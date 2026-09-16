@@ -1,0 +1,184 @@
+{
+  "source": "KP Master Staff Register (active teachers) - public fields only (name, qualifications, class). No PII.",
+  "note": "Qualifications shown where recorded in the register; some entries blank pending update.",
+  "generatedAt": "2026-08-24",
+  "count": 25,
+  "withQualification": 13,
+  "teachers": [
+    {
+      "name": "Vinita Gupta",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Alpana Gautam",
+      "academic": "B.A.",
+      "professional": "B.Ed, PdPet, DIT, TET",
+      "qualification": "B.A., B.Ed, PdPet, DIT, TET",
+      "classAssigned": "Class 2"
+    },
+    {
+      "name": "Meenu Bala",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Vipasha Bhardwaj",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Broniya Jambal Sharma",
+      "academic": "MA",
+      "professional": "B.Ed, PdPet, TET, NTT",
+      "qualification": "MA, B.Ed, PdPet, TET, NTT",
+      "classAssigned": "KG"
+    },
+    {
+      "name": "Pragya Sharma",
+      "academic": "MBA",
+      "professional": "PGDCA",
+      "qualification": "MBA, PGDCA",
+      "classAssigned": ""
+    },
+    {
+      "name": "Amita Rana",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Kanika Sharma",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Ribha Sharma",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Amisha Duggal",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Shilpa Bodh",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Divya Thakur",
+      "academic": "BBA",
+      "professional": "D.El.Ed",
+      "qualification": "BBA, D.El.Ed",
+      "classAssigned": "Nursery"
+    },
+    {
+      "name": "Yamika Chaudhary",
+      "academic": "MA(Eng)",
+      "professional": "B.Ed, Pd.Pet, CCA, TET",
+      "qualification": "MA(Eng), B.Ed, Pd.Pet, CCA, TET",
+      "classAssigned": "Class 4"
+    },
+    {
+      "name": "Poonam",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Anju",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Santosh",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Ravina",
+      "academic": "",
+      "professional": "",
+      "qualification": "",
+      "classAssigned": ""
+    },
+    {
+      "name": "Shiva Sen (Jamwal)",
+      "academic": "BA, PGDCA",
+      "professional": "NTT, D.El.Ed, PGDCA, CTE, TET",
+      "qualification": "BA, PGDCA, NTT, D.El.Ed, PGDCA, CTE, TET",
+      "classAssigned": "Class 2,3,4 & 5"
+    },
+    {
+      "name": "Sampada Bharti Thakur",
+      "academic": "BA",
+      "professional": "MBA, NTT",
+      "qualification": "BA, MBA, NTT",
+      "classAssigned": "Class 1"
+    },
+    {
+      "name": "Manpreet",
+      "academic": "MA(Eng, Pol Sci)",
+      "professional": "D.El.Ed, NTT, PGDCA, MBA",
+      "qualification": "MA(Eng, Pol Sci), D.El.Ed, NTT, PGDCA, MBA",
+      "classAssigned": "Class 1"
+    },
+    {
+      "name": "Kritika",
+      "academic": "B.Tech",
+      "professional": "Pursuing NTT",
+      "qualification": "B.Tech, Pursuing NTT",
+      "classAssigned": "Pre-Nursery"
+    },
+    {
+      "name": "Shagun Sharma",
+      "academic": "B.A.",
+      "professional": "Pursuing B.Ed, Visharad",
+      "qualification": "B.A., Pursuing B.Ed, Visharad",
+      "classAssigned": ""
+    },
+    {
+      "name": "Sneh Lata",
+      "academic": "MSc Maths",
+      "professional": "B.Ed, TET",
+      "qualification": "MSc Maths, B.Ed, TET",
+      "classAssigned": ""
+    },
+    {
+      "name": "Arpita Sharma",
+      "academic": "BSc Computer Apps",
+      "professional": "Pursuing NTT",
+      "qualification": "BSc Computer Apps, Pursuing NTT",
+      "classAssigned": ""
+    },
+    {
+      "name": "Supriya Sood",
+      "academic": "M.Com",
+      "professional": "",
+      "qualification": "M.Com",
+      "classAssigned": "Nursery"
+    }
+  ]
+}

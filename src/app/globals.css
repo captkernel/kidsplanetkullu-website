@@ -1,0 +1,317 @@
+@import "tailwindcss";
+
+/* Tailwind v4 skips gitignored src/components; register it explicitly. */
+@source "../components";
+@source "../app";
+
+/* ============================================================
+   DESIGN.md §2 tokens — the single source of truth.
+   Off-white / off-black only. One accent (gold), locked.
+   ============================================================ */
+@theme {
+  --color-canvas: #fbf8f1;        /* warm bone page background */
+  --color-surface: #fefcf8;       /* raised surfaces, cards */
+  --color-ink: #1c2a21;           /* near-black forest (NOT pure black) */
+  --color-ink-soft: #4a5a50;      /* secondary text, AA on canvas */
+  --color-primary: #2d5016;       /* deep forest green */
+  --color-primary-deep: #1e3a10;  /* footer / dark sections */
+  --color-gold: #c8a84e;          /* the single accent */
+  --color-gold-soft: #e0c878;     /* gold at lower intensity, decorative only */
+  --color-line: #e8e1d3;          /* hairline dividers on canvas */
+  --color-line-dark: #2f4a24;     /* hairline on dark sections */
+
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+
+  /* One radius scale: cards 2xl, inputs xl, buttons pill. */
+  --radius-xl: 0.85rem;
+  --radius-2xl: 1.1rem;
+
+  /* Soft, green-warm tinted shadows (never pure black). */
+  --shadow-card: 0 2px 14px rgba(28, 42, 33, 0.06);
+  --shadow-card-hover: 0 12px 34px rgba(28, 42, 33, 0.11);
+
+  --spacing-content: 1200px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-gold) 35%, transparent);
+    color: var(--color-ink);
+  }
+
+  /* Visible gold focus ring, everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+    text-wrap: balance;
+    color: var(--color-ink);
+  }
+
+  p { text-wrap: pretty; }
+}
+
+/* ============================================================
+   Scroll reveal — the ONLY motion primitive. Gated on
+   prefers-reduced-motion (elements start visible if reduced).
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Utilities used across pages. */
+@utility container-page {
+  width: 100%;
+  max-width: var(--spacing-content);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ============================================================
+   FULL-PAGE SNAP PANELS — the homepage scroll experience.
+   Each top-level homepage section fills the viewport and gently
+   snaps into place with CSS scroll-snap (proximity, so it never
+   traps the scroll). Normal document flow, no sticky-cover, no
+   overflow capture. Content is vertically centred; a panel taller
+   than the viewport simply grows and scrolls with the page.
+
+   The header is 72px and the mobile CTA bar sits at the bottom on
+   < lg; panels reserve safe vertical padding so their content
+   never hides behind either chrome. scroll-padding-top on <html>
+   makes each snap point land just below the fixed header.
+   ============================================================ */
+html {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 4.5rem;
+}
+.kp-panel {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* top pad clears the 72px header; bottom pad clears the mobile CTA bar */
+  padding-block: 4.75rem 5rem;
+  padding-block-end: calc(5rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  /* No mobile CTA bar on desktop; tighten vertical rhythm. */
+  .kp-panel {
+    padding-block: 6rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-snap-type: none; }
+}
+
+/* The hero is a SHORTER snap panel: it is the first snap point but sits
+   noticeably below full viewport height so the page opens lighter. It still
+   clears the fixed header and centres its content. On very small phones it
+   may grow past its min-height; that is fine, it simply scrolls. */
+.kp-hero {
+  position: relative; /* contain the absolute bg image + scrim so they clip to
+                         the hero and never bleed into the next section */
+  min-height: 84vh; /* a proper first-screen hero, not a cropped band */
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Top clears the 72px fixed header (cap at ~pt-24 per Taste). */
+  padding-block: 5.5rem 3rem;
+  padding-block-end: calc(3rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  .kp-hero {
+    min-height: 90vh;
+    padding-block: 6rem 3.5rem;
+  }
+}
+
+/* ============================================================
+   §0.5 THE CONSTELLATION — signature system.
+   A thin gold star-map line threads down the page. Each SVG
+   path draws its stroke in as it enters view. Reduced-motion
+   renders it fully drawn and static.
+   ============================================================ */
+.constellation-line path {
+  stroke-dasharray: var(--len, 1);
+  stroke-dashoffset: var(--len, 1);
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.33, 1, 0.68, 1);
+}
+.constellation-line.is-drawn path {
+  stroke-dashoffset: 0;
+}
+.constellation-star {
+  opacity: 0;
+  transform: scale(0.4);
+  transform-origin: center;
+  transition:
+    opacity 0.6s ease 0.5s,
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s;
+}
+.constellation-line.is-drawn .constellation-star {
+  opacity: 1;
+  transform: scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .constellation-line path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .constellation-star {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* A single twinkling star node in a star-field (calm, low amplitude). */
+@keyframes kp-twinkle {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+.star-twinkle {
+  animation: kp-twinkle 4.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .star-twinkle { animation: none; opacity: 0.85; }
+}
+
+/* Slow drift for hero night-sky field. */
+@keyframes kp-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-24px, -16px, 0); }
+}
+.sky-drift {
+  animation: kp-drift 60s linear infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sky-drift { animation: none; }
+}
+
+/* Hero parallax: native CSS scroll-driven animation tied to the hero's own
+   view progress. No window scroll listeners. Falls back to a static scale
+   where scroll timelines are unsupported, and is disabled for reduced-motion. */
+.hero-parallax {
+  transform: scale(1.08);
+  will-change: transform;
+}
+@supports (animation-timeline: view()) {
+  @keyframes kp-hero-parallax {
+    from { transform: translate3d(0, -3%, 0) scale(1.12); }
+    to { transform: translate3d(0, 6%, 0) scale(1.12); }
+  }
+  .hero-parallax {
+    animation: kp-hero-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-parallax { animation: none; transform: scale(1.03); }
+}
+
+/* Hero emblem: a soft radial halo lifts the dark green shield off the dark
+   forest scrim so both the gold and the green outline read cleanly, plus a
+   gentle drop shadow to separate the mark from the photo behind it. */
+.hero-logo img {
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.45));
+}
+.hero-logo {
+  position: relative;
+}
+.hero-logo::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 130%;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(251, 248, 241, 0.22) 0%,
+    rgba(251, 248, 241, 0.08) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================================
+   House orbits — planets revolve around the "Kids Planet" centre.
+   The arm spins a full turn; the label counter-spins to stay upright.
+   Durations vary per planet (set inline) so they never move in lockstep.
+   Gated on prefers-reduced-motion: no-preference, so reduced-motion
+   users see the planets placed statically with no movement.
+   ============================================================ */
+@keyframes kp-orbit-spin {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
+}
+@keyframes kp-orbit-counter {
+  from { rotate: 0deg; }
+  to { rotate: -360deg; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .kp-orbit-arm {
+    animation: kp-orbit-spin var(--kp-orbit-duration, 30s) linear infinite;
+    transform-origin: center;
+    will-change: rotate;
+  }
+  .kp-orbit-label {
+    animation: kp-orbit-counter var(--kp-orbit-duration, 30s) linear infinite;
+    will-change: rotate;
+  }
+}
+
+/* Magnetic CTA: a subtle pull toward the pointer, translated via CSS vars set
+   on pointermove (rAF-throttled in JS). Springs back on leave. */
+.magnetic {
+  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .magnetic { transform: none; transition: none; }
+}

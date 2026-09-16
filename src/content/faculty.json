@@ -1,0 +1,57 @@
+[
+  {
+    "id": "pragya-sharma",
+    "name": "Mrs. Pragya Sharma",
+    "designation": "Senior Teacher — Class 5",
+    "qualification": "M.A., B.Ed.",
+    "experience": "15 years",
+    "initials": "PS",
+    "photo": "/images/staff/pragya-sharma.jpg",
+    "bio": "One of the most experienced educators at Kids Planet with 15 years of dedicated teaching. Guides Class 5 students through advanced primary curriculum with a focus on conceptual clarity.",
+    "featured": true
+  },
+  {
+    "id": "pragya",
+    "name": "Mrs. Pragya",
+    "designation": "Class Teacher — Class 4",
+    "qualification": "B.A., B.Ed.",
+    "experience": "10 years",
+    "initials": "PR",
+    "photo": "/images/staff/pragya.jpg",
+    "bio": "Brings a decade of teaching experience to Class 4. Known for making complex subjects accessible and nurturing student confidence through interactive learning.",
+    "featured": false
+  },
+  {
+    "id": "santosh-kumari",
+    "name": "Mrs. Santosh Kumari",
+    "designation": "Class Teacher — Class 2",
+    "qualification": "B.A., D.El.Ed.",
+    "experience": "3 years",
+    "initials": "SK",
+    "photo": "/images/staff/santosh-kumari.jpg",
+    "bio": "A dedicated young educator who brings fresh energy to the primary section. Focuses on building strong reading and numeracy foundations for Class 2 students.",
+    "featured": false
+  },
+  {
+    "id": "shivya",
+    "name": "Mrs. Shivya",
+    "designation": "Class Teacher — Class 1",
+    "qualification": "B.A., D.El.Ed.",
+    "experience": "5 years",
+    "initials": "SH",
+    "photo": "/images/staff/shivya.jpg",
+    "bio": "Specializes in the critical transition year from kindergarten to formal schooling. Creates a warm and engaging classroom environment for Class 1 learners.",
+    "featured": false
+  },
+  {
+    "id": "rashmi",
+    "name": "Mrs. Rashmi",
+    "designation": "Teacher",
+    "qualification": "B.A., B.Ed.",
+    "experience": "3 years",
+    "initials": "RA",
+    "photo": "/images/staff/rashmi.jpg",
+    "bio": "An enthusiastic educator who supports the Class 4 section with a focus on activity-based learning and student engagement.",
+    "featured": false
+  }
+]
