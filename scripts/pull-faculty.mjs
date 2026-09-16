@@ -78,7 +78,13 @@ const staff = rows.map((r) => {
   const isTeacher = /teach/i.test(r.designation || "");
   const subjects = (r.subjects || "").split("|").map(clean).filter(Boolean).sort();
   let photo = null;
-  if (r.photo_url) {
+  // Hand-picked override (website-v2/portraits/<slug>.jpg) wins over the portal photo.
+  const override = `portraits/${slug(name)}.jpg`;
+  if (existsSync(override)) {
+    const file = `${slug(name)}.jpg`;
+    resizeJobs.push([override, `${PHOTO_DIR}/${file}`]);
+    photo = `/images/faculty/${file}`;
+  } else if (r.photo_url) {
     const src = `${DASH}/${r.photo_url}`;
     if (existsSync(src)) {
       const file = `${slug(name)}.jpg`;
