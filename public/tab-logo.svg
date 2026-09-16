@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Four-houses tab mark: gold planet orbited by the four house planets.
+       House colours: Mars=red, Venus=blue, Jupiter=yellow, Mercury=green.
+       Deep-purple field matches the real school emblem's colours. -->
+  <rect width="120" height="120" rx="26" fill="#33246b"/>
+  <circle cx="60" cy="60" r="42" fill="none" stroke="#d9a521" stroke-width="2" opacity="0.55"/>
+  <circle cx="60" cy="60" r="19" fill="#d9a521"/>
+  <circle cx="60" cy="18" r="7.5" fill="#d63b34"/>  <!-- Mars   · red   -->
+  <circle cx="102" cy="60" r="7.5" fill="#3a72c4"/> <!-- Venus  · blue  -->
+  <circle cx="60" cy="102" r="7.5" fill="#f0be28"/> <!-- Jupiter· yellow-->
+  <circle cx="18" cy="60" r="7.5" fill="#35a05a"/>  <!-- Mercury· green -->
+</svg>
