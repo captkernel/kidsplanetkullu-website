@@ -1,184 +1,230 @@
 {
-  "source": "KP Master Staff Register (active teachers) - public fields only (name, qualifications, class). No PII.",
-  "note": "Qualifications shown where recorded in the register; some entries blank pending update.",
-  "generatedAt": "2026-08-24",
-  "count": 25,
-  "withQualification": 13,
-  "teachers": [
-    {
-      "name": "Vinita Gupta",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
+  "source": "Kids Planet Student Portal (staff_profiles, active) - public fields only: name, role, subjects, class, qualification, portrait",
+  "generatedAt": "2026-09-16",
+  "count": 19,
+  "teacherCount": 14,
+  "staff": [
     {
       "name": "Alpana Gautam",
-      "academic": "B.A.",
-      "professional": "B.Ed, PdPet, DIT, TET",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 3",
+      "subjects": [
+        "English",
+        "Games",
+        "Hindi",
+        "History/Civics/Geography"
+      ],
       "qualification": "B.A., B.Ed, PdPet, DIT, TET",
-      "classAssigned": "Class 2"
-    },
-    {
-      "name": "Meenu Bala",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Vipasha Bhardwaj",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Broniya Jambal Sharma",
-      "academic": "MA",
-      "professional": "B.Ed, PdPet, TET, NTT",
-      "qualification": "MA, B.Ed, PdPet, TET, NTT",
-      "classAssigned": "KG"
-    },
-    {
-      "name": "Pragya Sharma",
-      "academic": "MBA",
-      "professional": "PGDCA",
-      "qualification": "MBA, PGDCA",
-      "classAssigned": ""
-    },
-    {
-      "name": "Amita Rana",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Kanika Sharma",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Ribha Sharma",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Amisha Duggal",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Shilpa Bodh",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
-    },
-    {
-      "name": "Divya Thakur",
-      "academic": "BBA",
-      "professional": "D.El.Ed",
-      "qualification": "BBA, D.El.Ed",
-      "classAssigned": "Nursery"
-    },
-    {
-      "name": "Yamika Chaudhary",
-      "academic": "MA(Eng)",
-      "professional": "B.Ed, Pd.Pet, CCA, TET",
-      "qualification": "MA(Eng), B.Ed, Pd.Pet, CCA, TET",
-      "classAssigned": "Class 4"
-    },
-    {
-      "name": "Poonam",
-      "academic": "",
-      "professional": "",
-      "qualification": "",
-      "classAssigned": ""
+      "photo": "/images/faculty/alpana-gautam.jpg"
     },
     {
       "name": "Anju",
-      "academic": "",
-      "professional": "",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": null,
+      "subjects": [
+        "G.K.",
+        "Hindi",
+        "Moral Science"
+      ],
       "qualification": "",
-      "classAssigned": ""
+      "photo": "/images/faculty/anju.jpg"
     },
     {
-      "name": "Santosh",
-      "academic": "",
-      "professional": "",
+      "name": "Broniya Jambal Sharma",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": null,
+      "subjects": [
+        "Moral Science"
+      ],
+      "qualification": "MA, B.Ed, PdPet, TET, NTT",
+      "photo": "/images/faculty/broniya-jambal-sharma.jpg"
+    },
+    {
+      "name": "Chintamani",
+      "title": "Support staff",
+      "isTeacher": false,
+      "classTeacherOf": null,
+      "subjects": [],
       "qualification": "",
-      "classAssigned": ""
+      "photo": "/images/faculty/chintamani.jpg"
+    },
+    {
+      "name": "Divya Thakur",
+      "title": "Vice Principal",
+      "isTeacher": true,
+      "classTeacherOf": "Class 1",
+      "subjects": [
+        "English",
+        "Maths",
+        "Spoken English"
+      ],
+      "qualification": "BBA, D.El.Ed",
+      "photo": "/images/faculty/divya-thakur.jpg"
+    },
+    {
+      "name": "Kanika Sharma",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 8",
+      "subjects": [
+        "Maths",
+        "Science"
+      ],
+      "qualification": "",
+      "photo": "/images/faculty/kanika-sharma.jpg"
+    },
+    {
+      "name": "Madhavi",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Nursery",
+      "subjects": [
+        "Spoken English"
+      ],
+      "qualification": "",
+      "photo": "/images/faculty/madhavi.jpg"
+    },
+    {
+      "name": "Meenu Bala",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 2",
+      "subjects": [
+        "EVS",
+        "English",
+        "G.K.",
+        "Hindi",
+        "Maths"
+      ],
+      "qualification": "",
+      "photo": "/images/faculty/meenu-bala.jpg"
+    },
+    {
+      "name": "Poonam",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": null,
+      "subjects": [
+        "Games",
+        "Him Lok Sanskriti",
+        "Hindi"
+      ],
+      "qualification": "",
+      "photo": "/images/faculty/poonam.jpg"
+    },
+    {
+      "name": "Pragya Sharma",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 6",
+      "subjects": [
+        "Computer",
+        "G.K.",
+        "Moral Science"
+      ],
+      "qualification": "MBA, PGDCA",
+      "photo": "/images/faculty/pragya-sharma.jpg"
     },
     {
       "name": "Ravina",
-      "academic": "",
-      "professional": "",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 4",
+      "subjects": [
+        "EVS",
+        "G.K.",
+        "Games",
+        "Hindi"
+      ],
       "qualification": "",
-      "classAssigned": ""
+      "photo": "/images/faculty/ravina.jpg"
     },
     {
-      "name": "Shiva Sen (Jamwal)",
-      "academic": "BA, PGDCA",
-      "professional": "NTT, D.El.Ed, PGDCA, CTE, TET",
-      "qualification": "BA, PGDCA, NTT, D.El.Ed, PGDCA, CTE, TET",
-      "classAssigned": "Class 2,3,4 & 5"
+      "name": "Ribha Sharma",
+      "title": "Administration",
+      "isTeacher": true,
+      "classTeacherOf": null,
+      "subjects": [
+        "Computer",
+        "Moral Science"
+      ],
+      "qualification": "",
+      "photo": "/images/faculty/ribha-sharma.jpg"
     },
     {
-      "name": "Sampada Bharti Thakur",
-      "academic": "BA",
-      "professional": "MBA, NTT",
-      "qualification": "BA, MBA, NTT",
-      "classAssigned": "Class 1"
+      "name": "Santosh",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 7",
+      "subjects": [
+        "English",
+        "Games",
+        "Maths"
+      ],
+      "qualification": "",
+      "photo": "/images/faculty/santosh.jpg"
     },
     {
-      "name": "Manpreet",
-      "academic": "MA(Eng, Pol Sci)",
-      "professional": "D.El.Ed, NTT, PGDCA, MBA",
-      "qualification": "MA(Eng, Pol Sci), D.El.Ed, NTT, PGDCA, MBA",
-      "classAssigned": "Class 1"
+      "name": "Sapna",
+      "title": "Support staff",
+      "isTeacher": false,
+      "classTeacherOf": null,
+      "subjects": [],
+      "qualification": "",
+      "photo": "/images/faculty/sapna.jpg"
     },
     {
-      "name": "Kritika",
-      "academic": "B.Tech",
-      "professional": "Pursuing NTT",
-      "qualification": "B.Tech, Pursuing NTT",
-      "classAssigned": "Pre-Nursery"
+      "name": "Shanta",
+      "title": "Support staff",
+      "isTeacher": false,
+      "classTeacherOf": null,
+      "subjects": [],
+      "qualification": "",
+      "photo": "/images/faculty/shanta.jpg"
     },
     {
-      "name": "Shagun Sharma",
-      "academic": "B.A.",
-      "professional": "Pursuing B.Ed, Visharad",
-      "qualification": "B.A., Pursuing B.Ed, Visharad",
-      "classAssigned": ""
+      "name": "Soma Devi",
+      "title": "Support staff",
+      "isTeacher": false,
+      "classTeacherOf": null,
+      "subjects": [],
+      "qualification": "",
+      "photo": "/images/faculty/soma-devi.jpg"
     },
     {
-      "name": "Sneh Lata",
-      "academic": "MSc Maths",
-      "professional": "B.Ed, TET",
-      "qualification": "MSc Maths, B.Ed, TET",
-      "classAssigned": ""
+      "name": "Tulsi Devi",
+      "title": "Support staff",
+      "isTeacher": false,
+      "classTeacherOf": null,
+      "subjects": [],
+      "qualification": "",
+      "photo": "/images/faculty/tulsi-devi.jpg"
     },
     {
-      "name": "Arpita Sharma",
-      "academic": "BSc Computer Apps",
-      "professional": "Pursuing NTT",
-      "qualification": "BSc Computer Apps, Pursuing NTT",
-      "classAssigned": ""
+      "name": "Vipasha Bhardwaj",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "LKG",
+      "subjects": [],
+      "qualification": "",
+      "photo": "/images/faculty/vipasha-bhardwaj.jpg"
     },
     {
-      "name": "Supriya Sood",
-      "academic": "M.Com",
-      "professional": "",
-      "qualification": "M.Com",
-      "classAssigned": "Nursery"
+      "name": "Yamika Chaudhary",
+      "title": "Teacher",
+      "isTeacher": true,
+      "classTeacherOf": "Class 5",
+      "subjects": [
+        "EVS",
+        "English",
+        "G.K.",
+        "Maths"
+      ],
+      "qualification": "MA (English), B.Ed, Pd.Pet, CCA, TET",
+      "photo": "/images/faculty/yamika-chaudhary.jpg"
     }
   ]
 }
