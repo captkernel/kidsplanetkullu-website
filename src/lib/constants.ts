@@ -36,11 +36,12 @@ export const SCHOOL = {
   mapUrl: "https://maps.app.goo.gl/wPPZwpFfuFCcPHuB9",
   mapEmbedUrl:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3377.5!2d77.1072594!3d31.9536218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390479a3c0f6e0c7%3A0x7e3e98bda7e7b1a4!2sKids%20Planet!5e0!3m2!1sen!2sin!4v1711280000000",
-  // Live numbers from the school database (updated 2026-08-20).
+  // Live numbers from the school database (updated 2026-09-16: 14 active
+  // teachers in staff_profiles, ~187 students -> about 13 per teacher).
   stats: [
     { value: "16", label: "Years in Kullu" },
-    { value: "18", label: "Teachers" },
-    { value: "10:1", label: "Students per Teacher" },
+    { value: "14", label: "Teachers" },
+    { value: "13:1", label: "Students per Teacher" },
   ],
 } as const;
 
