@@ -1,6 +1,6 @@
 {
   "source": "Kids Planet Student Portal (staff_profiles, active) - public fields only: name, role, subjects, class, qualification, portrait",
-  "generatedAt": "2026-09-16",
+  "generatedAt": "2026-10-05",
   "count": 19,
   "teacherCount": 14,
   "staff": [
@@ -143,18 +143,6 @@
       "photo": "/images/faculty/ravina.jpg"
     },
     {
-      "name": "Ribha Sharma",
-      "title": "Administration",
-      "isTeacher": true,
-      "classTeacherOf": null,
-      "subjects": [
-        "Computer",
-        "Moral Science"
-      ],
-      "qualification": "",
-      "photo": "/images/faculty/ribha-sharma.jpg"
-    },
-    {
       "name": "Santosh",
       "title": "Teacher",
       "isTeacher": true,
@@ -184,6 +172,18 @@
       "subjects": [],
       "qualification": "",
       "photo": "/images/faculty/shanta.jpg"
+    },
+    {
+      "name": "Shivantika Mahant",
+      "title": "Administration",
+      "isTeacher": true,
+      "classTeacherOf": null,
+      "subjects": [
+        "Computer",
+        "Moral Science"
+      ],
+      "qualification": "",
+      "photo": null
     },
     {
       "name": "Soma Devi",
