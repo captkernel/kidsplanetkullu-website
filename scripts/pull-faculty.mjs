@@ -21,7 +21,8 @@ const PHOTO_W = 480; // 3:4 tiles render at 64-96px wide; 480x640 is plenty for 
 // Public roles beyond "Teacher" (school leadership as of Sept 2026).
 const TITLE_OVERRIDES = {
   "Divya Thakur": "Vice Principal",
-  "Ribha Sharma": "Administration",
+  // Ribha Sharma left on 30 Sep 2026; Shivantika Mahant took over the office role.
+  "Shivantika Mahant": "Administration",
 };
 
 // Class-teacher map from the 2026-27 timetable (portal class_id is not yet filled).
