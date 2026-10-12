@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { Check, Heart, Compass, ShieldCheck, Sprout } from "lucide-react";
 
 import { PageHero } from "@/components/PageHero";
@@ -14,22 +15,23 @@ import programs from "@/content/programs.json";
 // dash tell can reach the page.
 const toRange = (s: string) => s.replace(/\s*[—–]\s*/g, " to ");
 
-export const metadata: Metadata = {
-  title: "Programs",
+export const metadata: Metadata = pageMetadata({
+  path: "/programs/",
+  title: "Programs: Pre-Nursery to Class 8",
   description:
-    "From Playgroup to Class 8, Kids Planet teaches one steady path through the foundation years. Early years, primary, and middle school programs in Kullu, built on character, curiosity, and confidence.",
-};
+    "Pre-Nursery to Class 8 at Kids Planet School, Kullu: early years, primary and middle school, built on character, curiosity and confidence.",
+});
 
 // Group the flat program list into three stages, each an id-anchored section.
 const STAGES = [
   {
     id: "early-years",
     label: "Early Years",
-    range: "Playgroup to UKG",
+    range: "Pre-Nursery to UKG",
     overview:
       "The first years are about wonder, not worksheets. Children build language, confidence, and social habits through play, sound, and story, so that formal school later feels like a natural next step.",
     image: "/images/classroom/colorful-preschool.jpg",
-    ids: ["playgroup", "nursery", "lkg", "ukg"],
+    ids: ["pre-nursery", "nursery", "lkg", "ukg"],
   },
   {
     id: "primary",
@@ -87,7 +89,7 @@ export default function ProgramsPage() {
             <em className="italic text-primary">foundation years.</em>
           </>
         }
-        intro="Kids Planet carries a child from the first day of playgroup to a confident Class 8, one stage flowing into the next with no jolt in between. Here is how each one works."
+        intro="Kids Planet carries a child from the first day of Pre-Nursery to a confident Class 8, one stage flowing into the next with no jolt in between. Here is how each one works."
       />
 
       {/* What guides every stage. Foundation-years framing that echoes the

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { Phone, CalendarDays, FileCheck, ShieldCheck } from "lucide-react";
 
 import { PageHero } from "@/components/PageHero";
@@ -12,11 +13,12 @@ import { InquiryForm } from "@/components/InquiryForm";
 import { SCHOOL } from "@/lib/constants";
 import { telHref } from "@/lib/links";
 
-export const metadata: Metadata = {
-  title: "Admissions open for 2026-27",
+export const metadata: Metadata = pageMetadata({
+  path: "/admissions/",
+  title: "Admissions 2027-28",
   description:
-    "Admissions are open at Kids Planet, Kullu for the 2026 to 2027 session, Playgroup through Class 8. Enquire, visit the campus, and apply. Send an enquiry or book a visit today.",
-};
+    "Admissions open for 2027-28 at Kids Planet School, Dhalpur, Kullu. Nursery 3+, LKG 4+, UKG 5+, Class 1 6+. Walk in, or call 94180 23454.",
+});
 
 const STEPS = [
   {
@@ -50,7 +52,7 @@ export default function AdmissionsPage() {
             <em className="italic text-primary">short conversation away.</em>
           </>
         }
-        intro="We are open for admissions for the 2026 to 2027 session, Playgroup through Class 8. Enquire, visit the campus, and apply. The clearest first step is always to walk the campus and meet a teacher."
+        intro="We are open for admissions for the 2027 to 2028 session, Pre-Nursery through Class 8. Enquire, visit the campus, and apply. The clearest first step is always to walk the campus and meet a teacher."
       >
         <div className="flex flex-wrap gap-3">
           <Button href="#visit" size="lg">
@@ -156,7 +158,7 @@ export default function AdmissionsPage() {
                 Fee structure
               </h3>
               <p className="mt-4 leading-relaxed text-ink-soft">
-                Fees vary by stage, from Playgroup to Class 8. For the current
+                Fees vary by stage, from Pre-Nursery to Class 8. For the current
                 fee schedule and any sibling concession, please speak with the
                 school office. We will share the full breakdown during your
                 visit.

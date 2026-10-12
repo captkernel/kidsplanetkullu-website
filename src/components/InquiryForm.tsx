@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, MessageCircle } from "lucide-react";
 import { whatsappHref } from "@/lib/links";
+import { track } from "@/lib/track";
 
 // Static-export friendly: no backend. On submit we compose a WhatsApp message
 // (the school's real, monitored channel) so the enquiry actually reaches them.
@@ -33,6 +34,7 @@ export function InquiryForm() {
       values.childClass ? `Class of interest: ${values.childClass}` : "",
       values.message ? `Message: ${values.message}` : "",
     ].filter(Boolean);
+    track("enquiry_submit", values.childClass || "class not given");
     window.open(whatsappHref(lines.join("\n")), "_blank", "noopener,noreferrer");
   };
 
@@ -43,7 +45,7 @@ export function InquiryForm() {
   const labelCls = "block text-sm font-semibold text-ink";
 
   const classes = [
-    "Playgroup",
+    "Pre-Nursery",
     "Nursery",
     "LKG",
     "UKG",

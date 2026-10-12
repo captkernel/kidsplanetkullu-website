@@ -1,79 +1,84 @@
+import type { Metadata } from "next";
 import { SCHOOL } from "./constants";
 
-export function getSchoolJsonLd() {
+export const SITE_URL = "https://kidsplanetkullu.com";
+
+/**
+ * Per-page metadata with a self-referencing canonical and matching og:url.
+ * `path` uses the site's trailing-slash form ("/about/"). Without this every page
+ * inherited the root layout's canonical and told Google it was a copy of the homepage.
+ */
+export function pageMetadata({
+  path,
+  title,
+  description,
+}: {
+  path: string;
+  title: string;
+  description: string;
+}): Metadata {
   return {
-    "@context": "https://schema.org",
-    "@type": ["School", "LocalBusiness"],
-    name: SCHOOL.name,
-    description: SCHOOL.description,
-    url: "https://kidsplanetkullu.com",
-    telephone: SCHOOL.phone,
-    email: SCHOOL.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Above Circuit House, Miyanbehar, Dhalpur",
-      addressLocality: "Kullu",
-      addressRegion: "Himachal Pradesh",
-      postalCode: "175101",
-      addressCountry: "IN",
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      siteName: SCHOOL.name,
+      title,
+      description,
+      url: path,
+      locale: "en_IN",
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: SCHOOL.name }],
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.9536218,
-      longitude: 77.1072594,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "15:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Saturday",
-        opens: "09:00",
-        closes: "13:00",
-      },
-    ],
-    foundingDate: "2010",
-    founder: {
-      "@type": "Person",
-      name: SCHOOL.founder,
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.4",
-      reviewCount: "23",
-    },
-    sameAs: [SCHOOL.social.facebook],
   };
 }
 
-export function getBreadcrumbJsonLd() {
-  const baseUrl = "https://kidsplanetkullu.com";
-  const pages = [
-    { name: "Home", path: "" },
-    { name: "About Us", path: "/about" },
-    { name: "Programs", path: "/programs" },
-    { name: "Admissions", path: "/admissions" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Faculty", path: "/faculty" },
-    { name: "Achievements", path: "/achievements" },
-    { name: "School Life", path: "/daily-life" },
-    { name: "Announcements", path: "/announcements" },
-    { name: "FAQ", path: "/faq" },
-    { name: "Contact", path: "/contact" },
+// Structured data for the homepage only. Follows Google's local-business and organization
+// docs (see SEO_RESEARCH.md §2.4). Deliberately NOT included:
+//   - aggregateRating: self-serving / copied from JustDial = against Google's review policy
+//   - opening hours: Google Business Profile asks schools not to list hours
+//   - FAQPage / HowTo / BreadcrumbList: no rich result for a site like this
+export function getSchoolJsonLd() {
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": ["School", "LocalBusiness"],
+      "@id": `${SITE_URL}/#school`,
+      name: "Kids Planet School",
+      alternateName: ["Kids Planet", "Kids Planet Kullu"],
+      description: SCHOOL.description,
+      url: `${SITE_URL}/`,
+      logo: `${SITE_URL}/kp-logo.png`,
+      image: [`${SITE_URL}/og-image.png`],
+      telephone: SCHOOL.phone,
+      email: SCHOOL.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Gurubehar, Dhalpur",
+        addressLocality: "Kullu",
+        addressRegion: "Himachal Pradesh",
+        postalCode: "175101",
+        addressCountry: "IN",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 31.95362,
+        longitude: 77.10726,
+      },
+      hasMap: SCHOOL.mapUrl,
+      areaServed: { "@type": "City", name: "Kullu" },
+      foundingDate: "2010",
+      founder: { "@type": "Person", name: SCHOOL.founder },
+      sameAs: [SCHOOL.social.facebook, SCHOOL.social.instagram, SCHOOL.justdial],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: "Kids Planet School",
+      alternateName: "Kids Planet Kullu",
+      url: `${SITE_URL}/`,
+      publisher: { "@id": `${SITE_URL}/#school` },
+    },
   ];
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: pages.map((page, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: page.name,
-      item: `${baseUrl}${page.path}`,
-    })),
-  };
 }

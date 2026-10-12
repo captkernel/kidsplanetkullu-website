@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { Trees, ShieldCheck, BookOpen, Palette, Bus, Trophy } from "lucide-react";
 
 import { PageHero } from "@/components/PageHero";
@@ -11,14 +12,15 @@ import { StatBand } from "@/components/ui/StatBand";
 import { Constellation } from "@/components/Constellation";
 import { SCHOOL } from "@/lib/constants";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = pageMetadata({
+  path: "/about/",
+  title: "About Our School, Since 2010",
   description:
-    "Kids Planet was founded in 2010 in Dhalpur, Kullu. Sixteen years of teaching children from Playgroup to Class 8 with small classes, patient teaching, and high standards.",
-};
+    "Kids Planet School was founded in 2010 in Dhalpur, Kullu. Sixteen years of small classes and patient teaching, Pre-Nursery to Class 8.",
+});
 
 const FACILITIES = [
-  { icon: BookOpen, title: "Bright classrooms", body: "Thirteen classrooms across Playgroup to Class 8, decorated for the age that learns in each one." },
+  { icon: BookOpen, title: "Bright classrooms", body: "Thirteen classrooms across Pre-Nursery to Class 8, decorated for the age that learns in each one." },
   { icon: Palette, title: "Art and activity", body: "Craft, drawing, and exhibition spaces where the annual art show comes together each year." },
   { icon: Trophy, title: "Sports and assembly", body: "An open courtyard for morning assembly, yoga day, and the annual sports meet." },
   { icon: ShieldCheck, title: "Safe campus", body: "A watched, walkable site in Dhalpur, close to the circuit house and easy for families to reach." },
@@ -37,7 +39,7 @@ export default function AboutPage() {
             <em className="italic text-primary">patient teaching.</em>
           </>
         }
-        intro="Established in 2010, Kids Planet has grown from a small playgroup into a full Playgroup to Class 8 school trusted by hundreds of Kullu families."
+        intro="Established in 2010, Kids Planet has grown from a small school into a full Pre-Nursery to Class 8 school trusted by hundreds of Kullu families."
       />
 
       {/* Founder story */}
@@ -66,7 +68,7 @@ export default function AboutPage() {
               </p>
               <p>
                 Alongside Mr. Ranjeet Parmar, she grew a small playgroup into a
-                full Playgroup to Class 8 institution trusted by hundreds of
+                full Pre-Nursery to Class 8 institution trusted by hundreds of
                 Kullu families. We remember them with love.
               </p>
               <p>

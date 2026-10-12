@@ -42,7 +42,7 @@ export function Footer() {
               <span className="font-display text-xl font-semibold">{SCHOOL.name}</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-canvas/70">
-              Established {SCHOOL.founded}. Playgroup to Class 8, English medium.
+              Established {SCHOOL.founded}. Pre-Nursery to Class 8, English medium.
               Affiliated to the state board.
             </p>
           </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 
 import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/ui/Section";
@@ -8,11 +9,12 @@ import { Button } from "@/components/ui/Button";
 import { Constellation } from "@/components/Constellation";
 import facultyData from "@/data/faculty.generated.json";
 
-export const metadata: Metadata = {
-  title: "Faculty",
+export const metadata: Metadata = pageMetadata({
+  path: "/faculty/",
+  title: "Our Teachers",
   description:
-    "Meet the teaching staff of Kids Planet, Kullu. Trained, qualified teachers who stay close to your child across Playgroup to Class 8.",
-};
+    "Meet the teaching staff of Kids Planet, Kullu. Trained, qualified teachers who stay close to your child across Pre-Nursery to Class 8.",
+});
 
 // Data source: src/data/faculty.generated.json, exported from the Student Portal
 // by scripts/pull-faculty.mjs (active staff, public fields only: name, role,
@@ -131,7 +133,7 @@ export default function FacultyPage() {
           The people behind every day at Kids Planet
         </h2>
         <p className="mt-3 max-w-2xl text-lg leading-relaxed text-ink-soft">
-          {teachers.length} teachers across Playgroup to Class 8, led by our
+          {teachers.length} teachers across Pre-Nursery to Class 8, led by our
           Chairman and Principal, Karan Parmar. Subjects are as taught this
           session; qualifications are shown where recorded in our staff register.
         </p>
