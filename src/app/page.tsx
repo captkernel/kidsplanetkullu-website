@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -26,6 +27,7 @@ import { HouseOrbits } from "@/components/HouseOrbits";
 import { SCHOOL } from "@/lib/constants";
 import { whatsappHref } from "@/lib/links";
 import { clean } from "@/lib/text";
+import { getSchoolJsonLd } from "@/lib/metadata";
 
 import announcements from "@/content/announcements.json";
 
@@ -95,7 +97,7 @@ const PROMISES = [
 const STAGES = [
   {
     label: "Early Years",
-    range: "Playgroup to UKG, ages 2 to 6",
+    range: "Pre-Nursery to UKG, ages 2 to 6",
     body: "Play, sound, and story build the first love of learning, long before worksheets.",
     image: "/images/classroom/colorful-preschool.jpg",
     href: "/programs#early-years",
@@ -159,7 +161,7 @@ const TRUST_FACTS = [
   },
   {
     icon: Compass,
-    title: "Playgroup to Class 8",
+    title: "Pre-Nursery to Class 8",
     body: "One unbroken path through the foundation years, all on one Dhalpur campus.",
   },
   {
@@ -173,9 +175,16 @@ const recentNews = announcements
   .filter((a) => a.type === "event" || a.type === "general")
   .slice(0, 3);
 
+// Title/description/OG come from the root layout; each page sets its own canonical.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(getSchoolJsonLd()) }}
+      />
       {/* ── 1 · HERO ─────────────────────────────────────────────────────────
           A real campus moment under a warm forest scrim, one signature star,
           the emblem, gentle image parallax, magnetic CTAs. NO NightSky. */}
@@ -216,7 +225,7 @@ export default function HomePage() {
             <div className="max-w-xl">
               <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-gold-soft">
               <span aria-hidden className="text-sm text-gold">✦</span>
-              Admissions open for 2026 to 2027
+              Admissions open for 2027 to 2028
             </p>
             <h1
               className="mt-4 font-display font-medium leading-[1.1] text-canvas"
@@ -230,7 +239,7 @@ export default function HomePage() {
               className="mt-5 max-w-lg leading-relaxed text-canvas/85"
               style={{ fontSize: "clamp(1rem, 2vw, 1.15rem)" }}
             >
-              A Playgroup to Class 8 school in Dhalpur, Kullu, rooted in the
+              A Pre-Nursery to Class 8 school in Dhalpur, Kullu, rooted in the
               valley since {SCHOOL.founded}.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -535,7 +544,7 @@ export default function HomePage() {
                   are truly known, not just enrolled.
                 </p>
                 <p>
-                  Sixteen years on, it is a full Playgroup to Class 8 school
+                  Sixteen years on, it is a full Pre-Nursery to Class 8 school
                   trusted by hundreds of Kullu families, still run by the
                   founding family, close to every name on the roll.
                 </p>
@@ -663,7 +672,7 @@ export default function HomePage() {
             <p className="mt-4 max-w-xl leading-relaxed text-canvas/85"
               style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.125rem)" }}
             >
-              Seats from Playgroup to Class 8 are filling now. Book a visit to
+              Seats from Pre-Nursery to Class 8 are filling now. Book a visit to
               walk the Dhalpur campus, meet the teachers, and begin the
               admission.
             </p>

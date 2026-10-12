@@ -6,7 +6,7 @@
 // Excludes all PII (phone, email, salary, aadhaar, address, dob, emergency contact).
 // Usage (from website-v2/):  node scripts/pull-faculty.mjs
 // Needs: dashboard/.env.local (PG*), python with Pillow (for resizing).
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 
@@ -74,6 +74,17 @@ const slug = (s) => clean(s).toLowerCase().replace(/[()]/g, "").replace(/[^a-z0-
 mkdirSync(PHOTO_DIR, { recursive: true });
 const resizeJobs = [];
 
+// Portraits this script generated last run. Used to prune the photo of anyone who has
+// left, so their picture does not stay on the live site. Only files that appear in the
+// PREVIOUS manifest are ever deleted, so hand-added images that live in this folder
+// (faculty-group.jpg, school-captains.jpg, investiture-ceremony.jpg) are never touched.
+const previousPhotos = (() => {
+  try {
+    const old = JSON.parse(readFileSync(OUT, "utf8"));
+    return new Set((old.staff || []).map((s) => s.photo).filter(Boolean).map((p) => p.split("/").pop()));
+  } catch { return new Set(); }
+})();
+
 const staff = rows.map((r) => {
   const name = clean(r.full_name);
   const isTeacher = /teach/i.test(r.designation || "");
@@ -129,5 +140,14 @@ const payload = {
   staff,
 };
 writeFileSync(OUT, JSON.stringify(payload, null, 2) + "\n");
+
+// Prune portraits of staff who are no longer active, so a departed member's picture
+// does not stay on the live site. Only files named in the PREVIOUS manifest are ever
+// deleted, so hand-added images in this folder are never touched.
+const currentPhotos = new Set(staff.map((s) => s.photo).filter(Boolean).map((p) => p.split("/").pop()));
+for (const file of [...previousPhotos].filter((f) => !currentPhotos.has(f))) {
+  const onDisk = `${PHOTO_DIR}/${file}`;
+  if (existsSync(onDisk)) { rmSync(onDisk); console.log(`pruned portrait of departed staff: ${file}`); }
+}
 console.log(`exported ${staff.length} active staff (${teachers.length} teaching) -> ${OUT}`);
 console.log("no photo:", staff.filter((s) => !s.photo).map((s) => s.name).join(", ") || "none");

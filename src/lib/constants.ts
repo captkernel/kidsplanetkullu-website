@@ -1,25 +1,25 @@
 export const SCHOOL = {
   name: "Kids Planet",
-  motto: "Excel & Explore",
-  tagline: "Excel & Explore · Since 2010",
+  motto: "Explore & Excel",
+  tagline: "Explore & Excel · Since 2010",
   description:
-    "Established in 2010 by Mrs. Neeta Parmar, Kids Planet is a Playgroup to Class 8 English medium school in the heart of the Kullu Valley. 187 children, 18 devoted teachers, small classes, and real personal attention for every family. Admissions open for 2026-27.",
+    "Established in 2010 by Mrs. Neeta Parmar, Kids Planet is a Pre-Nursery to Class 8 English medium school in the heart of the Kullu Valley. 185 children, 14 teachers, small classes, and real personal attention for every family. Admissions open for 2027-28.",
   founded: 2010,
   // Single source of truth for admissions messaging across the site.
-  admissionsYear: "2026-27",
-  admissionsSession: "2026 to 2027",
+  admissionsYear: "2027-28",
+  admissionsSession: "2027 to 2028",
   founder: "Mrs. Neeta Parmar",
   founderTitle: "Founder",
   // LEGACY DRAFT — every word subject to Karan's approval before deploy.
   founderBio:
-    "Kids Planet was founded in 2010 by Mrs. Neeta Parmar, whose decades of teaching shaped a simple belief: every child in the valley deserves a school where they are truly known. Alongside Mr. Ranjeet Parmar, she grew a small playgroup into a full Playgroup to Class 8 institution trusted by hundreds of Kullu families. We remember them with love. Their vision is carried forward today by the founding family's next generation.",
-  address: "Kids Planet School, Guru Behar, Dhalpur, Kullu 175101",
+    "Kids Planet was founded in 2010 by Mrs. Neeta Parmar, whose decades of teaching shaped a simple belief: every child in the valley deserves a school where they are truly known. Alongside Mr. Ranjeet Parmar, she grew a small playgroup into a full Pre-Nursery to Class 8 institution trusted by hundreds of Kullu families. We remember them with love. Their vision is carried forward today by the founding family's next generation.",
+  address: "Kids Planet School, Gurubehar, Dhalpur, Kullu 175101",
   phone: "+919418023454",
   phoneDisplay: "+91 94180 23454",
   email: "kidsplanetkullu@gmail.com",
   whatsapp: "919418023454",
   board: "HP State Board (HPBOSE)",
-  classes: "Playgroup – Class 8",
+  classes: "Pre-Nursery – Class 8",
   ageRange: "Ages 2–14",
   timings: {
     weekday: "Mon to Fri: 9:00 AM to 3:00 PM",

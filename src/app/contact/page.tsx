@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { MapPin, Phone, Mail, MessageCircle, Clock } from "lucide-react";
 
 import { PageHero } from "@/components/PageHero";
@@ -11,11 +12,12 @@ import { InquiryForm } from "@/components/InquiryForm";
 import { SCHOOL } from "@/lib/constants";
 import { whatsappHref, telHref, mailHref } from "@/lib/links";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata: Metadata = pageMetadata({
+  path: "/contact/",
+  title: "Contact & Directions, Dhalpur",
   description:
-    "Visit or reach Kids Planet in Dhalpur, Kullu, Himachal Pradesh 175101. Call, email, or message on WhatsApp. Office hours Monday to Saturday.",
-};
+    "Kids Planet School, Gurubehar, Dhalpur, Kullu, Himachal Pradesh 175101. Call +91 94180 23454, WhatsApp or email. Directions on Google Maps.",
+});
 
 const CONTACTS = [
   {

@@ -5,8 +5,8 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
+import { Analytics } from "@/components/Analytics";
 import { SCHOOL } from "@/lib/constants";
-import { getSchoolJsonLd } from "@/lib/metadata";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -27,19 +27,11 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   metadataBase: new URL("https://kidsplanetkullu.com"),
   title: {
-    default: `${SCHOOL.name}, ${SCHOOL.motto}`,
-    template: `%s | ${SCHOOL.name}`,
+    default: "Kids Planet School, Dhalpur Kullu: Pre-Nursery to Class 8",
+    template: `%s | ${SCHOOL.name} School, Kullu`,
   },
   description:
-    "Kids Planet is a Playgroup to Class 8 school in Dhalpur, Kullu, established in 2010. Small classes, patient teaching, and foundation years that shape a child. Admissions open for 2026-27.",
-  keywords: [
-    "Kids Planet",
-    "school in Kullu",
-    "Kullu Valley school",
-    "playgroup Kullu",
-    "best school Kullu",
-    "Dhalpur school",
-  ],
+    "English-medium Pre-Nursery to Class 8 school in Dhalpur, Kullu since 2010. Small classes, teachers who know every child. Admissions open 2027-28.",
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -50,14 +42,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SCHOOL.name,
-    title: `${SCHOOL.name}, ${SCHOOL.motto}`,
+    title: "Kids Planet School, Dhalpur Kullu",
     description:
-      "A Playgroup to Class 8 school in the Kullu Valley since 2010. Small classes and teachers who stay close to your child. Admissions open for 2026-27.",
-    url: "https://kidsplanetkullu.com",
+      "A Pre-Nursery to Class 8 school in the Kullu Valley since 2010. Small classes and teachers who stay close to your child. Admissions open for 2027-28.",
+    url: "/",
     locale: "en_IN",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${SCHOOL.name}` }],
   },
-  alternates: { canonical: "https://kidsplanetkullu.com" },
 };
 
 export const viewport: Viewport = {
@@ -82,10 +73,7 @@ export default function RootLayout({
         <main id="main">{children}</main>
         <Footer />
         <StickyMobileCTA />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(getSchoolJsonLd()) }}
-        />
+        <Analytics />
       </body>
     </html>
   );
