@@ -22,8 +22,8 @@ export function Footer() {
             <span aria-hidden className="text-gold">✦</span> {SCHOOL.motto}
           </p>
           <p className="mt-4 font-display text-2xl md:text-3xl leading-snug text-canvas">
-            A school in the Kullu Valley with small classes, patient teaching,
-            and teachers who stay close to your child through the years.
+            A Pre-Nursery to Class 8 school in the Kullu Valley, with small
+            classes, patient teaching, and a high standard.
           </p>
           <Link
             href="/admissions"
@@ -44,6 +44,14 @@ export function Footer() {
             <p className="mt-4 text-sm leading-relaxed text-canvas/70">
               Established {SCHOOL.founded}. Pre-Nursery to Class 8, English medium.
               Affiliated to the state board.
+            </p>
+            <p className="mt-4 flex gap-4 text-sm font-semibold text-gold-soft">
+              <a href={SCHOOL.social.facebook} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-gold">
+                Facebook
+              </a>
+              <a href={SCHOOL.social.instagram} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-gold">
+                Instagram
+              </a>
             </p>
           </div>
 
@@ -116,12 +124,6 @@ export function Footer() {
                 </span>
               </li>
             </ul>
-            <dl className="mt-6 space-y-1 text-xs text-canvas/60">
-              <div className="flex gap-2">
-                <dt className="font-semibold">Board:</dt>
-                <dd>{SCHOOL.board}</dd>
-              </div>
-            </dl>
           </div>
         </div>
 

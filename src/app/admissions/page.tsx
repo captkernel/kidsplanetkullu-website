@@ -20,6 +20,21 @@ export const metadata: Metadata = pageMetadata({
     "Admissions open for 2027-28 at Kids Planet School, Dhalpur, Kullu. Nursery 3+, LKG 4+, UKG 5+, Class 1 6+. Walk in, or call 94180 23454.",
 });
 
+// Fill in when the session's fees are approved; the table appears automatically.
+// Amounts in rupees. Leave FEES empty to show the "ask the office" text instead.
+const FEES: { stage: string; admission: number; annual: number; monthly: number }[] = [];
+const FEE_NOTE = "";
+const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
+
+// From 01-strategy/CLAIMS-SHEET.md (school policy).
+const AGES: [string, string][] = [
+  ["Pre-Nursery", "Reopens with the 2027-28 session. Ask us about age"],
+  ["Nursery", "3 years and above"],
+  ["LKG", "4 years and above"],
+  ["UKG", "5 years and above"],
+  ["Class 1", "6 years and above"],
+];
+
 const STEPS = [
   {
     n: "01",
@@ -134,20 +149,23 @@ export default function AdmissionsPage() {
             <p className="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
               Before anything else, a parent needs to trust where their child
               spends the day. Careful vans on the valley roads, a gated and
-              watched campus, staff trained in first aid, and nutritious meals
-              are looked after here every single day. It is the quiet
+              watched campus, first aid and a call home the same day, and a
+              child handed only to a named guardian, every single day. It is the quiet
               groundwork that lets a child simply get on with being a child.
             </p>
           </FadeIn>
         </div>
       </Section>
 
-      {/* Fees & calendar placeholders. Kept intact. */}
+      {/* Practical details. Fees render as a table once FEES is filled in for the
+          session; until then the card says how fees are shared. Ages and the
+          walk-in policy come from 01-strategy/CLAIMS-SHEET.md. No dates until
+          this cycle's are fixed (claims sheet). */}
       <Section tone="canvas">
         <div className="max-w-2xl">
           <Eyebrow>The practical details</Eyebrow>
           <h2 className="mt-4 font-display text-3xl md:text-4xl">
-            Fees, dates, and everything in between.
+            Fees, ages, and how to join.
           </h2>
         </div>
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
@@ -155,17 +173,39 @@ export default function AdmissionsPage() {
             <Card className="h-full p-8">
               <Eyebrow>Fees</Eyebrow>
               <h3 className="mt-3 font-display text-2xl md:text-3xl">
-                Fee structure
+                Fees for {SCHOOL.admissionsYear}
               </h3>
-              <p className="mt-4 leading-relaxed text-ink-soft">
-                Fees vary by stage, from Pre-Nursery to Class 8. For the current
-                fee schedule and any sibling concession, please speak with the
-                school office. We will share the full breakdown during your
-                visit.
-              </p>
-              <div className="mt-6 rounded-xl border border-dashed border-line bg-surface p-4 text-sm text-ink-soft">
-                [TO CONFIRM: published fee table for 2026 to 27, per stage.]
-              </div>
+              {FEES.length > 0 ? (
+                <div className="mt-5 overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead>
+                      <tr className="border-b border-line text-ink-soft">
+                        <th className="py-2 pr-4 font-semibold">Stage</th>
+                        <th className="py-2 pr-4 font-semibold">Admission (once)</th>
+                        <th className="py-2 pr-4 font-semibold">Annual charges</th>
+                        <th className="py-2 font-semibold">Tuition / month</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {FEES.map((f) => (
+                        <tr key={f.stage} className="border-b border-line/60">
+                          <td className="py-2.5 pr-4 font-medium text-ink">{f.stage}</td>
+                          <td className="py-2.5 pr-4">{inr(f.admission)}</td>
+                          <td className="py-2.5 pr-4">{inr(f.annual)}</td>
+                          <td className="py-2.5">{inr(f.monthly)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {FEE_NOTE && <p className="mt-3 text-sm text-ink-soft">{FEE_NOTE}</p>}
+                </div>
+              ) : (
+                <p className="mt-4 leading-relaxed text-ink-soft">
+                  Fees are set by stage, from Pre-Nursery to Class 8. Call or
+                  visit and the office will walk you through the full breakdown
+                  for your child&rsquo;s class.
+                </p>
+              )}
               <Button href={telHref} external variant="secondary" size="md" className="mt-6">
                 Ask about fees
               </Button>
@@ -174,19 +214,26 @@ export default function AdmissionsPage() {
 
           <FadeIn delay={100}>
             <Card className="h-full p-8">
-              <Eyebrow>Calendar</Eyebrow>
+              <Eyebrow>Who can join</Eyebrow>
               <h3 className="mt-3 font-display text-2xl md:text-3xl">
-                Session and key dates
+                Ages and admission
               </h3>
-              <p className="mt-4 leading-relaxed text-ink-soft">
-                The academic session runs across the year, with admission
-                windows opening ahead of it. Reach out for the exact
-                application deadline for your child&rsquo;s class this year.
-              </p>
-              <div className="mt-6 rounded-xl border border-dashed border-line bg-surface p-4 text-sm text-ink-soft">
-                [TO CONFIRM: session start date and admission deadlines for 2026 to 27.]
-              </div>
-              <ul className="mt-6 space-y-2 text-sm text-ink">
+              <table className="mt-5 w-full text-left text-sm">
+                <tbody>
+                  {AGES.map(([cls, age]) => (
+                    <tr key={cls} className="border-b border-line/60">
+                      <td className="py-2.5 pr-4 font-medium text-ink">{cls}</td>
+                      <td className="py-2.5 text-ink-soft">{age}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <ul className="mt-5 space-y-2 leading-relaxed text-ink-soft">
+                <li>Admissions for {SCHOOL.admissionsYear} are open now, from Pre-Nursery to Class 8.</li>
+                <li>Walk in on any working day. No appointment needed.</li>
+                <li>English medium.</li>
+              </ul>
+              <ul className="mt-5 space-y-1 text-sm text-ink">
                 <li>Office hours: {SCHOOL.timings.weekday}</li>
                 <li>{SCHOOL.timings.saturday}</li>
               </ul>
@@ -211,19 +258,13 @@ export default function AdmissionsPage() {
               office hours, or message us on WhatsApp any time.
             </p>
             <p className="mt-6 font-display text-xl italic text-primary">
-              We would love to help your child aim for the stars.
+              Come and see an ordinary morning here. It says more than we can.
             </p>
             <dl className="mt-8 space-y-3 text-sm text-ink">
               <div>
                 <dt className="font-semibold text-ink">Where we are</dt>
                 <dd className="text-ink-soft">
                   Guru Behar, Dhalpur, Kullu, Himachal Pradesh 175101
-                </dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-ink">Affiliation</dt>
-                <dd className="text-ink-soft">
-                  {SCHOOL.board}
                 </dd>
               </div>
             </dl>

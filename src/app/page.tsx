@@ -12,7 +12,6 @@ import {
   MapPin,
   CalendarClock,
   Bus,
-  Utensils,
   HeartPulse,
   DoorClosed,
 } from "lucide-react";
@@ -105,7 +104,7 @@ const STAGES = [
   {
     label: "Primary",
     range: "Class 1 to 5, ages 6 to 11",
-    body: "Reading, numbers, and ideas taught for real understanding, in English and Hindi.",
+    body: "Reading, numbers, and ideas taught for real understanding, in an English-medium classroom.",
     image: "/images/classroom/students-in-class.jpg",
     href: "/programs#primary",
   },
@@ -135,11 +134,6 @@ const SAFE_HANDS = [
     body: "Teachers handle the everyday scrapes, and a parent hears about it the same day.",
   },
   {
-    icon: Utensils,
-    title: "A warm meal every day",
-    body: "Freshly cooked, wholesome food, so no child sits through the afternoon hungry.",
-  },
-  {
     icon: ShieldCheck,
     title: "Only into hands you know",
     body: "A child leaves with a named guardian, on a pickup routine parents recognise.",
@@ -157,7 +151,7 @@ const TRUST_FACTS = [
   {
     icon: Users,
     title: "Small classes",
-    body: "About ten children to a teacher, so no one slips quietly to the back.",
+    body: "Thirteen children to every teacher, so no one slips quietly to the back.",
   },
   {
     icon: Compass,
@@ -233,7 +227,7 @@ export default function HomePage() {
             >
               A valley school where children
               <br className="hidden sm:block" /> learn to{" "}
-              <em className="italic text-gold-soft">excel and explore.</em>
+              <em className="italic text-gold-soft">explore and excel.</em>
             </h1>
             <p
               className="mt-5 max-w-lg leading-relaxed text-canvas/85"
@@ -474,9 +468,6 @@ export default function HomePage() {
                   <span className="text-ink-soft">rated by parents on JustDial</span>
                 </span>
               </a>
-              <p className="mt-4 text-sm text-ink-soft">
-                Affiliated to the {SCHOOL.board}.
-              </p>
             </FadeIn>
             <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3.5">
               {TRUST_FACTS.map((f, i) => {
@@ -533,20 +524,20 @@ export default function HomePage() {
               <h2 className="mt-2 font-display"
                 style={{ fontSize: "clamp(1.5rem, 4.5vw, 2.5rem)" }}
               >
-                Started by a family that still knows every name.
+                Opened in 2010, still run by the family that began it.
               </h2>
               <div className="mt-4 space-y-3 leading-relaxed text-ink-soft sm:mt-5"
                 style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.125rem)" }}
               >
                 <p>
-                  In 2010, Kids Planet opened as a small playgroup with one
-                  belief: every child in the valley deserves a school where they
-                  are truly known, not just enrolled.
+                  In 2010, Kids Planet opened as a small playgroup in Dhalpur
+                  with one belief: every child in the valley deserves patient
+                  teaching and a high standard, side by side.
                 </p>
                 <p>
-                  Sixteen years on, it is a full Pre-Nursery to Class 8 school
-                  trusted by hundreds of Kullu families, still run by the
-                  founding family, close to every name on the roll.
+                  Sixteen years on, it is a Pre-Nursery to Class 8 school
+                  trusted by hundreds of Kullu families, with thirteen children
+                  to every teacher, and still run by the family that founded it.
                 </p>
               </div>
               <Button href="/about" variant="secondary" size="md" className="mt-6">
@@ -568,7 +559,7 @@ export default function HomePage() {
             <h2 className="mt-2 font-display"
               style={{ fontSize: "clamp(1.6rem, 5vw, 3rem)" }}
             >
-              Don't take our word for it. Take theirs.
+              Don&rsquo;t take our word for it. Take theirs.
             </h2>
             <p className="mt-4 max-w-xl leading-relaxed text-ink-soft"
               style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.125rem)" }}
@@ -672,9 +663,9 @@ export default function HomePage() {
             <p className="mt-4 max-w-xl leading-relaxed text-canvas/85"
               style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.125rem)" }}
             >
-              Seats from Pre-Nursery to Class 8 are filling now. Book a visit to
-              walk the Dhalpur campus, meet the teachers, and begin the
-              admission.
+              Admissions are open from Pre-Nursery to Class 8. Walk in on any
+              working day, or book a visit to see the Dhalpur campus, meet the
+              teachers, and begin the admission.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <MagneticButton href="/admissions#visit" size="lg">

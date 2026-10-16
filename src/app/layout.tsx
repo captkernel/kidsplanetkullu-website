@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: SCHOOL.name,
     title: "Kids Planet School, Dhalpur Kullu",
     description:
-      "A Pre-Nursery to Class 8 school in the Kullu Valley since 2010. Small classes and teachers who stay close to your child. Admissions open for 2027-28.",
+      "A Pre-Nursery to Class 8 school in the Kullu Valley since 2010. Small classes, thirteen children to every teacher. Admissions open for 2027-28.",
     url: "/",
     locale: "en_IN",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${SCHOOL.name}` }],

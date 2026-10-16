@@ -39,7 +39,7 @@ export default function AboutPage() {
             <em className="italic text-primary">patient teaching.</em>
           </>
         }
-        intro="Established in 2010, Kids Planet has grown from a small school into a full Pre-Nursery to Class 8 school trusted by hundreds of Kullu families."
+        intro="Established in 2010, Kids Planet has grown from a small playgroup into a Pre-Nursery to Class 8 school trusted by hundreds of Kullu families."
       />
 
       {/* Founder story */}
@@ -64,21 +64,18 @@ export default function AboutPage() {
               <p>
                 Kids Planet was founded in 2010 by Mrs. Neeta Parmar, whose years
                 of teaching shaped a simple belief: every child in the valley
-                deserves a school where they are truly known.
+                deserves patient teaching and a high standard, side by side.
               </p>
               <p>
                 Alongside Mr. Ranjeet Parmar, she grew a small playgroup into a
-                full Pre-Nursery to Class 8 institution trusted by hundreds of
-                Kullu families. We remember them with love.
+                Pre-Nursery to Class 8 school trusted by hundreds of Kullu
+                families. We remember them with love.
               </p>
               <p>
                 Their vision is carried forward today by the founding family, who
-                stay close to the classroom and to every name on the roll.
+                stay close to the classroom.
               </p>
             </div>
-            <p className="mt-6 text-sm italic text-ink-soft">
-              [TO CONFIRM: founder wording to be approved before publishing.]
-            </p>
           </FadeIn>
         </div>
       </Section>

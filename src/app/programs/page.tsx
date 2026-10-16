@@ -38,7 +38,7 @@ const STAGES = [
     label: "Primary School",
     range: "Class 1 to 5",
     overview:
-      "The foundation years, taught for understanding rather than rote. English and Hindi, science that gets explored, and value education woven through the ordinary day.",
+      "The foundation years, taught for understanding rather than rote. English-medium teaching, science that gets explored, and value education woven through the ordinary day.",
     image: "/images/classroom/students-in-class.jpg",
     ids: ["primary-lower", "primary-upper"],
   },
@@ -69,7 +69,7 @@ const VALUES = [
   {
     icon: ShieldCheck,
     title: "Confidence",
-    body: "The quiet self-belief that comes from being truly known, and from being stretched at the right pace.",
+    body: "The quiet self-belief that comes from small classes, and from being stretched at the right pace.",
   },
   {
     icon: Sprout,
@@ -212,8 +212,8 @@ export default function ProgramsPage() {
             The best way to understand a program is to watch a class.
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-canvas/80">
-            Come and sit in on a morning. See how a child is taught, met, and
-            known here, and picture your own in the room.
+            Come and sit in on a morning. See how a child is taught
+            here, and picture your own in the room.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button
