@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/admissions/",
   title: "Admissions 2027-28",
   description:
-    "Admissions open for 2027-28 at Kids Planet School, Dhalpur, Kullu. Nursery 3+, LKG 4+, UKG 5+, Class 1 6+. Walk in, or call 94180 23454.",
+    "Admissions open for 2027-28 at Kids Planet School, Dhalpur, Kullu. Pre-Nursery 2+, Nursery 3+, LKG 4+, UKG 5+, Class 1 6+. Walk in, or call 94180 23454.",
 });
 
 // Fill in when the session's fees are approved; the table appears automatically.
@@ -28,7 +28,7 @@ const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 
 // From 01-strategy/CLAIMS-SHEET.md (school policy).
 const AGES: [string, string][] = [
-  ["Pre-Nursery", "Reopens with the 2027-28 session. Ask us about age"],
+  ["Pre-Nursery", "2 years and above (reopens with the 2027-28 session)"],
   ["Nursery", "3 years and above"],
   ["LKG", "4 years and above"],
   ["UKG", "5 years and above"],
