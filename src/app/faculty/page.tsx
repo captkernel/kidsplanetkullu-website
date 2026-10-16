@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/faculty/",
   title: "Our Teachers",
   description:
-    "Meet the teaching staff of Kids Planet, Kullu. Trained, qualified teachers who stay close to your child across Pre-Nursery to Class 8.",
+    "Meet the teaching staff of Kids Planet, Kullu. Fourteen trained, qualified teachers across Pre-Nursery to Class 8, thirteen children to every teacher.",
 });
 
 // Data source: src/data/faculty.generated.json, exported from the Student Portal
@@ -121,7 +121,7 @@ export default function FacultyPage() {
       <PageHero
         eyebrow="Our teachers"
         title="Qualified teachers who give your child real personal attention."
-        intro="Our strength is not a building. It is a team of trained, qualified teachers who stay close to every child through the years that matter most."
+        intro="Our strength is not a building. It is a team of trained, qualified teachers, with thirteen children to every teacher, so each child gets real attention."
       />
 
       <Section tone="canvas">
@@ -198,7 +198,7 @@ export default function FacultyPage() {
             Come meet them
           </Eyebrow>
           <h2 className="mt-4 font-display text-3xl text-canvas md:text-4xl">
-            The teachers are the reason families stay for years.
+            Meet the people who teach here.
           </h2>
           <div className="mt-8 flex justify-center">
             <Button

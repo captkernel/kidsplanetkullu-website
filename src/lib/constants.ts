@@ -12,7 +12,7 @@ export const SCHOOL = {
   founderTitle: "Founder",
   // LEGACY DRAFT — every word subject to Karan's approval before deploy.
   founderBio:
-    "Kids Planet was founded in 2010 by Mrs. Neeta Parmar, whose decades of teaching shaped a simple belief: every child in the valley deserves a school where they are truly known. Alongside Mr. Ranjeet Parmar, she grew a small playgroup into a full Pre-Nursery to Class 8 institution trusted by hundreds of Kullu families. We remember them with love. Their vision is carried forward today by the founding family's next generation.",
+    "Kids Planet was founded in 2010 by Mrs. Neeta Parmar, whose decades of teaching shaped a simple belief: every child in the valley deserves patient teaching and a high standard, side by side. Alongside Mr. Ranjeet Parmar, she grew a small playgroup into a Pre-Nursery to Class 8 school trusted by hundreds of Kullu families. We remember them with love. Their vision is carried forward today by the founding family's next generation.",
   address: "Kids Planet School, Gurubehar, Dhalpur, Kullu 175101",
   phone: "+919418023454",
   phoneDisplay: "+91 94180 23454",

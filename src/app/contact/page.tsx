@@ -147,12 +147,6 @@ export default function ContactPage() {
                 <li>{SCHOOL.timings.saturday}</li>
                 <li>{SCHOOL.timings.sunday}</li>
               </ul>
-              <dl className="mt-6 space-y-1 border-t border-line pt-4 text-sm text-ink-soft">
-                <div className="flex gap-2">
-                  <dt className="font-semibold text-ink">Board:</dt>
-                  <dd>{SCHOOL.board}</dd>
-                </div>
-              </dl>
             </Card>
           </FadeIn>
 
