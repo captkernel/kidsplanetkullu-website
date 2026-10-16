@@ -27,7 +27,7 @@ robocopy $src $dest /MIR `
   /XF .preview.log next-env.d.ts *.tsbuildinfo .env .env.local kp-logo-large.png `
       finance.ts media-library.ts stickers.ts curated-icons.ts templates.ts `
       achievements.json daily-schedule.json faq.json gallery.json news.json testimonials.json `
-      SEO_RESEARCH.md `
+      SEO_RESEARCH.md DRAFT-*.md `
   /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed with exit code $LASTEXITCODE" }
 
