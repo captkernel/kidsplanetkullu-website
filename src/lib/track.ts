@@ -1,12 +1,22 @@
-// Cookieless visitor analytics -> kp-pulse Cloudflare Worker (see ../website-analytics).
-// No cookies, no personal data: a random per-tab session id lives in sessionStorage only.
+// Visitor analytics -> kp-pulse Cloudflare Worker (see ../website-analytics).
+// No cookies, no personal data: a random per-tab session id lives in sessionStorage. A lasting id
+// is added only for visitors who chose Allow (see consent.ts).
 // Disabled unless NEXT_PUBLIC_PULSE_URL is set at build time.
+
+import { lastingId } from "./consent";
 
 const ENDPOINT = process.env.NEXT_PUBLIC_PULSE_URL;
 
 type Payload = Record<string, string | number | undefined>;
 
-function sessionId(): string {
+/** Collector address for a path, or null when analytics is off here. */
+export function endpoint(path: "/b" | "/r"): string | null {
+  if (!ENDPOINT || typeof window === "undefined") return null;
+  if (location.hostname === "localhost" && !process.env.NEXT_PUBLIC_PULSE_LOCAL) return null;
+  return ENDPOINT.replace(/\/p$/, path);
+}
+
+export function sessionId(): string {
   try {
     let s = sessionStorage.getItem("kp_s");
     if (!s) {
@@ -21,8 +31,8 @@ function sessionId(): string {
 
 export function send(data: Payload) {
   if (!ENDPOINT || typeof window === "undefined") return;
-  if (location.hostname === "localhost" && !location.search.includes("pulse")) return;
-  const body = JSON.stringify({ ...data, s: sessionId(), p: data.p ?? location.pathname });
+  if (location.hostname === "localhost" && !process.env.NEXT_PUBLIC_PULSE_LOCAL && !location.search.includes("pulse")) return;
+  const body = JSON.stringify({ ...data, s: sessionId(), v: lastingId(), p: data.p ?? location.pathname });
   try {
     // text/plain keeps this a "simple" request: no CORS preflight.
     const blob = new Blob([body], { type: "text/plain" });

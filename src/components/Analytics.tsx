@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { send, track } from "@/lib/track";
+import { startInteractions, watchSections } from "@/lib/interactions";
 
 type NetInfo = { effectiveType?: string; saveData?: boolean };
 
@@ -162,6 +163,10 @@ export function Analytics() {
       leave();
     };
   }, [pathname]);
+
+  // Clicks, form fields and errors for the whole visit; sections read, page by page.
+  useEffect(() => startInteractions(), []);
+  useEffect(() => watchSections(pathname), [pathname]);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {

@@ -66,7 +66,7 @@ export function InquiryForm() {
   const classes = CLASSES;
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5" noValidate>
+    <form data-form="enquiry" onSubmit={onSubmit} className="space-y-5" noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="parent" className={labelCls}>

@@ -12,6 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@rrweb/record": "2.2.2",
     "framer-motion": "^12.38.0",
     "html-to-image": "^1.11.13",
     "jszip": "^3.10.1",

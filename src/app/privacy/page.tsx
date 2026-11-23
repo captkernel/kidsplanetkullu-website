@@ -4,6 +4,7 @@ import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/ui/Section";
 import { SCHOOL } from "@/lib/constants";
 import { mailHref, telHref } from "@/lib/links";
+import { VisitControls } from "@/components/VisitChoice";
 
 export const metadata: Metadata = pageMetadata({
   path: "/privacy/",
@@ -80,6 +81,25 @@ export default function PrivacyPage() {
             </div>
           ))}
         </dl>
+        <div id="visits" className="mt-12 max-w-3xl scroll-mt-28">
+          <h2 className="font-display text-2xl text-primary">When you only visit this website</h2>
+          <p className="mt-4 leading-relaxed text-ink-soft">
+            <strong className="text-ink">For every visit</strong> we count, without cookies and without knowing who you
+            are: the pages and sections looked at and for how long, which buttons are tapped, which form fields are
+            opened and whether they were filled, errors shown, the kind of device, the approximate town your network
+            reports, and the site you came from. We never collect what you type. Your network address is not stored;
+            it is used only to make a code that changes every day, so one day cannot be joined to the next.
+          </p>
+          <p className="mt-4 leading-relaxed text-ink-soft">
+            <strong className="text-ink">Only if you choose Allow</strong>, we also keep a random number on your device
+            for up to one year, so we know it is the same device coming back, and we record how our public pages are
+            scrolled and tapped. Forms are left out of recordings, and the parent area, the application form and the
+            status page are never recorded. Recordings are kept for 30 days, can be seen only by the school office, and
+            are not shared with anyone or used for advertising. This is for adults: if you are under 18, please do not
+            choose Allow. You can change your mind here at any time.
+          </p>
+          <VisitControls />
+        </div>
         <p className="mt-10 max-w-3xl leading-relaxed text-ink">
           Questions, corrections or a request to delete: call{" "}
           <a href={telHref} className="font-semibold text-primary">{SCHOOL.phoneDisplay}</a>{" "}

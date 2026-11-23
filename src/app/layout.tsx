@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 import { Analytics } from "@/components/Analytics";
+import { VisitChoice } from "@/components/VisitChoice";
 import { SCHOOL } from "@/lib/constants";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -74,6 +75,7 @@ export default function RootLayout({
         <Footer />
         <StickyMobileCTA />
         <Analytics />
+        <VisitChoice />
       </body>
     </html>
   );
