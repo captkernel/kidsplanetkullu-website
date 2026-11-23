@@ -62,6 +62,15 @@ export default function ApplyPage() {
               </p>
             </div>
             <div>
+              <h2 className="font-display text-2xl">Not ready to apply?</h2>
+              <p className="mt-3 leading-relaxed text-ink-soft">
+                <Link href="/parent/?new=1" className="font-semibold text-primary underline underline-offset-4">
+                  Create a free parent profile
+                </Link>{" "}
+                instead. It takes a minute, and your details are waiting when you come back.
+              </p>
+            </div>
+            <div>
               <h2 className="font-display text-2xl">Already applied?</h2>
               <p className="mt-3 leading-relaxed text-ink-soft">
                 <Link href="/admissions/status/" className="font-semibold text-primary underline underline-offset-4">

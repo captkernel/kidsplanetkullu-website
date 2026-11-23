@@ -137,6 +137,29 @@ export async function shrinkImage(file: File, maxSide = 1800, quality = 0.85): P
   }
 }
 
+// The words a parent agrees to when opening a profile without an application.
+export const PROFILE_CONSENT_TEXT =
+  "I am a parent or guardian. I agree to Kids Planet School keeping the details I give here, so that it can contact me about admission and show me school updates.";
+
+// Carries a child's details from the profile to the application form, in this tab only
+// (never in the page address, where it would be logged).
+const PREFILL_KEY = "kp_prefill";
+export type Prefill = { child_name: string; child_dob: string; class_sought: string };
+export function setPrefill(p: Prefill) {
+  try {
+    sessionStorage.setItem(PREFILL_KEY, JSON.stringify(p));
+  } catch {}
+}
+export function takePrefill(): Prefill | null {
+  try {
+    const v = JSON.parse(sessionStorage.getItem(PREFILL_KEY) || "null");
+    sessionStorage.removeItem(PREFILL_KEY);
+    return v && typeof v === "object" ? v : null;
+  } catch {
+    return null;
+  }
+}
+
 // ---- the parent's saved place on this phone -------------------------------
 
 const KEY = "kp_apply";
@@ -173,7 +196,11 @@ export type Account = {
   must_change: boolean;
   phone_verified: boolean;
   created_at: string;
+  /** Present only while the number is unconfirmed: the parent sends it from their own WhatsApp. */
+  verify_code: string;
 };
+/** A child a family is considering, saved on a profile before any application. */
+export type Interest = { id: string; child_name: string; child_dob: string; class_sought: string };
 export type SignedInDevice = { id: string; device: string; created_at: string; last_used_at: string; current: boolean };
 export type AccountEvent = { kind: string; device: string; at: string };
 export type EnrolledChild = { name: string; class: string };
@@ -182,6 +209,7 @@ export type AccountData = {
   account: Account;
   applications: Application[];
   children: EnrolledChild[];
+  interests: Interest[];
   updates: SchoolUpdate[];
   sessions: SignedInDevice[];
   events: AccountEvent[];
@@ -202,6 +230,9 @@ export async function fetchFeatures(): Promise<Features> {
 // How the profile's "Recent activity" reads to a parent.
 export const EVENT_WORDS: Record<string, string> = {
   profile_created: "Profile created",
+  profile_created_without_application: "Profile created",
+  profile_reclaimed_with_reference: "Profile set up again with your application reference",
+  number_confirmed_by_office: "Mobile number confirmed by the school office",
   profile_created_by_office: "Profile created for you by the school office",
   children_updated_by_office: "Your children's details updated by the office",
   signed_in: "Signed in",

@@ -264,6 +264,13 @@ export default function AdmissionsPage() {
                 </li>
                 <li>English medium.</li>
                 <li>
+                  Still deciding?{" "}
+                  <Link href="/parent/?new=1" className="font-semibold text-primary underline underline-offset-4">
+                    Create a free parent profile
+                  </Link>{" "}
+                  and apply when you are ready.
+                </li>
+                <li>
                   No fee to apply.{" "}
                   <Link href="/admissions/apply/" className="font-semibold text-primary underline underline-offset-4">
                     Apply online

@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Bell, Check, FileUp, GraduationCap, Loader2, LogOut, Phone, Plus, ShieldCheck, Smartphone } from "lucide-react";
+import { Bell, Check, FileUp, GraduationCap, Loader2, LogOut, MessageCircle, Phone, Plus, ShieldCheck, Smartphone } from "lucide-react";
 import {
-  admissionsOnline, api, ApiError, clearSession, DOC_KINDS, EVENT_WORDS, fetchFeatures, loadSaved, loadSession,
-  MIN_PASSWORD, saveSession, shrinkImage, STATUS_LABELS, uploadFile,
-  type Account, type AccountData, type Application, type Features, type SchoolUpdate,
+  admissionsOnline, ageGuidance, api, ApiError, CLASSES, clearSession, DOC_KINDS, EVENT_WORDS, fetchFeatures, loadSaved, loadSession,
+  MIN_PASSWORD, PROFILE_CONSENT_TEXT, saveSession, setPrefill, shrinkImage, STATUS_LABELS, uploadFile,
+  type Account, type AccountData, type Application, type Features, type Interest, type SchoolUpdate,
 } from "@/lib/admissions";
 import { SCHOOL } from "@/lib/constants";
-import { telHref } from "@/lib/links";
+import { telHref, whatsappHref } from "@/lib/links";
 import { track } from "@/lib/track";
 import { HumanCheck } from "./HumanCheck";
 import { PasswordField } from "./PasswordField";
@@ -129,21 +129,30 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [ref, setRef] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [child, setChild] = useState({ name: "", child_dob: "", class_sought: "" });
+  const [ref, setRef] = useState("");
+  const [hasRef, setHasRef] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState(""); // honeypot, hidden from people
   const [human, setHuman] = useState<string | null>(null);
   const [round, setRound] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Someone who has just applied on this phone has their reference filled in.
+  // ?new=1 opens straight on "Create a profile". Someone who has just applied on this phone
+  // has their reference filled in, which confirms their number at once.
   useEffect(() => {
     const prefill = async () => {
-      const q = new URLSearchParams(window.location.search).get("ref");
-      const r = (q || loadSaved()?.ref || "").toUpperCase();
-      if (r) setRef(r);
-      if (q) setMode("new");
+      const q = new URLSearchParams(window.location.search);
+      const r = (q.get("ref") || loadSaved()?.ref || "").toUpperCase();
+      if (r) {
+        setRef(r);
+        setHasRef(true);
+      }
+      if (q.get("ref") || q.get("new")) setMode("new");
     };
     void prefill();
   }, []);
@@ -151,19 +160,27 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const useRef = hasRef && ref.trim() !== "";
     if (mode === "in" && (!id.trim() || !password)) return setError("Please enter your mobile number or email, and your password.");
     if (mode === "new") {
-      if (!ref.trim() || !phone.trim()) return setError("Please enter your reference and the mobile number you applied with.");
+      if (!useRef && !name.trim()) return setError("Please add your name.");
+      if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, "").slice(-10))) return setError("Please add a 10 digit mobile number.");
       if (password.length < MIN_PASSWORD) return setError(SHORT);
       if (password !== confirm) return setError("The two passwords are not the same. Please type them again.");
+      if (!useRef && !consent) return setError("Please tick the box so we can keep your details.");
     }
     setBusy(true);
     try {
       const r =
         mode === "in"
           ? await api<{ session: string }>("POST", "/api/account/login", { body: { id, password, ts: human } })
-          : await api<{ session: string }>("POST", "/api/account/register", { body: { ref, phone, password, email, ts: human } });
-      track(mode === "in" ? "account_login" : "account_create", "parent page");
+          : await api<{ session: string }>("POST", "/api/account/register", {
+              body: {
+                name, phone, password, email, ts: human, website,
+                ...(useRef ? { ref } : { consent: true, consent_text: PROFILE_CONSENT_TEXT, child }),
+              },
+            });
+      track(mode === "in" ? "account_login" : "account_create", mode === "in" ? "parent page" : useRef ? "with reference" : "without application");
       await onSignedIn(r.session);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Please try again.");
@@ -185,6 +202,7 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
       {label}
     </button>
   );
+  const guide = ageGuidance(child.child_dob, child.class_sought);
 
   return (
     <div className="max-w-xl">
@@ -204,30 +222,85 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
         ) : (
           <>
             <p className="leading-relaxed text-ink-soft">
-              If your child is already at Kids Planet, the office gives you your login:
-              call or message us and sign in with the password we send. If you have
-              applied or enquired online, create your profile here with the reference
-              we gave you.{" "}
-              <Link href="/admissions/apply/" className="font-semibold text-primary underline underline-offset-4">
-                Not applied yet? Start here.
-              </Link>
+              A profile is free and takes a minute. You do not need to apply first: we keep your
+              details, show you school updates, and your form is half filled when you are ready.
+              If your child is already at Kids Planet, ask the office for your login instead.
             </p>
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label htmlFor="reg_ref" className={labelCls}>Reference</label>
-                <input id="reg_ref" value={ref} onChange={(e) => setRef(e.target.value.toUpperCase())} className={`mt-2 ${field} uppercase`} placeholder="KP27-ABC234" autoComplete="off" />
+                <label htmlFor="reg_name" className={labelCls}>Your name</label>
+                <input id="reg_name" value={name} onChange={(e) => setName(e.target.value)} className={`mt-2 ${field}`} placeholder="Parent or guardian" autoComplete="name" />
               </div>
               <div>
                 <label htmlFor="reg_phone" className={labelCls}>Mobile number</label>
-                <input id="reg_phone" type="tel" inputMode="numeric" value={phone} onChange={(e) => setPhone(e.target.value)} className={`mt-2 ${field}`} placeholder="The number you applied with" autoComplete="tel" />
+                <input id="reg_phone" type="tel" inputMode="numeric" value={phone} onChange={(e) => setPhone(e.target.value)} className={`mt-2 ${field}`} placeholder="10 digit mobile number" autoComplete="tel" />
               </div>
             </div>
             <div>
               <label htmlFor="reg_email" className={labelCls}>Email</label>
               <input id="reg_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field}`} placeholder="Only if you use one. You can sign in with it too." autoComplete="email" />
             </div>
+
+            {!hasRef && (
+              <fieldset className="rounded-xl border border-line p-4">
+                <legend className="px-2 text-sm font-semibold text-primary">Your child (optional)</legend>
+                <p className="text-sm text-ink-soft">Tell us who you are thinking of, and the office can guide you on the right class.</p>
+                <div className="mt-3 grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <label htmlFor="reg_child" className={labelCls}>First name</label>
+                    <input id="reg_child" value={child.name} onChange={(e) => setChild({ ...child, name: e.target.value })} className={`mt-2 ${field}`} autoComplete="off" />
+                  </div>
+                  <div>
+                    <label htmlFor="reg_dob" className={labelCls}>Date of birth</label>
+                    <input id="reg_dob" type="date" value={child.child_dob} onChange={(e) => setChild({ ...child, child_dob: e.target.value })} className={`mt-2 ${field}`} />
+                  </div>
+                  <div>
+                    <label htmlFor="reg_class" className={labelCls}>Class</label>
+                    <select id="reg_class" value={child.class_sought} onChange={(e) => setChild({ ...child, class_sought: e.target.value })} className={`mt-2 ${field}`}>
+                      <option value="">Not sure yet</option>
+                      {CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
+                {guide && <p className="mt-3 text-sm leading-relaxed text-ink-soft">{guide.text}</p>}
+              </fieldset>
+            )}
+
             <PasswordField id="pw" label="Choose a password" value={password} onChange={setPassword} autoComplete="new-password" guide />
             <PasswordField id="pw2" label="Type it once more" value={confirm} onChange={setConfirm} autoComplete="new-password" />
+
+            {hasRef ? (
+              <div>
+                <label htmlFor="reg_ref" className={labelCls}>Your application reference</label>
+                <input id="reg_ref" value={ref} onChange={(e) => setRef(e.target.value.toUpperCase())} className={`mt-2 ${field} uppercase`} placeholder="KP27-ABC234" autoComplete="off" />
+                <p className="mt-1 text-sm text-ink-soft">
+                  Use the mobile number you applied with. This links your application and confirms your number at once.{" "}
+                  <button type="button" onClick={() => { setHasRef(false); setRef(""); }} className="font-semibold text-primary underline underline-offset-4">
+                    I have not applied yet
+                  </button>
+                </p>
+              </div>
+            ) : (
+              <>
+                <button type="button" onClick={() => setHasRef(true)} className="text-sm font-semibold text-primary underline underline-offset-4">
+                  Already applied or enquired? Add your reference
+                </button>
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-canvas p-4">
+                  <input type="checkbox" className="mt-1 h-5 w-5 accent-[#2d5016]" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+                  <span className="text-sm leading-relaxed text-ink">
+                    {PROFILE_CONSENT_TEXT}{" "}
+                    <Link href="/privacy/" target="_blank" className="font-semibold text-primary underline underline-offset-4">
+                      How we look after your details
+                    </Link>
+                  </span>
+                </label>
+              </>
+            )}
+            {/* Honeypot: hidden from people, tempting to bots. */}
+            <div className="hidden" aria-hidden>
+              <label htmlFor="reg_website">Website</label>
+              <input id="reg_website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+            </div>
           </>
         )}
         <HumanCheck onToken={setHuman} resetKey={round} />
@@ -238,7 +311,11 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
         </button>
         {mode === "in" && (
           <p className="text-sm leading-relaxed text-ink-soft">
-            Forgotten your password? Call the office on{" "}
+            New here?{" "}
+            <button type="button" onClick={() => setMode("new")} className="font-semibold text-primary underline underline-offset-4">
+              Create a free profile
+            </button>
+            . Forgotten your password? Call the office on{" "}
             <a href={telHref} className="font-semibold text-primary">{SCHOOL.phoneDisplay}</a>{" "}
             from your registered number and we will give you a temporary one.
           </p>
@@ -316,10 +393,15 @@ function Profile(props: ProfileProps) {
   const { account, applications } = data;
   const children = data.children ?? [];
   const updates = data.updates ?? [];
+  const interests = data.interests ?? [];
   return (
     <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]" data-private>
       <div>
+        {!account.phone_verified && <ConfirmNumber account={account} />}
         <Updates updates={updates} firstName={account.name.split(" ")[0]} />
+        {(interests.length > 0 || (applications.length === 0 && children.length === 0)) && (
+          <Considering interests={interests} session={session} setData={props.setData} />
+        )}
 
         {children.length > 0 && (
           <section className="mb-10" data-testid="enrolled">
@@ -368,6 +450,131 @@ function Profile(props: ProfileProps) {
         <Security {...props} />
       </div>
     </div>
+  );
+}
+
+/** A profile opened without an application has an unconfirmed number. One WhatsApp message fixes that. */
+function ConfirmNumber({ account }: { account: Account }) {
+  const text = `Namaste Kids Planet, please confirm my parent profile. My code is ${account.verify_code}.`;
+  return (
+    <section className="mb-10 rounded-2xl border border-gold bg-gold/10 p-5" data-testid="confirm-number">
+      <h2 className="font-display text-xl">Confirm your mobile number</h2>
+      <p className="mt-2 leading-relaxed text-ink">
+        Send us one WhatsApp message from {account.phone}, so we know this number is yours.
+        Once the office confirms it, you will also see updates meant only for your family.
+      </p>
+      <a href={whatsappHref(text)} target="_blank" rel="noopener noreferrer" className={`${quietBtn} mt-4 bg-surface`}>
+        <MessageCircle size={16} strokeWidth={1.75} /> Send the message on WhatsApp
+      </a>
+      {account.verify_code && (
+        <p className="mt-3 text-sm text-ink-soft">
+          Your code is <strong className="tracking-widest text-ink">{account.verify_code}</strong>. You can also read it out on a call.
+        </p>
+      )}
+    </section>
+  );
+}
+
+/** Children a family is thinking of sending, saved before any application. */
+function Considering({
+  interests, session, setData,
+}: { interests: Interest[]; session: string; setData: (d: AccountData) => void }) {
+  const [open, setOpen] = useState(interests.length === 0);
+  const [form, setForm] = useState({ child_name: "", child_dob: "", class_sought: "" });
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = async (fn: () => Promise<AccountData>) => {
+    setBusy(true);
+    setError(null);
+    try {
+      setData(await fn());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+  const add = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.child_name.trim()) return setError("Please add your child's first name.");
+    void run(async () => {
+      const d = await api<AccountData>("POST", "/api/account/interests", { token: session, body: form });
+      setForm({ child_name: "", child_dob: "", class_sought: "" });
+      setOpen(false);
+      return d;
+    });
+  };
+
+  return (
+    <section className="mb-10" data-testid="considering">
+      <h2 className="font-display text-2xl md:text-3xl">Children you are thinking of sending</h2>
+      {interests.length === 0 && (
+        <p className="mt-3 leading-relaxed text-ink-soft">
+          Add your child and we will tell you which class fits. When you are ready, the application starts already filled in.
+        </p>
+      )}
+      <ul className="mt-4 space-y-3">
+        {interests.map((c) => {
+          const g = ageGuidance(c.child_dob, c.class_sought);
+          return (
+            <li key={c.id} className="rounded-2xl border border-line bg-surface p-5 shadow-[var(--shadow-card)]">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="font-display text-2xl">{c.child_name}</h3>
+                <span className="text-sm text-ink-soft">{c.class_sought || "Class not chosen yet"}</span>
+              </div>
+              {g && <p className="mt-2 text-sm leading-relaxed text-ink-soft">{g.text}</p>}
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/admissions/apply/?new=1"
+                  onClick={() => setPrefill({ child_name: c.child_name, child_dob: c.child_dob, class_sought: c.class_sought })}
+                  className={primaryBtn}
+                >
+                  Start {c.child_name}&rsquo;s application
+                </Link>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => run(() => api<AccountData>("DELETE", `/api/account/interests/${c.id}`, { token: session }))}
+                  className="text-sm font-semibold text-primary underline underline-offset-4"
+                >
+                  Remove
+                </button>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      {open ? (
+        <form onSubmit={add} className="mt-4 grid gap-4 rounded-2xl border border-line p-4 sm:grid-cols-3" noValidate>
+          <div>
+            <label htmlFor="in_name" className={labelCls}>First name</label>
+            <input id="in_name" value={form.child_name} onChange={(e) => setForm({ ...form, child_name: e.target.value })} className={`mt-2 ${field}`} autoComplete="off" />
+          </div>
+          <div>
+            <label htmlFor="in_dob" className={labelCls}>Date of birth</label>
+            <input id="in_dob" type="date" value={form.child_dob} onChange={(e) => setForm({ ...form, child_dob: e.target.value })} className={`mt-2 ${field}`} />
+          </div>
+          <div>
+            <label htmlFor="in_class" className={labelCls}>Class</label>
+            <select id="in_class" value={form.class_sought} onChange={(e) => setForm({ ...form, class_sought: e.target.value })} className={`mt-2 ${field}`}>
+              <option value="">Not sure yet</option>
+              {CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          <div className="sm:col-span-3">
+            <button type="submit" disabled={busy} className={quietBtn}>
+              {busy && <Loader2 size={15} className="animate-spin" />} Save
+            </button>
+          </div>
+        </form>
+      ) : (
+        <button type="button" onClick={() => setOpen(true)} className="mt-4 text-sm font-semibold text-primary underline underline-offset-4">
+          Add a child
+        </button>
+      )}
+      {error && <div className="mt-3"><Notice>{error}</Notice></div>}
+    </section>
   );
 }
 

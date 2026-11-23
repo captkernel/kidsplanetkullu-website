@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, FileUp, Loader2, MessageCircle, Phone, Trash2 } from "lucide-react";
 import {
   admissionsOnline, ageGuidance, api, ApiError, CLASSES, clearSaved, CONSENT_TEXT, DOC_KINDS,
-  loadSaved, loadSession, MIN_PASSWORD, saveSaved, saveSession, shrinkImage, uploadFile, visitSource,
+  loadSaved, loadSession, MIN_PASSWORD, saveSaved, saveSession, shrinkImage, takePrefill, uploadFile, visitSource,
   type AccountData, type Application, type Details, type Saved, type UploadedFile,
 } from "@/lib/admissions";
 import { SCHOOL } from "@/lib/constants";
@@ -78,6 +78,11 @@ export function ApplyForm() {
     const s: Saved | null =
       wanted && sess ? { ref: wanted, token: sess } : q.get("new") ? null : loadSaved();
     if (!s) {
+      // A child chosen on the profile page arrives already filled in.
+      const pre = takePrefill();
+      if (pre) {
+        setStart((v) => ({ ...v, child_name: pre.child_name || v.child_name, child_dob: pre.child_dob || v.child_dob, class_sought: pre.class_sought || v.class_sought }));
+      }
       // A signed-in parent does not retype their own name and number.
       if (sess) {
         api<AccountData>("GET", "/api/account", { token: sess })

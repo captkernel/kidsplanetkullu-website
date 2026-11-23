@@ -39,7 +39,7 @@ const ROWS: [string, string][] = [
   ],
   [
     "Parent profiles",
-    "If you choose a password, we keep a profile with your name, mobile number and email so you can sign in and see your own applications. Your password is stored in a scrambled form that even the school cannot read, and we check it against lists of passwords known to have leaked elsewhere, without the password ever leaving our system. If you forget it, the office can give you a temporary one. The profile is deleted within 30 days of your last application being removed.",
+    "You can open a profile with or without applying. We keep your name, mobile number and email so you can sign in, and, if you tell us, the first name, date of birth and class of a child you are considering. Until your mobile number is confirmed (by an application reference, a message from that number, or the office), a profile shows only updates meant for all parents. A profile with no application and no child at the school is deleted one year after your last visit. Your password is stored in a scrambled form that even the school cannot read, and we check it against lists of passwords known to have leaked elsewhere, without the password ever leaving our system. If you forget it, the office can give you a temporary one.",
   ],
   [
     "Parents of children at the school",

@@ -654,16 +654,17 @@ export default function HomePage() {
               Your child&rsquo;s school, <em className="italic text-primary">in your pocket.</em>
             </h2>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
-              Sign in to the parent area to follow an admission, add documents,
-              read updates from the school about your child and class, and keep
-              your phone number and email up to date.
+              Thinking about Kids Planet for next year? Create a free profile in a
+              minute, with no need to apply first. We keep your details, show you
+              school updates, and your application starts half filled when you are
+              ready. Already a parent here? Sign in for your child&rsquo;s class updates.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href="/parent/" size="lg">
                 Parent Login
               </Button>
-              <Button href="/admissions/status/" variant="secondary" size="lg">
-                Check an application
+              <Button href="/parent/?new=1" variant="secondary" size="lg">
+                Create a free profile
               </Button>
             </div>
           </FadeIn>
