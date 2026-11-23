@@ -248,6 +248,10 @@ export default function AdmissionsPage() {
               <ul className="mt-5 space-y-2 leading-relaxed text-ink-soft">
                 <li>Admissions for {SCHOOL.admissionsYear} are open now, from Pre-Nursery to Class 8.</li>
                 <li>Walk in on any working day. No appointment needed.</li>
+                <li>
+                  The new session begins in February for Classes 1 to 8, and in
+                  March for the kindergarten classes, Pre-Nursery to UKG.
+                </li>
                 <li>English medium.</li>
                 <li>
                   No fee to apply.{" "}
