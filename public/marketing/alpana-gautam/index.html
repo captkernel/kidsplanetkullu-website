@@ -1,0 +1,187 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="format-detection" content="telephone=no"><title>Alpana Gautam · Share admissions</title>
+<link rel="icon" href="/favicon-32.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,700&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+:root{--green:#2d5016;--night:#0F1F08;--mari:#F5B301;--paper:#FBF8EC;--ink:#1B2A12;--line:#D9D6C2;--muted:#4C5A41}
+*{box-sizing:border-box} html{-webkit-text-size-adjust:100%} body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+header{background:var(--green);color:var(--paper);border-bottom:5px solid var(--mari)} header .wrap{display:flex;align-items:center;gap:14px;padding-top:16px;padding-bottom:14px}
+header img{height:60px;width:auto;flex:none} header small{display:block;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#DCE8CC}
+h1{font:700 28px/1.1 Newsreader,Georgia,serif;margin:2px 0 0;letter-spacing:-.01em}
+h2{font:700 22px/1.2 Newsreader,Georgia,serif;margin:0 0 10px} .step{font-weight:600;font-size:18px;line-height:1.3;color:var(--ink);margin:24px 0 10px} .step b{display:inline-block;min-width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:var(--mari);color:var(--night);font-size:16px;margin-right:8px}
+p{margin:0 0 10px} .lede{margin:18px 0 0;font-size:18px}
+button,.btns a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.apps,.shape{display:grid;gap:8px} .apps{grid-template-columns:repeat(3,1fr)} .shape{grid-template-columns:1fr 1fr}
+.apps button,.shape button{font-family:inherit;font-weight:600;font-size:16px;line-height:1.2;min-height:52px;padding:10px 4px;border:2px solid var(--green);background:#fff;color:var(--green);border-radius:10px;cursor:pointer}
+.apps button[aria-pressed=true],.shape button[aria-pressed=true]{background:var(--green);color:#fff}
+.hint{background:#FCF1CC;border-left:5px solid var(--mari);padding:12px 14px;margin:12px 0 0;font-size:16px;border-radius:0 8px 8px 0} .hint b{font-weight:600}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 20px}
+.card[hidden]{display:none} #biolink{margin:12px 0 0} #biolink p{font-size:16px}
+.pic{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:8px;background:var(--night)} .pic.story{width:62%;margin:0 auto;aspect-ratio:9/16}
+.caplabel{font-weight:600;font-size:16px;margin:14px 0 4px}
+.cap{white-space:pre-wrap;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 12px;font-size:16px;line-height:1.45;overflow-wrap:anywhere;-webkit-user-select:text;user-select:text}
+.btns{display:grid;gap:8px} .btns button,.btns a{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;text-align:center;font-family:inherit;font-weight:600;font-size:16px;line-height:1.2;padding:8px 6px;border-radius:10px;border:2px solid var(--green);background:#fff;color:var(--green);text-decoration:none;cursor:pointer}
+.btns .main{background:var(--green);color:#fff;font-size:19px;min-height:60px;box-shadow:0 3px 0 var(--night)} .btns .main:active{transform:translateY(2px);box-shadow:0 1px 0 var(--night)}
+.btns .or{font-size:16px;color:var(--muted);margin:6px 0 0} .btns .three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opt{font-weight:400;color:var(--muted);font-size:16px} .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:2px 2px 12px}
+.th{min-width:0;padding:0;border:3px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;line-height:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation} .th img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 25%;border-radius:7px;background:var(--line)}
+.th[aria-pressed=true]{border-color:var(--green);box-shadow:0 0 0 3px var(--mari)} .th[hidden]{display:none}
+.pick{display:flex;align-items:center;justify-content:center;min-height:52px;font-weight:600;font-size:16px;border:2px solid var(--green);border-radius:10px;color:var(--green);background:#fff;cursor:pointer}
+#adjust{margin:16px 0 0;padding:12px 0 0;border-top:1px solid var(--line)} #adjust[hidden]{display:none} #adjust label{display:block;font-weight:600;font-size:16px;margin:8px 0 0}
+.pv{display:flex;align-items:center;justify-content:center;gap:18px;margin:8px 0 6px} .pv canvas{display:block;background:var(--line);border:3px solid var(--mari)} #pvt{width:112px;height:auto;border-radius:6px} #pvr{width:96px;height:96px;border-radius:50%}
+.sl.off{opacity:.35} .pvl{font-weight:600;margin:0}
+#adjust input{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;margin:0;padding:0;background:transparent;cursor:pointer;touch-action:pan-y}
+#adjust input::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:var(--line)} #adjust input::-moz-range-track{height:8px;border-radius:4px;background:var(--line)}
+#adjust input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:32px;height:32px;margin-top:-12px;border-radius:50%;background:var(--green);border:3px solid #fff;box-shadow:0 0 0 2px var(--green)}
+#adjust input::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--green);border:3px solid #fff;box-shadow:0 0 0 2px var(--green)}
+.keep{font-size:16px;color:var(--muted);margin:12px 0 0}
+.msg{font-size:16px;color:var(--muted);margin:10px 0 0} .msg:empty{display:none} .msg.on{color:var(--ink);font-weight:600;background:#FCF1CC;border-radius:8px;padding:10px 12px}
+.names{display:grid;gap:8px;margin:14px 0 40px} .names a{display:flex;align-items:center;gap:12px;min-height:64px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 12px;color:var(--ink);text-decoration:none;font-weight:600;font-size:18px}
+.names img{width:52px;height:52px;border-radius:50%;flex:none;background:var(--line)} .names a::after{content:"\203A";margin-left:auto;font-size:26px;color:var(--green)}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--night);color:#fff;padding:14px 18px;border-radius:14px;font-weight:600;font-size:16px;line-height:1.35;opacity:0;pointer-events:none;transition:opacity .2s;width:max-content;max-width:calc(100vw - 24px);text-align:center;z-index:5}
+#toast.on{opacity:1} footer{color:var(--muted);font-size:16px;padding:6px 0 40px} a.back{display:inline-block;padding:12px 0;color:var(--green);font-weight:600}
+button:focus-visible,a:focus-visible{outline:3px solid var(--mari);outline-offset:2px}
+</style></head><body>
+<header><div class="wrap"><img src="../img/logo.png" alt="Kids Planet School crest" width="118" height="128"><div><small>Kids Planet School · for teachers</small><h1>Hello, Alpana Ma’am</h1></div></div></header>
+<main class="wrap"><p class="lede">Your pictures and captions are ready. Four small steps.</p><div class="step"><b>1</b>Where are you posting?</div><div class="apps"><button data-app="whatsapp">WhatsApp</button><button data-app="instagram">Instagram</button><button data-app="facebook">Facebook</button></div><div class="step"><b>2</b>Which kind?</div><div class="shape"><button data-shape="story">Status</button><button data-shape="post">Group or chat</button></div><div class="card" id="biolink" hidden><p><b>Do this once:</b> Instagram does not open links in captions, so put your link in your profile.</p><p class="cap" id="mylink"></p><div class="btns"><button id="copylink">Copy my link</button></div><p class="msg"></p></div><div class="step"><b>3</b>Your photo <span class="opt">(you can skip this)</span></div><div class="card" id="photo"><p>This is the photo on your cards. You can use one of your own instead.</p><div class="thumbs" id="thumbs"><button class="th" data-photo="1" aria-label="School photo 1"><img src="../img/alpana-gautam/photo-1.jpg" alt="" width="96" height="120"></button><button class="th own" data-photo="own" hidden aria-label="My own photo"><img id="ownthumb" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" width="96" height="120"></button></div><div class="btns"><label class="pick" for="file">Use my own photo</label><input type="file" id="file" accept="image/*" hidden></div><p class="msg"></p><div id="adjust" hidden><p class="pvl">How your photo looks on your cards</p><div class="pv"><canvas id="pvt" width="224" height="282" aria-hidden="true"></canvas><canvas id="pvr" width="192" height="192" aria-hidden="true"></canvas></div><div class="sl"><label for="pz">Make your face bigger or smaller</label><input type="range" id="pz" min="1" max="4" step="0.05" value="1"></div><div class="sl" id="sy"><label for="py">Move the photo up or down</label><input type="range" id="py" min="0" max="1" step="0.02" value="0.7"></div><div class="sl" id="sx"><label for="px">Move it left or right</label><input type="range" id="px" min="0" max="1" step="0.02" value="0.5"></div></div><p class="keep">Your own photo stays on this phone. It is not sent to the school or to anyone else. Please use a clear, recent photo of yourself.</p></div><div class="step"><b>4</b>Choose a picture</div><div class="hint" id="hint"></div><div style="height:16px"></div><section class="card" id="c0"><h2>1. Meet our teachers</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Meet our teachers" width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><section class="card" id="c1"><h2>2. Come and see my classroom</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Come and see my classroom" width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><section class="card" id="c2"><h2>3. Too many questions? Good.</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Too many questions? Good." width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><section class="card" id="c3"><h2>4. How old is your child?</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="How old is your child?" width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><section class="card" id="c4"><h2>5. We teach at Kids Planet</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="We teach at Kids Planet" width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><section class="card" id="c5"><h2>6. Meet our teachers (group)</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Meet our teachers (group)" width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><section class="card" id="c6"><h2>7. Come and see our school</h2><img class="pic" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Come and see our school" width="1080" height="1350" decoding="async"><p class="caplabel">Caption</p><div class="cap"></div><div class="btns"><button class="main share">Share</button><p class="or">Or do it yourself:</p><div class="three"><button class="copypic">Copy picture</button><button class="copycap">Copy caption</button><a class="save" href="#">Save picture</a></div></div><p class="msg">Not working? Press and hold the picture and tap Download image. Then post it from your gallery.</p></section><footer><p>If someone asks about fees or anything you are unsure of, give them the school number: <b>94180 23454</b>.</p><p><a class="back" href="../">Not you? Choose another name</a></p></footer></main><div id="toast" role="status" aria-live="polite"></div><script>
+const T={"slug": "alpana-gautam", "n": 1, "geo": {"A-meet-post": {"x": 78, "y": 354.1, "w": 353.0, "h": 444.3, "r": 7.5, "round": false}, "A-meet-story": {"x": 78, "y": 572.7, "w": 381.1, "h": 479.4, "r": 7.5, "round": false}, "B-invite-post": {"x": 77, "y": 829.2, "w": 197, "h": 197, "r": 45, "round": true}, "B-invite-story": {"x": 77, "y": 1073.7, "w": 224, "h": 224, "r": 45, "round": true}, "C-question-post": {"x": 77, "y": 869.7, "w": 197, "h": 197, "r": 45, "round": true}, "C-question-story": {"x": 77, "y": 1106.3, "w": 224, "h": 224, "r": 45, "round": true}, "D-ages-post": {"x": 77, "y": 950.6, "w": 197, "h": 197, "r": 45, "round": true}, "D-ages-story": {"x": 77, "y": 1195.9, "w": 224, "h": 224, "r": 45, "round": true}}, "cards": [{"key": "A-meet", "folder": "alpana-gautam", "text": "I teach Class 3 at Kids Planet School in Dhalpur, and I am proud to be part of this school. Admissions are open for 2027-28, from Pre-Nursery (age 2+) to Class 8."}, {"key": "B-invite", "folder": "alpana-gautam", "text": "Come and see my classroom. Kids Planet School, Dhalpur, is open to visitors on any working day, no appointment needed. Admissions are open for 2027-28."}, {"key": "C-question", "folder": "alpana-gautam", "text": "If your child asks too many questions, good. In my classroom, \"why?\" is welcome. Admissions are open for 2027-28 at Kids Planet School, Dhalpur."}, {"key": "D-ages", "folder": "alpana-gautam", "text": "Which class is your child ready for? Pre-Nursery 2+, Nursery 3+, LKG 4+, UKG 5+, Class 1 6+. Admissions are open for 2027-28 at Kids Planet School, Dhalpur, where I teach."}, {"key": "team-we", "folder": "shared", "text": "This is us: the teachers of Kids Planet School, Dhalpur. Come and meet us on any working day. Admissions are open for 2027-28, from Pre-Nursery (age 2+) to Class 8."}, {"key": "team-meet", "folder": "shared", "text": "Meet our teachers: the people behind Kids Planet School, Dhalpur. Come and meet us on any working day. Admissions are open for 2027-28."}, {"key": "admissions", "folder": "shared", "text": "Admissions are open for 2027-28 at Kids Planet School, Dhalpur. Pre-Nursery (age 2+) to Class 8, English medium. Visit on any working day, no appointment needed."}]}, SITE="https://kidsplanetkullu.com/admissions/";
+const NAME={whatsapp:'WhatsApp',instagram:'Instagram',facebook:'Facebook'};
+const KIND={whatsapp:{post:'Group or chat',story:'Status'},instagram:{post:'Post',story:'Story'},facebook:{post:'Post',story:'Story'}};
+const SIZE={post:[1080,1350],story:[1080,1920]};
+const HINT={
+ 'whatsapp-story':'Tap the green button under a picture. Choose <b>WhatsApp</b>, then <b>My status</b>. The words and your link go with the picture.',
+ 'whatsapp-post':'Tap the green button under a picture. Choose <b>WhatsApp</b>, then the group or person. The words and your link go with the picture.',
+ 'instagram-post':'Tap the green button under a picture. Choose <b>Instagram</b>, then <b>Feed</b>. The words are already copied: press and hold in the caption box and tap <b>Paste</b>.',
+ 'instagram-story':'Tap the green button under a picture. Choose <b>Instagram</b>, then <b>Stories</b>. A story needs no caption.',
+ 'facebook-post':'Tap the green button under a picture and choose <b>Facebook</b>. The words are already copied: press and hold where you write and tap <b>Paste</b>.',
+ 'facebook-story':'Tap the green button under a picture. Choose <b>Facebook</b>, then <b>Your story</b>. A story needs no caption.'};
+const store={get(k){try{return localStorage.getItem(k)}catch(_){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(_){return false}},del(k){try{localStorage.removeItem(k)}catch(_){}}};
+let app=store.get('kp-app');if(!NAME[app])app='whatsapp';
+let shape=app==='whatsapp'?'story':'post';
+const link=m=>`${SITE}?utm_source=teacher&utm_medium=${m}&utm_campaign=digital27&utm_content=${T.slug}#enquire`;
+const tail=()=>app==='instagram'?`Call or WhatsApp: 94180 23454\nWebsite: link in my bio (kidsplanetkullu.com/admissions)`:`Call or WhatsApp: 94180 23454\nWebsite: ${link(app)}`;
+const caption=c=>`${c.text}\n\n${tail()}`;
+const base=c=>`../img/${c.folder}/${c.key}-${shape}.jpg`;
+/* Her photo. 'd' = the one already on the cards; {a:n} = another school photo; 'o' = her own, kept on this phone only. */
+let photo={k:'d'},ownData=null,made={},jobs={},ver=0,photoPromise=null,line=Promise.resolve(),slideT=0,raf=0;const urls=new Set();
+try{const j=JSON.parse(store.get('kp-photo-'+T.slug)||'null');ownData=store.get('kp-own-'+T.slug);
+  if(j&&((j.k==='a'&&j.n>1&&j.n<=T.n)||(j.k==='o'&&ownData)))photo=j}catch(_){}
+let ownP=null,lastP=JSON.stringify(photo);try{ownP=JSON.parse(store.get('kp-place-'+T.slug)||'null')}catch(_){}
+const num=(v,d,lo,hi)=>{v=+v;return v>=lo&&v<=hi?v:d};
+const custom=c=>c.folder!=='shared'&&photo.k!=='d';
+const mk=c=>c.key+'-'+shape;
+const src=c=>custom(c)?(made[mk(c)]?made[mk(c)].url:''):base(c);
+function loadImg(u){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>i.naturalWidth?res(i):rej(new Error('empty'));i.onerror=()=>rej(new Error('load'));i.src=u})}
+function photoImg(){if(!photoPromise)photoPromise=loadImg(photo.k==='o'?ownData:`../img/${T.slug}/photo-${photo.n}.jpg`);return photoPromise}
+/* Where the photo goes in a space g. School photos are framed as on the printed cards (cover at 50% 30% in the tile; 128% wide at 50% 23% in the circle). */
+function place(g,ph){const own=photo.k==='o',z=own?num(photo.z,1,1,4):(g.round?1.28:1),fy=own?num(photo.y,.3,0,1):(g.round?.23:.3),fx=own?num(photo.x,.5,0,1):.5;
+  const s=Math.max(g.w/ph.naturalWidth,g.h/ph.naturalHeight)*z,dw=ph.naturalWidth*s,dh=ph.naturalHeight*s;return [g.x+(g.w-dw)*fx,g.y+(g.h-dh)*fy,dw,dh]}
+function hole(x,g){x.beginPath();if(g.round)x.arc(g.x+g.w/2,g.y+g.h/2,g.w/2,0,Math.PI*2);else if(x.roundRect)x.roundRect(g.x,g.y,g.w,g.h,g.r);else x.rect(g.x,g.y,g.w,g.h);x.clip()}
+/* Redraw one card with the chosen photo in the place where the school photo sits. Done on this phone; nothing is uploaded.
+   One card at a time, and a card asked for before the photo changed again is dropped, so quick changes do not pile up. */
+function compose(c){const k=mk(c),v=ver,u=base(c);if(made[k])return Promise.resolve(made[k]);if(jobs[k]&&jobs[k].v===v)return jobs[k].p;
+  const p=line.then(()=>{if(v!==ver)throw new Error('stale');return Promise.all([loadImg(u),photoImg()])}).then(([b,ph])=>new Promise((res,rej)=>{
+    if(v!==ver)return rej(new Error('stale'));
+    const g=T.geo[k],cv=document.createElement('canvas');cv.width=b.naturalWidth;cv.height=b.naturalHeight;const x=cv.getContext('2d');x.drawImage(b,0,0);
+    x.save();hole(x,g);x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(g.x-1,g.y-1,g.w+2,g.h+2);x.drawImage(ph,...place(g,ph));x.restore();
+    cv.toBlob(bl=>{cv.width=cv.height=0;if(!bl)return rej(new Error('blob'));if(v!==ver)return rej(new Error('stale'));const m={blob:bl,url:URL.createObjectURL(bl)};urls.add(m.url);made[k]=m;ready[m.url]=bl;res(m)},'image/jpeg',.9)}));
+  const done=()=>{if(jobs[k]&&jobs[k].p===p)delete jobs[k]};jobs[k]={v,p};line=p.then(done,done);return p}
+/* A redrawn picture is let go once no picture or Save link on the page still uses it. */
+function sweep(){const used=new Set(Object.values(made).map(m=>m.url));document.querySelectorAll('.pic').forEach(i=>used.add(i.getAttribute('src')));document.querySelectorAll('.save').forEach(a=>used.add(a.getAttribute('href')));
+  urls.forEach(u=>{if(!used.has(u)){URL.revokeObjectURL(u);urls.delete(u);delete ready[u]}})}
+function setPhoto(p){clearTimeout(slideT);slideT=0;photo=p;lastP=JSON.stringify(p);ver++;photoPromise=null;made={};jobs={};store.set('kp-photo-'+T.slug,JSON.stringify(p));if(p.k==='o'){ownP=p;store.set('kp-place-'+T.slug,JSON.stringify(p))}render()}
+/* The two small pictures beside the sliders: drawn at once on every movement, so she sees the result without scrolling to the cards. */
+function preview(){if(photo.k!=='o')return;const v=ver;photoImg().then(ph=>{if(v!==ver||photo.k!=='o')return;let sx=false,sy=false;
+  [['pvt','A-meet'],['pvr','B-invite']].forEach(([id,key])=>{const cv=document.getElementById(id),g0=T.geo[key+'-'+shape],W=cv.width,H=g0.round?W:Math.round(W*g0.h/g0.w);if(cv.height!==H)cv.height=H;
+    const x=cv.getContext('2d'),g={x:0,y:0,w:W,h:H,round:false},q=place(g,ph);x.imageSmoothingQuality='high';x.fillStyle='#fff';x.fillRect(0,0,W,H);x.drawImage(ph,...q);if(q[2]>W+1)sx=true;if(q[3]>H+1)sy=true});
+  document.getElementById('sx').classList.toggle('off',!sx);document.getElementById('px').disabled=!sx;document.getElementById('sy').classList.toggle('off',!sy);document.getElementById('py').disabled=!sy},()=>{})}
+const fname=c=>`kids-planet-${c.key}-${shape}.jpg`;
+function say(m,el,quiet){const t=document.getElementById('toast');clearTimeout(say.t);if(quiet){t.classList.remove('on');t.textContent=''}else{t.textContent=m;t.classList.add('on');say.t=setTimeout(()=>t.classList.remove('on'),6000)}
+  document.querySelectorAll('.msg.on').forEach(x=>{x.textContent=x.dataset.d||'';x.classList.remove('on')});
+  if(el){const x=el.querySelector('.msg');if(x){if(x.dataset.d==null)x.dataset.d=x.textContent;x.textContent=m;x.classList.add('on')}}}
+/* Copy at once, inside the tap, so nothing is lost while the share sheet opens. */
+function copyNow(s){const a=document.createElement('textarea');a.value=s;a.readOnly=true;a.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px';document.body.appendChild(a);
+  a.focus({preventScroll:true});a.select();try{a.setSelectionRange(0,s.length)}catch(_){}let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();
+  if(!ok&&navigator.clipboard&&navigator.clipboard.writeText){try{navigator.clipboard.writeText(s).catch(()=>{})}catch(_){}}return ok}
+function copyText(s){if(copyNow(s))return Promise.resolve(true);try{return navigator.clipboard.writeText(s).then(()=>true,()=>false)}catch(_){return Promise.resolve(false)}}
+/* The picture file is fetched as soon as the picture shows, so Share can open in the same tap (phones refuse a share that starts late). */
+const ready={},going={};
+function warm(u){if(ready[u])return Promise.resolve(ready[u]);if(!going[u])going[u]=fetch(u,{cache:'force-cache'}).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>(ready[u]=b)).catch(()=>{delete going[u];return null});return going[u]}
+function setPic(el,c){const im=el.querySelector('.pic'),a=el.querySelector('.save');im.classList.toggle('story',shape==='story');im.width=SIZE[shape][0];im.height=SIZE[shape][1];a.download=fname(c);
+  if(!el.dataset.live)return;
+  if(!custom(c)){const u=base(c);if(im.getAttribute('src')!==u)im.src=u;a.href=u;return}
+  const v=ver,sh=shape;compose(c).then(m=>{if(v!==ver||sh!==shape)return;if(im.getAttribute('src')!==m.url)im.src=m.url;a.href=m.url},e=>{if(v!==ver||sh!==shape||(e&&e.message==='stale'))return;im.src=base(c);a.href=base(c);say('Could not put your photo on this picture. Try another photo.',document.getElementById('photo'))})}
+function render(){
+  document.querySelectorAll('.apps button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.app===app));
+  document.querySelectorAll('.shape button').forEach(b=>{b.textContent=KIND[app][b.dataset.shape];b.setAttribute('aria-pressed',b.dataset.shape===shape)});
+  document.getElementById('hint').innerHTML=HINT[app+'-'+shape];
+  document.getElementById('biolink').hidden=app!=='instagram';
+  T.cards.forEach((c,i)=>{const el=document.getElementById('c'+i);setPic(el,c);
+    el.querySelector('.cap').textContent=caption(c);el.querySelector('.share').textContent='Share on '+NAME[app];
+    });
+  document.querySelectorAll('.th').forEach(b=>b.setAttribute('aria-pressed',String(photo.k==='o'?b.dataset.photo==='own':b.dataset.photo===String(photo.k==='a'?photo.n:1))));
+  const ot=document.querySelector('.th.own');ot.hidden=!ownData;if(ownData&&document.getElementById('ownthumb').getAttribute('src')!==ownData)document.getElementById('ownthumb').src=ownData;
+  /* Sliders: right moves the photo right, or down; the stored value is the other way round (0 = photo pushed fully right, or down). */
+  const adj=document.getElementById('adjust');adj.hidden=photo.k!=='o';if(photo.k==='o'){document.getElementById('py').value=1-num(photo.y,.3,0,1);document.getElementById('px').value=1-num(photo.x,.5,0,1);document.getElementById('pz').value=num(photo.z,1,1,4);preview()}
+}
+function pngOf(im){return new Promise((res,rej)=>{try{const cv=document.createElement('canvas');cv.width=im.naturalWidth;cv.height=im.naturalHeight;cv.getContext('2d').drawImage(im,0,0);cv.toBlob(b=>b?res(b):rej(new Error('png')),'image/png')}catch(e){rej(e)}})}
+function copyPic(el){
+  const im=el.querySelector('.pic'),no='This phone cannot copy pictures. Tap Save picture, then post it from your gallery.';
+  if(!(im.complete&&im.naturalWidth)){say('The picture is still loading. Wait a moment and tap again.',el);return}
+  if(!(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem)){say(no,el);return}
+  const png=pngOf(im);let job;
+  /* Safari needs the item made inside the tap, with the picture promised; older Chrome needs the finished picture. */
+  try{job=navigator.clipboard.write([new ClipboardItem({'image/png':png})]).catch(()=>png.then(b=>navigator.clipboard.write([new ClipboardItem({'image/png':b})])))}
+  catch(_){job=png.then(b=>navigator.clipboard.write([new ClipboardItem({'image/png':b})]))}
+  job.then(()=>say('Picture copied. Open '+NAME[app]+', press and hold where you type, and tap Paste.',el),()=>say(no,el));
+}
+function sharePic(el,c){
+  const text=caption(c),u=src(c)||base(c),name=fname(c),copied=copyNow(text),cu=custom(c);
+  const manual=(copied?'The caption is copied. ':'')+'This browser cannot share. Tap Save picture, then post it from your gallery'+(copied?' and paste the caption.':'.');
+  if(!navigator.share){say(manual,el);return}
+  const go=(blob,late)=>{
+    if(!blob){say('The picture did not load. Check your internet and tap again.',el);return}
+    const file=new File([blob],name,{type:'image/jpeg'});
+    if(!navigator.canShare||!navigator.canShare({files:[file]})){say(manual,el);return}
+    navigator.share({files:[file],text}).then(()=>say(copied?'Done. If the words are missing, press and hold and tap Paste.':'Done.',el),
+      err=>{if(err&&err.name==='AbortError')return;
+        if(late&&err&&err.name==='NotAllowedError'){say('The picture is ready now. Tap the green button once more.',el);return}
+        say(manual,el)});};
+  if(cu&&!made[mk(c)]){say('Getting the picture ready.',el);compose(c).then(m=>go(m.blob,true),()=>go(null,true));return}
+  if(ready[u])go(ready[u],false);else{say('Getting the picture ready.',el);warm(u).then(b=>go(b,true))}
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.app){app=b.dataset.app;store.set('kp-app',app);shape=app==='whatsapp'?'story':'post';render();return}
+  if(b.dataset.shape){shape=b.dataset.shape;render();return}
+  if(b.dataset.photo){const was=JSON.stringify(photo);
+    if(b.dataset.photo==='own'){if(ownData&&photo.k!=='o')setPhoto(Object.assign({y:.3,x:.5,z:1},ownP,{k:'o'}))}
+    else{const p=b.dataset.photo==='1'?{k:'d'}:{k:'a',n:+b.dataset.photo};if(JSON.stringify(p)!==was)setPhoto(p)}return}
+  if(b.id==='copylink'){copyText(link('instagram')).then(ok=>say(ok?'Your link is copied. In Instagram: Edit profile, Links, Add external link, Paste.':'Could not copy. Press and hold the link above to copy it.',b.closest('.card')));return}
+  const el=b.closest('.card');if(!el||!el.id.startsWith('c'))return;const c=T.cards[+el.id.slice(1)];
+  if(b.classList.contains('copycap')){copyText(caption(c)).then(ok=>say(ok?'Caption copied. Open '+NAME[app]+', press and hold where you type, and tap Paste.':'Could not copy. Press and hold the words above, then tap Select all and Copy.',el));return}
+  if(b.classList.contains('copypic')){copyPic(el);return}
+  if(b.classList.contains('share'))sharePic(el,c);
+});
+document.querySelectorAll('.pic').forEach(im=>im.addEventListener('load',()=>{warm(im.getAttribute('src'));sweep()}));
+document.getElementById('mylink').textContent=link('instagram');
+/* Her own photo: read on the phone, made smaller, and kept in this browser only. */
+document.getElementById('file').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;const card=document.getElementById('photo'),u=URL.createObjectURL(f);
+  say('Getting your photo ready.',card,true);
+  loadImg(u).then(i=>{const s=Math.min(1,1400/Math.max(i.naturalWidth,i.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(i.naturalWidth*s));cv.height=Math.max(1,Math.round(i.naturalHeight*s));
+    const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.imageSmoothingQuality='high';x.drawImage(i,0,0,cv.width,cv.height);
+    const d=cv.toDataURL('image/jpeg',.85);cv.width=cv.height=0;if(d.indexOf('data:image/jpeg')!==0)throw new Error('draw');return d})
+   .then(d=>{ownData=d;if(!store.set('kp-own-'+T.slug,d))store.del('kp-own-'+T.slug);   /* a full or closed store: the photo still works until the page is closed */
+      setPhoto({k:'o',y:.3,x:.5,z:1});say('Your photo is on your cards. Use the sliders to place your face.',card,true)},
+    ()=>say('That file could not be opened. Please choose a photo.',card,true)).then(()=>URL.revokeObjectURL(u))});
+/* Sliders: the small pictures follow the finger; the cards are redrawn once the finger rests. */
+const slider=id=>+document.getElementById(id).value,r2=n=>Math.round(n*100)/100;
+function slide(now){if(photo.k!=='o')return;photo={k:'o',y:r2(1-slider('py')),x:r2(1-slider('px')),z:slider('pz')};
+  if(!raf)raf=requestAnimationFrame(()=>{raf=0;preview()});clearTimeout(slideT);slideT=0;if(JSON.stringify(photo)===lastP)return;if(now)setPhoto(photo);else slideT=setTimeout(()=>setPhoto(photo),250)}
+['py','px','pz'].forEach(id=>{const s=document.getElementById(id);s.addEventListener('input',()=>slide(false));s.addEventListener('change',()=>slide(true))});
+render();
+/* Pictures load only as they come near the screen, so the page opens quickly on a slow connection. */
+const cards=[...document.querySelectorAll('section.card')],live=el=>{el.dataset.live=1;setPic(el,T.cards[+el.id.slice(1)])};
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){io.unobserve(x.target);live(x.target)}}),{rootMargin:'500px 0px'});cards.forEach(el=>io.observe(el))}else cards.forEach(live);
+</script></body></html>
