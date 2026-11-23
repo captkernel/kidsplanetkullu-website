@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Send, MessageCircle } from "lucide-react";
 import { whatsappHref } from "@/lib/links";
 import { track } from "@/lib/track";
+import { admissionsOnline, api, CLASSES, visitSource } from "@/lib/admissions";
 
 // Static-export friendly: no backend. On submit we compose a WhatsApp message
 // (the school's real, monitored channel) so the enquiry actually reaches them.
@@ -35,6 +36,18 @@ export function InquiryForm() {
       values.message ? `Message: ${values.message}` : "",
     ].filter(Boolean);
     track("enquiry_submit", values.childClass || "class not given");
+    // Record it for the office too, so the enquiry is not lost if WhatsApp is never sent.
+    if (admissionsOnline) {
+      api("POST", "/api/enquiry", {
+        body: {
+          parent_name: values.parent,
+          phone: values.phone,
+          class_sought: values.childClass,
+          message: values.message,
+          source: visitSource(),
+        },
+      }).catch(() => {});
+    }
     window.open(whatsappHref(lines.join("\n")), "_blank", "noopener,noreferrer");
   };
 
@@ -44,20 +57,7 @@ export function InquiryForm() {
     "focus-visible:outline-gold focus-visible:outline-offset-2";
   const labelCls = "block text-sm font-semibold text-ink";
 
-  const classes = [
-    "Pre-Nursery",
-    "Nursery",
-    "LKG",
-    "UKG",
-    "Class 1",
-    "Class 2",
-    "Class 3",
-    "Class 4",
-    "Class 5",
-    "Class 6",
-    "Class 7",
-    "Class 8",
-  ];
+  const classes = CLASSES;
 
   return (
     <form onSubmit={onSubmit} className="space-y-5" noValidate>

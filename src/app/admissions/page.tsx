@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
+import Link from "next/link";
 import { Phone, CalendarDays, FileCheck, ShieldCheck } from "lucide-react";
 
 import { PageHero } from "@/components/PageHero";
@@ -52,7 +53,8 @@ const STEPS = [
     n: "03",
     icon: FileCheck,
     title: "Apply",
-    body: "Submit the application with the required documents and secure your child's seat for the coming session.",
+    body: "Fill the application on your phone or at the office, with the documents, and the seat is confirmed at the school.",
+    link: { href: "/admissions/apply/", label: "Apply online" },
   },
 ];
 
@@ -70,7 +72,10 @@ export default function AdmissionsPage() {
         intro="We are open for admissions for the 2027 to 2028 session, Pre-Nursery through Class 8. Enquire, visit the campus, and apply. The clearest first step is always to walk the campus and meet a teacher."
       >
         <div className="flex flex-wrap gap-3">
-          <Button href="#visit" size="lg">
+          <Button href="/admissions/apply/" size="lg">
+            Apply Online
+          </Button>
+          <Button href="#visit" variant="secondary" size="lg">
             Book a Visit
           </Button>
           <Button href={telHref} external variant="secondary" size="lg">
@@ -89,9 +94,9 @@ export default function AdmissionsPage() {
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink-soft">
             Admissions for the {SCHOOL.admissionsSession} session move through
-            three steps: Enquire, Visit, and Apply. No forms to puzzle over
-            before you have even seen the school. We keep it human, and we walk
-            each family through it in turn.
+            three steps: Enquire, Visit, and Apply. Start with whichever suits
+            you: a phone call, a walk around the campus, or the short online
+            form. We keep it human, and we walk each family through it in turn.
           </p>
         </div>
         <ol className="mt-12 grid gap-5 md:grid-cols-3">
@@ -115,6 +120,14 @@ export default function AdmissionsPage() {
                   </div>
                   <h3 className="mt-5 font-display text-2xl">{s.title}</h3>
                   <p className="mt-2 leading-relaxed text-ink-soft">{s.body}</p>
+                  {"link" in s && s.link && (
+                    <Link
+                      href={s.link.href}
+                      className="mt-4 font-semibold text-primary underline underline-offset-4"
+                    >
+                      {s.link.label}
+                    </Link>
+                  )}
                 </Card>
               </FadeIn>
             );
@@ -232,6 +245,17 @@ export default function AdmissionsPage() {
                 <li>Admissions for {SCHOOL.admissionsYear} are open now, from Pre-Nursery to Class 8.</li>
                 <li>Walk in on any working day. No appointment needed.</li>
                 <li>English medium.</li>
+                <li>
+                  No fee to apply.{" "}
+                  <Link href="/admissions/apply/" className="font-semibold text-primary underline underline-offset-4">
+                    Apply online
+                  </Link>{" "}
+                  or{" "}
+                  <Link href="/admissions/status/" className="font-semibold text-primary underline underline-offset-4">
+                    check an application
+                  </Link>
+                  .
+                </li>
               </ul>
               <ul className="mt-5 space-y-1 text-sm text-ink">
                 <li>Office hours: {SCHOOL.timings.weekday}</li>

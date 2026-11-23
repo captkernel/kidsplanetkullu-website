@@ -10,6 +10,8 @@ const explore = [
   { href: "/admissions", label: "Admissions" },
   { href: "/faculty", label: "Our Faculty" },
   { href: "/contact", label: "Contact" },
+  { href: "/parent", label: "Parent Sign In" },
+  { href: "/privacy", label: "Privacy" },
 ];
 
 export function Footer() {

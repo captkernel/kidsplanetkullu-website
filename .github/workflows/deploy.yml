@@ -28,6 +28,8 @@ jobs:
         env:
           NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_PULSE_URL: ${{ vars.NEXT_PUBLIC_PULSE_URL }}
+          # kp-admissions Worker (online application + status). Empty = pages fall back to phone/WhatsApp.
+          NEXT_PUBLIC_ADMISSIONS_API: ${{ vars.NEXT_PUBLIC_ADMISSIONS_API }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

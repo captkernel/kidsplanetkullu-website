@@ -6,7 +6,7 @@ import type { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 const BASE = "https://kidsplanetkullu.com";
-const PATHS = ["/", "/about/", "/programs/", "/admissions/", "/faculty/", "/contact/"];
+const PATHS = ["/", "/about/", "/programs/", "/admissions/", "/admissions/apply/", "/faculty/", "/contact/", "/privacy/"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return PATHS.map((path) => ({ url: `${BASE}${path}` }));
