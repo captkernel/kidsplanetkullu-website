@@ -5,12 +5,14 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, FileUp, Loader2, MessageCircle, Phone, Trash2 } from "lucide-react";
 import {
   admissionsOnline, ageGuidance, api, ApiError, CLASSES, clearSaved, CONSENT_TEXT, DOC_KINDS,
-  loadSaved, loadSession, saveSaved, saveSession, shrinkImage, uploadFile, visitSource,
+  loadSaved, loadSession, MIN_PASSWORD, saveSaved, saveSession, shrinkImage, uploadFile, visitSource,
   type AccountData, type Application, type Details, type Saved, type UploadedFile,
 } from "@/lib/admissions";
 import { SCHOOL } from "@/lib/constants";
 import { telHref, whatsappHref } from "@/lib/links";
 import { track } from "@/lib/track";
+import { HumanCheck } from "./HumanCheck";
+import { PasswordField } from "./PasswordField";
 
 const STEPS = ["Your child", "Family", "Documents", "Visit and send"] as const;
 
@@ -56,7 +58,10 @@ export function ApplyForm() {
   const [declared, setDeclared] = useState(false);
   const [session, setSession] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
   const [newEmail, setNewEmail] = useState("");
+  const [human, setHuman] = useState<string | null>(null);
+  const [humanRound, setHumanRound] = useState(0);
   const top = useRef<HTMLDivElement>(null);
 
   // Pick up where this phone left off, or open the form a signed-in parent chose
@@ -126,6 +131,7 @@ export function ApplyForm() {
       await fn();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      setHumanRound((n) => n + 1); // a human-check token works once
     } finally {
       setBusy(false);
     }
@@ -151,7 +157,7 @@ export function ApplyForm() {
       } else {
         const r = await api<{ ref: string; token?: string }>("POST", "/api/applications", {
           token: session ?? undefined,
-          body: { ...start, consent: true, consent_text: CONSENT_TEXT, source: visitSource(), website },
+          body: { ...start, consent: true, consent_text: CONSENT_TEXT, source: visitSource(), website, ts: human },
         });
         if (!r.token) throw new Error("Could not save just now. Please call the school office.");
         const s = { ref: r.ref, token: r.token };
@@ -171,7 +177,7 @@ export function ApplyForm() {
       return setError("Please add the name of at least one parent.");
     if (!details.address?.trim()) return setError("Please add your home address.");
     run(async () => {
-      await api("PATCH", `/api/applications/${saved.ref}`, { token: saved.token, body: { details } });
+      await api("PATCH", `/api/applications/${saved.ref}`, { token: saved.token, body: { details, progress: "family" } });
       track("apply_step", "family");
       goTo(2);
     });
@@ -210,7 +216,7 @@ export function ApplyForm() {
     run(async () => {
       await api("PATCH", `/api/applications/${saved.ref}`, {
         token: saved.token,
-        body: { visit_pref: visit, message },
+        body: { visit_pref: visit, message, progress: "visit" },
       });
       await api("POST", `/api/applications/${saved.ref}/submit`, { token: saved.token, body: { declared: true } });
       track("apply_submit", start.class_sought);
@@ -223,14 +229,16 @@ export function ApplyForm() {
   const createAccount = (e: React.FormEvent) => {
     e.preventDefault();
     if (!saved) return;
-    if (newPassword.length < 8) return setError("Please choose a password of at least 8 characters.");
+    if (newPassword.length < MIN_PASSWORD) return setError(`Please choose a password of at least ${MIN_PASSWORD} characters.`);
+    if (newPassword !== newPassword2) return setError("The two passwords are not the same. Please type them again.");
     run(async () => {
       const r = await api<{ session: string }>("POST", "/api/account/register", {
-        body: { ref: saved.ref, phone: start.phone, password: newPassword, email: newEmail, name: start.parent_name },
+        body: { ref: saved.ref, phone: start.phone, password: newPassword, email: newEmail, name: start.parent_name, ts: human },
       });
       saveSession(r.session);
       setSession(r.session);
       setNewPassword("");
+      setNewPassword2("");
       track("account_create", "after apply");
     });
   };
@@ -315,15 +323,14 @@ export function ApplyForm() {
               Choose a password and you can sign in from any phone with your mobile
               number, to follow progress, add documents, or apply for another child.
             </p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="new_password" className={labelCls}>Choose a password</label>
-                <input id="new_password" type="password" autoComplete="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`mt-2 ${field}`} placeholder="At least 8 characters" />
-              </div>
+            <div className="mt-4 space-y-4">
+              <PasswordField id="new_password" label="Choose a password" value={newPassword} onChange={setNewPassword} autoComplete="new-password" guide />
+              <PasswordField id="new_password2" label="Type it once more" value={newPassword2} onChange={setNewPassword2} autoComplete="new-password" />
               <div>
                 <label htmlFor="new_email" className={labelCls}>Email</label>
-                <input id="new_email" type="email" autoComplete="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className={`mt-2 ${field}`} placeholder="Only if you use one" />
+                <input id="new_email" type="email" autoComplete="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className={`mt-2 ${field}`} placeholder="Only if you use one. You can sign in with it too." />
               </div>
+              <HumanCheck onToken={setHuman} resetKey={humanRound} />
             </div>
             <ErrorLine error={error} />
             <button type="submit" disabled={busy} className={`${quietBtn} mt-4`}>
@@ -418,6 +425,7 @@ export function ApplyForm() {
               </Link>
             </span>
           </label>
+          {!saved && !session && <HumanCheck onToken={setHuman} resetKey={humanRound} />}
           <ErrorLine error={error} />
           <button type="submit" disabled={busy} className={`${primaryBtn} w-full sm:w-auto`}>
             {busy ? <Loader2 size={18} className="animate-spin" /> : null}
@@ -555,7 +563,16 @@ export function ApplyForm() {
             <button type="button" onClick={() => goTo(1)} className={quietBtn}>
               <ArrowLeft size={18} strokeWidth={1.75} /> Back
             </button>
-            <button type="button" onClick={() => { track("apply_step", `documents:${files.length}`); goTo(3); }} className={primaryBtn} disabled={!!uploading}>
+            <button
+              type="button"
+              onClick={() => {
+                track("apply_step", `documents:${files.length}`);
+                if (saved) api("PATCH", `/api/applications/${saved.ref}`, { token: saved.token, body: { progress: "documents" } }).catch(() => {});
+                goTo(3);
+              }}
+              className={primaryBtn}
+              disabled={!!uploading}
+            >
               {files.length ? "Continue" : "Skip for now"} <ArrowRight size={18} strokeWidth={1.75} />
             </button>
           </div>

@@ -30,6 +30,8 @@ jobs:
           NEXT_PUBLIC_PULSE_URL: ${{ vars.NEXT_PUBLIC_PULSE_URL }}
           # kp-admissions Worker (online application + status). Empty = pages fall back to phone/WhatsApp.
           NEXT_PUBLIC_ADMISSIONS_API: ${{ vars.NEXT_PUBLIC_ADMISSIONS_API }}
+          # Cloudflare Turnstile site key (public). The secret lives only in the Worker.
+          NEXT_PUBLIC_TURNSTILE_SITEKEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITEKEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

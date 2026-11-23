@@ -39,7 +39,15 @@ const ROWS: [string, string][] = [
   ],
   [
     "Parent profiles",
-    "If you choose a password, we keep a profile with your name, mobile number and email so you can sign in and see your own applications. Your password is stored in a scrambled form that even the school cannot read. If you forget it, the office can give you a temporary one. The profile is deleted when your applications are.",
+    "If you choose a password, we keep a profile with your name, mobile number and email so you can sign in and see your own applications. Your password is stored in a scrambled form that even the school cannot read, and we check it against lists of passwords known to have leaked elsewhere, without the password ever leaving our system. If you forget it, the office can give you a temporary one. The profile is deleted within 30 days of your last application being removed.",
+  ],
+  [
+    "Keeping the forms safe",
+    "A Cloudflare check confirms that a person, not an automated program, is sending each form. We keep a record of enquiries, forms started, and every sign-in attempt on a profile (time, type of phone or browser, and the mobile number typed), so the office can help a parent who got stuck and can spot misuse. You can see the recent activity on your own profile. This record is kept for one year.",
+  ],
+  [
+    "Messages from us",
+    "We may send an acknowledgement, updates on your application, or a one-time code to your mobile number on WhatsApp, or to your email if you gave one. We do not send advertising.",
   ],
   [
     "Your choices",

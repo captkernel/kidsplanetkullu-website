@@ -4,7 +4,9 @@ import { useState } from "react";
 import { Send, MessageCircle } from "lucide-react";
 import { whatsappHref } from "@/lib/links";
 import { track } from "@/lib/track";
+import Link from "next/link";
 import { admissionsOnline, api, CLASSES, visitSource } from "@/lib/admissions";
+import { HumanCheck } from "@/components/admissions/HumanCheck";
 
 // Static-export friendly: no backend. On submit we compose a WhatsApp message
 // (the school's real, monitored channel) so the enquiry actually reaches them.
@@ -16,6 +18,8 @@ export function InquiryForm() {
     message: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [human, setHuman] = useState<string | null>(null);
+  const [round, setRound] = useState(0);
 
   const set = (k: keyof typeof values) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -45,8 +49,10 @@ export function InquiryForm() {
           class_sought: values.childClass,
           message: values.message,
           source: visitSource(),
+          ts: human,
         },
       }).catch(() => {});
+      setRound((n) => n + 1); // a human-check token works once
     }
     window.open(whatsappHref(lines.join("\n")), "_blank", "noopener,noreferrer");
   };
@@ -129,6 +135,8 @@ export function InquiryForm() {
         />
       </div>
 
+      {admissionsOnline && <HumanCheck onToken={setHuman} resetKey={round} />}
+
       {error && (
         <p role="alert" className="text-sm font-medium text-primary">
           {error}
@@ -155,7 +163,11 @@ export function InquiryForm() {
       </div>
       <p className="text-xs text-ink-soft">
         Your enquiry opens WhatsApp with the details filled in, sent straight to
-        the school office. We usually reply within one working day.
+        the school office. We usually reply within one working day. We also keep
+        a note of it so the office can call you back.{" "}
+        <Link href="/privacy/" className="font-semibold text-primary underline underline-offset-4">
+          How we look after your details
+        </Link>
       </p>
     </form>
   );

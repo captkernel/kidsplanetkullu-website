@@ -2,15 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, FileUp, Loader2, LogOut, Phone, Plus } from "lucide-react";
+import { Check, FileUp, Loader2, LogOut, Phone, Plus, ShieldCheck, Smartphone } from "lucide-react";
 import {
-  admissionsOnline, api, ApiError, clearSession, DOC_KINDS, loadSaved, loadSession, saveSession,
-  shrinkImage, STATUS_LABELS, uploadFile,
-  type Account, type AccountData, type Application,
+  admissionsOnline, api, ApiError, clearSession, DOC_KINDS, EVENT_WORDS, fetchFeatures, loadSaved, loadSession,
+  MIN_PASSWORD, saveSession, shrinkImage, STATUS_LABELS, uploadFile,
+  type Account, type AccountData, type Application, type Features,
 } from "@/lib/admissions";
 import { SCHOOL } from "@/lib/constants";
 import { telHref } from "@/lib/links";
 import { track } from "@/lib/track";
+import { HumanCheck } from "./HumanCheck";
+import { PasswordField } from "./PasswordField";
 
 const field =
   "w-full rounded-xl border border-line bg-canvas px-4 py-3 text-ink " +
@@ -26,6 +28,10 @@ const quietBtn =
 
 const DOCS_OPEN = ["started", "submitted", "in_review", "visit_booked"];
 const DOC_LABEL: Record<string, string> = Object.fromEntries(DOC_KINDS.map((d) => [d.kind, d.label]));
+const SHORT = `Please choose a password of at least ${MIN_PASSWORD} characters.`;
+
+const when = (iso: string) =>
+  new Date(iso).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
 
 function Notice({ tone = "warn", children }: { tone?: "warn" | "ok"; children: React.ReactNode }) {
   return (
@@ -44,6 +50,7 @@ export function ParentPortal() {
   const [ready, setReady] = useState(false);
   const [session, setSession] = useState<string | null>(null);
   const [data, setData] = useState<AccountData | null>(null);
+  const [features, setFeatures] = useState<Features>({ human_check: false, verify_phone: false, messages: false });
 
   const refresh = useCallback(async (token: string) => {
     const d = await api<AccountData>("GET", "/api/account", { token });
@@ -53,6 +60,7 @@ export function ParentPortal() {
   useEffect(() => {
     const boot = async () => {
       const s = admissionsOnline ? loadSession() : null;
+      if (admissionsOnline) fetchFeatures().then(setFeatures);
       if (s) {
         setSession(s);
         try {
@@ -101,7 +109,17 @@ export function ParentPortal() {
   if (data.account.must_change) {
     return <NewPassword session={session} onDone={signedIn} onSignOut={signOut} />;
   }
-  return <Profile session={session} data={data} onChanged={signedIn} refresh={() => refresh(session)} onSignOut={signOut} />;
+  return (
+    <Profile
+      session={session}
+      data={data}
+      features={features}
+      setData={setData}
+      onChanged={signedIn}
+      refresh={() => refresh(session)}
+      onSignOut={signOut}
+    />
+  );
 }
 
 // ---------------------------------------------------------------- sign in / create
@@ -110,18 +128,24 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
   const [mode, setMode] = useState<"in" | "new">("in");
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [ref, setRef] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [human, setHuman] = useState<string | null>(null);
+  const [round, setRound] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Someone who has just applied on this phone has their reference filled in.
   useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get("ref");
-    const r = (q || loadSaved()?.ref || "").toUpperCase();
-    if (r) setRef(r);
-    if (q) setMode("new");
+    const prefill = async () => {
+      const q = new URLSearchParams(window.location.search).get("ref");
+      const r = (q || loadSaved()?.ref || "").toUpperCase();
+      if (r) setRef(r);
+      if (q) setMode("new");
+    };
+    void prefill();
   }, []);
 
   const submit = async (e: React.FormEvent) => {
@@ -130,18 +154,20 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
     if (mode === "in" && (!id.trim() || !password)) return setError("Please enter your mobile number or email, and your password.");
     if (mode === "new") {
       if (!ref.trim() || !phone.trim()) return setError("Please enter your reference and the mobile number you applied with.");
-      if (password.length < 8) return setError("Please choose a password of at least 8 characters.");
+      if (password.length < MIN_PASSWORD) return setError(SHORT);
+      if (password !== confirm) return setError("The two passwords are not the same. Please type them again.");
     }
     setBusy(true);
     try {
       const r =
         mode === "in"
-          ? await api<{ session: string }>("POST", "/api/account/login", { body: { id, password } })
-          : await api<{ session: string }>("POST", "/api/account/register", { body: { ref, phone, password, email } });
+          ? await api<{ session: string }>("POST", "/api/account/login", { body: { id, password, ts: human } })
+          : await api<{ session: string }>("POST", "/api/account/register", { body: { ref, phone, password, email, ts: human } });
       track(mode === "in" ? "account_login" : "account_create", "parent page");
       await onSignedIn(r.session);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Please try again.");
+      setRound((n) => n + 1); // a human-check token works once
     } finally {
       setBusy(false);
     }
@@ -150,7 +176,7 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
   const tab = (m: "in" | "new", label: string) => (
     <button
       type="button"
-      onClick={() => { setMode(m); setError(null); setPassword(""); }}
+      onClick={() => { setMode(m); setError(null); setPassword(""); setConfirm(""); }}
       aria-pressed={mode === m}
       className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${
         mode === m ? "bg-primary text-canvas" : "text-primary hover:bg-primary/8"
@@ -168,10 +194,13 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
       </div>
       <form onSubmit={submit} className="mt-6 space-y-5" noValidate>
         {mode === "in" ? (
-          <div>
-            <label htmlFor="login_id" className={labelCls}>Mobile number or email</label>
-            <input id="login_id" value={id} onChange={(e) => setId(e.target.value)} className={`mt-2 ${field}`} autoComplete="username" placeholder="The one on your profile" />
-          </div>
+          <>
+            <div>
+              <label htmlFor="login_id" className={labelCls}>Mobile number or email</label>
+              <input id="login_id" value={id} onChange={(e) => setId(e.target.value)} className={`mt-2 ${field}`} autoComplete="username" autoCapitalize="none" placeholder="The one on your profile" />
+            </div>
+            <PasswordField id="pw" label="Password" value={password} onChange={setPassword} autoComplete="current-password" />
+          </>
         ) : (
           <>
             <p className="leading-relaxed text-ink-soft">
@@ -195,12 +224,11 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
               <label htmlFor="reg_email" className={labelCls}>Email</label>
               <input id="reg_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field}`} placeholder="Only if you use one. You can sign in with it too." autoComplete="email" />
             </div>
+            <PasswordField id="pw" label="Choose a password" value={password} onChange={setPassword} autoComplete="new-password" guide />
+            <PasswordField id="pw2" label="Type it once more" value={confirm} onChange={setConfirm} autoComplete="new-password" />
           </>
         )}
-        <div>
-          <label htmlFor="pw" className={labelCls}>{mode === "in" ? "Password" : "Choose a password"}</label>
-          <input id="pw" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className={`mt-2 ${field}`} autoComplete={mode === "in" ? "current-password" : "new-password"} placeholder={mode === "in" ? "" : "At least 8 characters"} />
-        </div>
+        <HumanCheck onToken={setHuman} resetKey={round} />
         {error && <Notice>{error}</Notice>}
         <button type="submit" disabled={busy} className={primaryBtn}>
           {busy && <Loader2 size={18} className="animate-spin" />}
@@ -225,13 +253,15 @@ function NewPassword({
 }: { session: string; onDone: (token: string) => Promise<void>; onSignOut: () => void }) {
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (next.length < 8) return setError("Please choose a password of at least 8 characters.");
+    if (next.length < MIN_PASSWORD) return setError(SHORT);
+    if (next !== confirm) return setError("The two new passwords are not the same. Please type them again.");
     setBusy(true);
     try {
       const r = await api<{ session: string }>("PATCH", "/api/account", {
@@ -251,15 +281,11 @@ function NewPassword({
       <h2 className="font-display text-2xl md:text-3xl">Choose your own password.</h2>
       <p className="leading-relaxed text-ink-soft">
         You signed in with the temporary password from the office. Please replace it now.
+        It stops working after 24 hours.
       </p>
-      <div>
-        <label htmlFor="temp_pw" className={labelCls}>Temporary password</label>
-        <input id="temp_pw" type="password" value={current} onChange={(e) => setCurrent(e.target.value)} className={`mt-2 ${field}`} autoComplete="current-password" />
-      </div>
-      <div>
-        <label htmlFor="next_pw" className={labelCls}>New password</label>
-        <input id="next_pw" type="password" value={next} onChange={(e) => setNext(e.target.value)} className={`mt-2 ${field}`} autoComplete="new-password" placeholder="At least 8 characters" />
-      </div>
+      <PasswordField id="temp_pw" label="Temporary password" value={current} onChange={setCurrent} autoComplete="current-password" />
+      <PasswordField id="next_pw" label="New password" value={next} onChange={setNext} autoComplete="new-password" guide />
+      <PasswordField id="next_pw2" label="Type it once more" value={confirm} onChange={setConfirm} autoComplete="new-password" />
       {error && <Notice>{error}</Notice>}
       <div className="flex flex-wrap gap-3">
         <button type="submit" disabled={busy} className={primaryBtn}>
@@ -273,15 +299,18 @@ function NewPassword({
 
 // ---------------------------------------------------------------- profile
 
-function Profile({
-  session, data, onChanged, refresh, onSignOut,
-}: {
+type ProfileProps = {
   session: string;
   data: AccountData;
+  features: Features;
+  setData: (d: AccountData) => void;
   onChanged: (token: string) => Promise<void>;
   refresh: () => Promise<void>;
   onSignOut: () => void;
-}) {
+};
+
+function Profile(props: ProfileProps) {
+  const { session, data, refresh } = props;
   const { account, applications } = data;
   return (
     <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
@@ -309,7 +338,10 @@ function Profile({
         )}
         <Claim session={session} phone={account.phone} refresh={refresh} />
       </div>
-      <Details account={account} session={session} onChanged={onChanged} refresh={refresh} onSignOut={onSignOut} />
+      <div className="space-y-10">
+        <Details {...props} account={account} />
+        <Security {...props} />
+      </div>
     </div>
   );
 }
@@ -408,7 +440,7 @@ function Claim({ session, phone, refresh }: { session: string; phone: string; re
     setError(null);
     setBusy(true);
     try {
-      await api("POST", "/api/account/claim", { token: session, body: { ref, phone } });
+      await api("POST", "/api/account/claim", { token: session, body: { ref } });
       setRef("");
       setOpen(false);
       await refresh();
@@ -441,30 +473,30 @@ function Claim({ session, phone, refresh }: { session: string; phone: string; re
   );
 }
 
-function Details({
-  account, session, onChanged, refresh, onSignOut,
-}: {
-  account: Account;
-  session: string;
-  onChanged: (token: string) => Promise<void>;
-  refresh: () => Promise<void>;
-  onSignOut: () => void;
-}) {
+function Details({ account, session, onChanged, refresh, onSignOut }: ProfileProps & { account: Account }) {
   const [name, setName] = useState(account.name);
   const [email, setEmail] = useState(account.email);
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ tone: "ok" | "warn"; text: string } | null>(null);
+
+  const emailChanged = email.trim().toLowerCase() !== account.email;
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setMsg(null);
     const body: Record<string, unknown> = {};
     if (name.trim() !== account.name) body.name = name;
-    if (email.trim().toLowerCase() !== account.email) body.email = email;
-    if (next || current) {
-      if (next.length < 8) return setMsg({ tone: "warn", text: "Please choose a new password of at least 8 characters." });
+    if (emailChanged) {
+      if (!current) return setMsg({ tone: "warn", text: "Please enter your current password to change your email." });
+      body.email = email;
+      body.current_password = current;
+    }
+    if (next) {
+      if (next.length < MIN_PASSWORD) return setMsg({ tone: "warn", text: SHORT });
+      if (next !== confirm) return setMsg({ tone: "warn", text: "The two new passwords are not the same. Please type them again." });
       body.password = { current, next };
     }
     if (!Object.keys(body).length) return setMsg({ tone: "ok", text: "Nothing to change." });
@@ -473,9 +505,10 @@ function Details({
       const r = await api<{ session?: string }>("PATCH", "/api/account", { token: session, body });
       setCurrent("");
       setNext("");
+      setConfirm("");
       if (r.session) await onChanged(r.session);
       else await refresh();
-      setMsg({ tone: "ok", text: "Saved." });
+      setMsg({ tone: "ok", text: r.session ? "Saved. Other phones have been signed out." : "Saved." });
     } catch (err) {
       setMsg({ tone: "warn", text: err instanceof Error ? err.message : "Please try again." });
     } finally {
@@ -484,7 +517,7 @@ function Details({
   };
 
   return (
-    <aside>
+    <section>
       <h2 className="font-display text-2xl md:text-3xl">Your details</h2>
       <form onSubmit={save} className="mt-5 space-y-4" noValidate>
         <div>
@@ -502,12 +535,13 @@ function Details({
           <label htmlFor="acc_email" className={labelCls}>Email</label>
           <input id="acc_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field}`} autoComplete="email" placeholder="Add one to sign in with it too" />
         </div>
-        <fieldset className="rounded-xl border border-line p-4">
-          <legend className="px-2 text-sm font-semibold text-primary">Change password</legend>
-          <label htmlFor="acc_current" className={labelCls}>Current password</label>
-          <input id="acc_current" type="password" value={current} onChange={(e) => setCurrent(e.target.value)} className={`mt-2 ${field}`} autoComplete="current-password" />
-          <label htmlFor="acc_next" className={`${labelCls} mt-4`}>New password</label>
-          <input id="acc_next" type="password" value={next} onChange={(e) => setNext(e.target.value)} className={`mt-2 ${field}`} autoComplete="new-password" placeholder="At least 8 characters" />
+        <fieldset className="space-y-4 rounded-xl border border-line p-4">
+          <legend className="px-2 text-sm font-semibold text-primary">Password</legend>
+          <PasswordField id="acc_current" label="Current password" value={current} onChange={setCurrent} autoComplete="current-password" placeholder="Needed to change your email or password" />
+          <PasswordField id="acc_next" label="New password" value={next} onChange={setNext} autoComplete="new-password" placeholder="Leave blank to keep the current one" guide={next.length > 0} />
+          {next.length > 0 && (
+            <PasswordField id="acc_next2" label="Type the new password once more" value={confirm} onChange={setConfirm} autoComplete="new-password" />
+          )}
         </fieldset>
         {msg && <Notice tone={msg.tone}>{msg.text}</Notice>}
         <div className="flex flex-wrap gap-3">
@@ -519,6 +553,118 @@ function Details({
           </button>
         </div>
       </form>
-    </aside>
+    </section>
+  );
+}
+
+/** Who is signed in, what has happened on the profile, and proving the number. */
+function Security({ session, data, features, setData }: ProfileProps) {
+  const { account, sessions, events } = data;
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [codeSent, setCodeSent] = useState(false);
+  const [code, setCode] = useState("");
+
+  const run = async (fn: () => Promise<void>) => {
+    setBusy(true);
+    setError(null);
+    try {
+      await fn();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+  const revoke = (body: Record<string, unknown>) =>
+    run(async () => setData(await api<AccountData>("POST", "/api/account/sessions/revoke", { token: session, body })));
+
+  const others = sessions.filter((s) => !s.current);
+
+  return (
+    <section data-testid="security">
+      <h2 className="flex items-center gap-2 font-display text-2xl md:text-3xl">
+        <ShieldCheck size={24} strokeWidth={1.75} className="text-primary" /> Security
+      </h2>
+
+      {features.verify_phone && (
+        <div className="mt-5 rounded-xl border border-line p-4">
+          {account.phone_verified ? (
+            <p className="flex items-center gap-2 font-semibold text-ink">
+              <Check size={16} className="text-primary" /> Mobile number confirmed
+            </p>
+          ) : codeSent ? (
+            <form
+              className="space-y-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                run(async () => setData(await api<AccountData>("POST", "/api/account/verify/confirm", { token: session, body: { code } })));
+              }}
+            >
+              <label htmlFor="otp" className={labelCls}>Enter the 6 digit code we sent on WhatsApp</label>
+              <input id="otp" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} className={`${field} tracking-[0.4em]`} />
+              <button type="submit" disabled={busy || code.length !== 6} className={quietBtn}>Confirm</button>
+            </form>
+          ) : (
+            <>
+              <p className="text-sm leading-relaxed text-ink-soft">
+                Confirm that {account.phone} is yours with a one-time code on WhatsApp.
+              </p>
+              <button
+                type="button"
+                disabled={busy}
+                className={`${quietBtn} mt-3`}
+                onClick={() => run(async () => { await api("POST", "/api/account/verify/start", { token: session }); setCodeSent(true); })}
+              >
+                Send me a code
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+      <h3 className="mt-6 text-sm font-semibold uppercase tracking-[0.16em] text-ink-soft">Signed in on</h3>
+      <ul className="mt-2 divide-y divide-line">
+        {sessions.map((s) => (
+          <li key={s.id} className="flex items-center justify-between gap-3 py-3 text-sm">
+            <span className="flex items-start gap-2 text-ink">
+              <Smartphone size={16} strokeWidth={1.75} className="mt-0.5 shrink-0 text-primary" />
+              <span>
+                {s.device || "Unknown device"}
+                {s.current && <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">this phone</span>}
+                <span className="block text-ink-soft">Last used {when(s.last_used_at)}</span>
+              </span>
+            </span>
+            {!s.current && (
+              <button type="button" disabled={busy} onClick={() => revoke({ id: s.id })} className="shrink-0 font-semibold text-primary underline underline-offset-4">
+                Sign out
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+      {others.length > 0 && (
+        <button type="button" disabled={busy} onClick={() => revoke({ others: true })} className={`${quietBtn} mt-2`}>
+          Sign out everywhere else
+        </button>
+      )}
+
+      <h3 className="mt-6 text-sm font-semibold uppercase tracking-[0.16em] text-ink-soft">Recent activity</h3>
+      <ul className="mt-2 space-y-2 text-sm">
+        {events.map((e, i) => (
+          <li key={i} className="flex justify-between gap-3">
+            <span className="text-ink">
+              {EVENT_WORDS[e.kind] ?? e.kind.replace(/_/g, " ")}
+              {e.device && <span className="text-ink-soft"> · {e.device}</span>}
+            </span>
+            <span className="shrink-0 text-ink-soft">{when(e.at)}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-sm text-ink-soft">
+        Something here you do not recognise? Change your password, then call the office.
+      </p>
+      {error && <div className="mt-3"><Notice>{error}</Notice></div>}
+    </section>
   );
 }

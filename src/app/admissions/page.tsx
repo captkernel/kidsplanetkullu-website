@@ -30,11 +30,14 @@ const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 // From 01-strategy/CLAIMS-SHEET.md (school policy).
 const AGES: [string, string][] = [
   ["Pre-Nursery", "2 years and above (reopens with the 2027-28 session)"],
-  ["Nursery", "3 years and above"],
-  ["LKG", "4 years and above"],
-  ["UKG", "5 years and above"],
-  ["Class 1", "6 years and above"],
+  ["Nursery", "3 years completed"],
+  ["LKG", "4 years completed"],
+  ["UKG", "5 years completed"],
+  ["Class 1", "6 years completed"],
 ];
+// Himachal Education Department letters of 24-12-2025, 12-03-2026 and 08-10-2026: the age for
+// Nursery to Class 1 is counted on 30 September of the admission year, in every school.
+const AGE_NOTE = "For Nursery to Class 1, the age is counted on 30 September 2027, as the Himachal Education Department requires. A child may join from the first day of the session if the birthday falls by then.";
 
 const STEPS = [
   {
@@ -241,6 +244,7 @@ export default function AdmissionsPage() {
                   ))}
                 </tbody>
               </table>
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">{AGE_NOTE}</p>
               <ul className="mt-5 space-y-2 leading-relaxed text-ink-soft">
                 <li>Admissions for {SCHOOL.admissionsYear} are open now, from Pre-Nursery to Class 8.</li>
                 <li>Walk in on any working day. No appointment needed.</li>

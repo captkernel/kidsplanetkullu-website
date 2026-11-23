@@ -164,8 +164,49 @@ export function clearSaved() {
 // ---- the signed-in parent --------------------------------------------------
 
 const SESSION_KEY = "kp_parent";
-export type Account = { name: string; phone: string; email: string; must_change: boolean };
-export type AccountData = { account: Account; applications: Application[] };
+export const MIN_PASSWORD = 10;
+
+export type Account = {
+  name: string;
+  phone: string;
+  email: string;
+  must_change: boolean;
+  phone_verified: boolean;
+  created_at: string;
+};
+export type SignedInDevice = { id: string; device: string; created_at: string; last_used_at: string; current: boolean };
+export type AccountEvent = { kind: string; device: string; at: string };
+export type AccountData = {
+  account: Account;
+  applications: Application[];
+  sessions: SignedInDevice[];
+  events: AccountEvent[];
+};
+
+/** What the backend currently has switched on, so pages offer only what works. */
+export type Features = { human_check: boolean; verify_phone: boolean; messages: boolean };
+export async function fetchFeatures(): Promise<Features> {
+  try {
+    const r = await fetch(ADMISSIONS_API + "/health");
+    const j = (await r.json()) as { features?: Features };
+    return j.features ?? { human_check: false, verify_phone: false, messages: false };
+  } catch {
+    return { human_check: false, verify_phone: false, messages: false };
+  }
+}
+
+// How the profile's "Recent activity" reads to a parent.
+export const EVENT_WORDS: Record<string, string> = {
+  profile_created: "Profile created",
+  signed_in: "Signed in",
+  wrong_password: "Wrong password tried",
+  locked_after_wrong_passwords: "Locked for 15 minutes after wrong passwords",
+  password_changed: "Password changed",
+  email_changed: "Email changed",
+  reset_by_office: "Temporary password given by the office",
+  signed_out_other_devices: "Signed out of other phones",
+  phone_verified: "Mobile number confirmed",
+};
 
 export function loadSession(): string | null {
   try {
