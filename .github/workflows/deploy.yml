@@ -32,6 +32,8 @@ jobs:
           NEXT_PUBLIC_ADMISSIONS_API: ${{ vars.NEXT_PUBLIC_ADMISSIONS_API }}
           # Cloudflare Turnstile site key (public). The secret lives only in the Worker.
           NEXT_PUBLIC_TURNSTILE_SITEKEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITEKEY }}
+          # Google OAuth client id for Continue with Google (public). Empty = the button is not shown.
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

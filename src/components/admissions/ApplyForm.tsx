@@ -62,6 +62,7 @@ export function ApplyForm() {
   const [newEmail, setNewEmail] = useState("");
   const [human, setHuman] = useState<string | null>(null);
   const [humanRound, setHumanRound] = useState(0);
+  const [phoneFromProfile, setPhoneFromProfile] = useState(false);
   const top = useRef<HTMLDivElement>(null);
 
   // Pick up where this phone left off, or open the form a signed-in parent chose
@@ -86,9 +87,10 @@ export function ApplyForm() {
       // A signed-in parent does not retype their own name and number.
       if (sess) {
         api<AccountData>("GET", "/api/account", { token: sess })
-          .then(({ account }) =>
-            setStart((v) => ({ ...v, parent_name: v.parent_name || account.name, phone: v.phone || account.phone }))
-          )
+          .then(({ account }) => {
+            setStart((v) => ({ ...v, parent_name: v.parent_name || account.name, phone: v.phone || account.phone }));
+            setPhoneFromProfile(!!account.phone);
+          })
           .catch(() => setSession(null))
           .finally(() => setReady(true));
       } else {
@@ -412,8 +414,8 @@ export function ApplyForm() {
             </div>
             <div>
               <label htmlFor="phone" className={labelCls}>Mobile number</label>
-              <input id="phone" type="tel" inputMode="numeric" value={start.phone} onChange={setS("phone")} className={`mt-2 ${field}`} placeholder="10 digit mobile number" autoComplete="tel" disabled={!!saved || !!session} />
-              {(saved || session) && <p className={hintCls}>To change the number, call the office.</p>}
+              <input id="phone" type="tel" inputMode="numeric" value={start.phone} onChange={setS("phone")} className={`mt-2 ${field}`} placeholder="10 digit mobile number" autoComplete="tel" disabled={!!saved || phoneFromProfile} />
+              {(saved || phoneFromProfile) && <p className={hintCls}>To change the number, call the office.</p>}
             </div>
           </div>
           {/* Honeypot: hidden from people, tempting to bots. */}

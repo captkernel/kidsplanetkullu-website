@@ -42,6 +42,10 @@ const ROWS: [string, string][] = [
     "You can open a profile with or without applying. We keep your name, mobile number and email so you can sign in, and, if you tell us, the first name, date of birth and class of a child you are considering. Until your mobile number is confirmed (by an application reference, a message from that number, or the office), a profile shows only updates meant for all parents. A profile with no application and no child at the school is deleted one year after your last visit. Your password is stored in a scrambled form that even the school cannot read, and we check it against lists of passwords known to have leaked elsewhere, without the password ever leaving our system. If you forget it, the office can give you a temporary one.",
   ],
   [
+    "Signing in with Google",
+    "If you choose Continue with Google, Google tells us your name and email address and confirms that the email is yours. We do not see your Google password, and we receive nothing else from your Google account. Google's own privacy policy covers what Google records about the sign-in.",
+  ],
+  [
     "Parents of children at the school",
     "If your child is at Kids Planet, the office may create a profile for you with your name, your mobile number, and your child's first name and class, so that you can read updates meant for your child's class or for your family. Nothing else from the school record is placed online. Ask the office and the profile will be removed.",
   ],

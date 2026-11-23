@@ -65,9 +65,12 @@ export type StatusResult = {
 
 export class ApiError extends Error {
   status: number;
-  constructor(message: string, status: number) {
+  /** The rest of the server's answer, for the few cases a page needs more than the message. */
+  data: Record<string, unknown>;
+  constructor(message: string, status: number, data: Record<string, unknown> = {}) {
     super(message);
     this.status = status;
+    this.data = data;
   }
 }
 
@@ -92,7 +95,7 @@ export async function api<T>(
     throw new ApiError(OFFLINE, 0);
   }
   const data = (await res.json().catch(() => ({}))) as { error?: string };
-  if (!res.ok) throw new ApiError(data.error || "Something went wrong. Please try again.", res.status);
+  if (!res.ok) throw new ApiError(data.error || "Something went wrong. Please try again.", res.status, data as Record<string, unknown>);
   return data as T;
 }
 
@@ -198,6 +201,9 @@ export type Account = {
   created_at: string;
   /** Present only while the number is unconfirmed: the parent sends it from their own WhatsApp. */
   verify_code: string;
+  /** Signs in with Google. `phone` is "" until such a profile adds a mobile number. */
+  google: boolean;
+  has_password: boolean;
 };
 /** A child a family is considering, saved on a profile before any application. */
 export type Interest = { id: string; child_name: string; child_dob: string; class_sought: string };
@@ -216,7 +222,7 @@ export type AccountData = {
 };
 
 /** What the backend currently has switched on, so pages offer only what works. */
-export type Features = { human_check: boolean; verify_phone: boolean; messages: boolean };
+export type Features = { human_check: boolean; verify_phone: boolean; messages: boolean; google?: boolean };
 export async function fetchFeatures(): Promise<Features> {
   try {
     const r = await fetch(ADMISSIONS_API + "/health");
@@ -233,6 +239,11 @@ export const EVENT_WORDS: Record<string, string> = {
   profile_created_without_application: "Profile created",
   profile_reclaimed_with_reference: "Profile set up again with your application reference",
   number_confirmed_by_office: "Mobile number confirmed by the school office",
+  profile_created_with_google: "Profile created with Google",
+  signed_in_with_google: "Signed in with Google",
+  google_connected: "Google sign-in connected",
+  mobile_number_added: "Mobile number added",
+  email_removed_its_owner_signed_up_with_google: "Email removed: its owner signed up with Google",
   profile_created_by_office: "Profile created for you by the school office",
   children_updated_by_office: "Your children's details updated by the office",
   signed_in: "Signed in",

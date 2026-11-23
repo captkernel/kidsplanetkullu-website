@@ -11,6 +11,7 @@ import {
 import { SCHOOL } from "@/lib/constants";
 import { telHref, whatsappHref } from "@/lib/links";
 import { track } from "@/lib/track";
+import { GoogleButton, googleOn } from "./GoogleButton";
 import { HumanCheck } from "./HumanCheck";
 import { PasswordField } from "./PasswordField";
 
@@ -124,6 +125,16 @@ export function ParentPortal() {
 
 // ---------------------------------------------------------------- sign in / create
 
+function Divider({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 text-sm text-ink-soft" role="separator">
+      <span className="h-px flex-1 bg-line" />
+      {children}
+      <span className="h-px flex-1 bg-line" />
+    </div>
+  );
+}
+
 function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }) {
   const [mode, setMode] = useState<"in" | "new">("in");
   const [id, setId] = useState("");
@@ -141,6 +152,35 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
   const [round, setRound] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // A Google sign-in for which no profile exists yet: kept so the parent can tick the box and finish.
+  const [pending, setPending] = useState<{ credential: string; email: string } | null>(null);
+
+  const withGoogle = async (credential: string, create: boolean) => {
+    setError(null);
+    if (create && !consent) {
+      setPending((p) => p ?? { credential, email: "" });
+      return setError("Please tick the box below, then press the Google button again.");
+    }
+    setBusy(true);
+    try {
+      const r = await api<{ session: string; created: boolean }>("POST", "/api/account/google", {
+        body: create ? { credential, create: true, consent: true, consent_text: PROFILE_CONSENT_TEXT, child } : { credential },
+      });
+      track(r.created ? "account_create" : "account_login", "google");
+      await onSignedIn(r.session);
+    } catch (err) {
+      if (err instanceof ApiError && err.data.need_profile) {
+        // No profile for this Google account yet: carry on as a sign-up, keeping the Google sign-in.
+        setPending({ credential, email: String(err.data.email || "") });
+        setMode("new");
+        setError(null);
+      } else {
+        setError(err instanceof Error ? err.message : "Please try again.");
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
 
   // ?new=1 opens straight on "Create a profile". Someone who has just applied on this phone
   // has their reference filled in, which confirms their number at once.
@@ -211,6 +251,12 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
         {tab("new", "Create a profile")}
       </div>
       <form onSubmit={submit} className="mt-6 space-y-5" noValidate>
+        {mode === "in" && googleOn && (
+          <>
+            <GoogleButton onCredential={(c) => void withGoogle(c, false)} label="continue_with" />
+            <Divider>or with your mobile number or email</Divider>
+          </>
+        )}
         {mode === "in" ? (
           <>
             <div>
@@ -226,21 +272,6 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
               details, show you school updates, and your form is half filled when you are ready.
               If your child is already at Kids Planet, ask the office for your login instead.
             </p>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="reg_name" className={labelCls}>Your name</label>
-                <input id="reg_name" value={name} onChange={(e) => setName(e.target.value)} className={`mt-2 ${field}`} placeholder="Parent or guardian" autoComplete="name" />
-              </div>
-              <div>
-                <label htmlFor="reg_phone" className={labelCls}>Mobile number</label>
-                <input id="reg_phone" type="tel" inputMode="numeric" value={phone} onChange={(e) => setPhone(e.target.value)} className={`mt-2 ${field}`} placeholder="10 digit mobile number" autoComplete="tel" />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="reg_email" className={labelCls}>Email</label>
-              <input id="reg_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field}`} placeholder="Only if you use one. You can sign in with it too." autoComplete="email" />
-            </div>
-
             {!hasRef && (
               <fieldset className="rounded-xl border border-line p-4">
                 <legend className="px-2 text-sm font-semibold text-primary">Your child (optional)</legend>
@@ -266,6 +297,50 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
               </fieldset>
             )}
 
+            {!hasRef && (
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-canvas p-4">
+                <input type="checkbox" className="mt-1 h-5 w-5 accent-[#2d5016]" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+                <span className="text-sm leading-relaxed text-ink">
+                  {PROFILE_CONSENT_TEXT}{" "}
+                  <Link href="/privacy/" target="_blank" className="font-semibold text-primary underline underline-offset-4">
+                    How we look after your details
+                  </Link>
+                </span>
+              </label>
+            )}
+            {googleOn && !hasRef && (
+              <>
+                {pending ? (
+                  <div className="rounded-xl border border-primary/30 bg-primary/5 p-4" data-testid="google-pending">
+                    <p className="text-sm leading-relaxed text-ink">
+                      There is no profile yet for{pending.email ? <> <strong>{pending.email}</strong></> : " this Google account"}.
+                      Tick the box above and we will create it. No password needed.
+                    </p>
+                    <button type="button" disabled={busy} onClick={() => void withGoogle(pending.credential, true)} className={`${primaryBtn} mt-3`}>
+                      {busy && <Loader2 size={18} className="animate-spin" />} Create my profile with Google
+                    </button>
+                  </div>
+                ) : (
+                  <GoogleButton onCredential={(c) => void withGoogle(c, true)} label="signup_with" />
+                )}
+                <Divider>or with your mobile number</Divider>
+              </>
+            )}
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label htmlFor="reg_name" className={labelCls}>Your name</label>
+                <input id="reg_name" value={name} onChange={(e) => setName(e.target.value)} className={`mt-2 ${field}`} placeholder="Parent or guardian" autoComplete="name" />
+              </div>
+              <div>
+                <label htmlFor="reg_phone" className={labelCls}>Mobile number</label>
+                <input id="reg_phone" type="tel" inputMode="numeric" value={phone} onChange={(e) => setPhone(e.target.value)} className={`mt-2 ${field}`} placeholder="10 digit mobile number" autoComplete="tel" />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="reg_email" className={labelCls}>Email</label>
+              <input id="reg_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field}`} placeholder="Only if you use one. You can sign in with it too." autoComplete="email" />
+            </div>
+
             <PasswordField id="pw" label="Choose a password" value={password} onChange={setPassword} autoComplete="new-password" guide />
             <PasswordField id="pw2" label="Type it once more" value={confirm} onChange={setConfirm} autoComplete="new-password" />
 
@@ -285,15 +360,6 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
                 <button type="button" onClick={() => setHasRef(true)} className="text-sm font-semibold text-primary underline underline-offset-4">
                   Already applied or enquired? Add your reference
                 </button>
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-canvas p-4">
-                  <input type="checkbox" className="mt-1 h-5 w-5 accent-[#2d5016]" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-                  <span className="text-sm leading-relaxed text-ink">
-                    {PROFILE_CONSENT_TEXT}{" "}
-                    <Link href="/privacy/" target="_blank" className="font-semibold text-primary underline underline-offset-4">
-                      How we look after your details
-                    </Link>
-                  </span>
-                </label>
               </>
             )}
             {/* Honeypot: hidden from people, tempting to bots. */}
@@ -397,7 +463,8 @@ function Profile(props: ProfileProps) {
   return (
     <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]" data-private>
       <div>
-        {!account.phone_verified && <ConfirmNumber account={account} />}
+        {!account.phone && <AddNumber session={session} setData={props.setData} />}
+        {account.phone && !account.phone_verified && <ConfirmNumber account={account} />}
         <Updates updates={updates} firstName={account.name.split(" ")[0]} />
         {(interests.length > 0 || (applications.length === 0 && children.length === 0)) && (
           <Considering interests={interests} session={session} setData={props.setData} />
@@ -443,13 +510,51 @@ function Profile(props: ProfileProps) {
             ))}
           </ul>
         )}
-        <Claim session={session} phone={account.phone} refresh={refresh} />
+        {account.phone && <Claim session={session} phone={account.phone} refresh={refresh} />}
       </div>
       <div className="space-y-10">
         <Details {...props} account={account} />
         <Security {...props} />
       </div>
     </div>
+  );
+}
+
+/** A profile made with Google has no mobile number yet. The office needs one to call. */
+function AddNumber({ session, setData }: { session: string; setData: (d: AccountData) => void }) {
+  const [phone, setPhone] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, "").slice(-10))) return setError("Please add a 10 digit mobile number.");
+    setBusy(true);
+    try {
+      setData(await api<AccountData>("POST", "/api/account/phone", { token: session, body: { phone } }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <section className="mb-10 rounded-2xl border border-gold bg-gold/10 p-5" data-testid="add-number">
+      <h2 className="font-display text-xl">Add your mobile number</h2>
+      <p className="mt-2 leading-relaxed text-ink">
+        The school office calls parents rather than emailing. Add the number we should ring about admission.
+      </p>
+      <form onSubmit={submit} className="mt-4 flex flex-wrap items-end gap-3" noValidate>
+        <div>
+          <label htmlFor="add_phone" className={labelCls}>Mobile number</label>
+          <input id="add_phone" type="tel" inputMode="numeric" value={phone} onChange={(e) => setPhone(e.target.value)} className={`mt-2 ${field} bg-surface`} placeholder="10 digit mobile number" autoComplete="tel" />
+        </div>
+        <button type="submit" disabled={busy} className={quietBtn + " bg-surface"}>
+          {busy && <Loader2 size={15} className="animate-spin" />} Save number
+        </button>
+      </form>
+      {error && <div className="mt-3"><Notice>{error}</Notice></div>}
+    </section>
   );
 }
 
@@ -802,15 +907,23 @@ function Details({ account, session, onChanged, refresh, onSignOut }: ProfilePro
         <div>
           <p className={labelCls}>Mobile number</p>
           <p className="mt-2 flex items-center gap-2 text-ink">
-            <Phone size={16} strokeWidth={1.75} className="text-primary" /> {account.phone}
+            <Phone size={16} strokeWidth={1.75} className="text-primary" /> {account.phone || "Not added yet"}
           </p>
-          <p className="mt-1 text-sm text-ink-soft">This is how you sign in. To change it, call the office.</p>
+          <p className="mt-1 text-sm text-ink-soft">
+            {account.phone ? (account.has_password ? "This is how you sign in. To change it, call the office." : "To change it, call the office.") : "Add it above so the office can call you."}
+          </p>
         </div>
         <div>
           <label htmlFor="acc_email" className={labelCls}>Email</label>
-          <input id="acc_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field}`} autoComplete="email" placeholder="Add one to sign in with it too" />
+          <input id="acc_email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`mt-2 ${field} disabled:opacity-70`} autoComplete="email" placeholder="Add one to sign in with it too" disabled={account.google} />
+          {account.google && <p className="mt-1 text-sm text-ink-soft">From your Google account.</p>}
         </div>
-        <fieldset className="space-y-4 rounded-xl border border-line p-4">
+        {!account.has_password && (
+          <p className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink-soft">
+            You sign in with Google, so there is no password to remember.
+          </p>
+        )}
+        <fieldset className={`space-y-4 rounded-xl border border-line p-4 ${account.has_password ? "" : "hidden"}`}>
           <legend className="px-2 text-sm font-semibold text-primary">Password</legend>
           <PasswordField id="acc_current" label="Current password" value={current} onChange={setCurrent} autoComplete="current-password" placeholder="Needed to change your email or password" />
           <PasswordField id="acc_next" label="New password" value={next} onChange={setNext} autoComplete="new-password" placeholder="Leave blank to keep the current one" guide={next.length > 0} />
@@ -893,6 +1006,26 @@ function Security({ session, data, features, setData }: ProfileProps) {
               >
                 Send me a code
               </button>
+            </>
+          )}
+        </div>
+      )}
+
+      {googleOn && (
+        <div className="mt-5 rounded-xl border border-line p-4" data-testid="google-status">
+          {account.google ? (
+            <p className="flex items-center gap-2 font-semibold text-ink">
+              <Check size={16} className="text-primary" /> Google sign-in connected
+            </p>
+          ) : (
+            <>
+              <p className="mb-3 text-sm leading-relaxed text-ink-soft">
+                Connect Google and you can sign in with one tap, without typing your password.
+              </p>
+              <GoogleButton
+                label="continue_with"
+                onCredential={(c) => run(async () => setData(await api<AccountData>("POST", "/api/account/google/link", { token: session, body: { credential: c } })))}
+              />
             </>
           )}
         </div>
