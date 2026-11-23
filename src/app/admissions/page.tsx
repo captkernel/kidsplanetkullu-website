@@ -21,10 +21,18 @@ export const metadata: Metadata = pageMetadata({
     "Admissions open for 2027-28 at Kids Planet School, Dhalpur, Kullu. Pre-Nursery 2+, Nursery 3+, LKG 4+, UKG 5+, Class 1 6+. Walk in, or call 94180 23454.",
 });
 
-// Fill in when the session's fees are approved; the table appears automatically.
-// Amounts in rupees. Leave FEES empty to show the "ask the office" text instead.
-const FEES: { stage: string; admission: number; annual: number; monthly: number }[] = [];
-const FEE_NOTE = "";
+// Amounts in rupees, from the school's fee sheet for 2026-27 (K:\2026-27\04 Finance\Fee Structure),
+// confirmed by the Vice Principal on 23 Nov 2026. Tuition is billed per QUARTER, four times a year.
+// Leave FEES empty to show the "ask the office" text instead. Update here when 2027-28 is fixed.
+const FEES: { stage: string; admission: number; annual: number; quarter: number }[] = [
+  { stage: "Pre-Nursery to UKG", admission: 12000, annual: 14000, quarter: 6600 },
+  { stage: "Class 1 to 5", admission: 10000, annual: 14000, quarter: 7000 },
+  { stage: "Class 6 to 8", admission: 10000, annual: 14000, quarter: 8500 },
+];
+const FEES_SESSION = "2026-27";
+const FEE_NOTE =
+  "These are the fees for the current session. Registration is paid once, by new admissions only. Annual charges are paid in two halves and tuition in four instalments through the year. Any change for 2027-28 will be shown here.";
+const yearTotal = (f: { annual: number; quarter: number }) => f.annual + f.quarter * 4;
 const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 
 // From 01-strategy/CLAIMS-SHEET.md (school policy).
@@ -189,7 +197,7 @@ export default function AdmissionsPage() {
             <Card className="h-full p-8">
               <Eyebrow>Fees</Eyebrow>
               <h3 className="mt-3 font-display text-2xl md:text-3xl">
-                Fees for {SCHOOL.admissionsYear}
+                Fees, session {FEES_SESSION}
               </h3>
               {FEES.length > 0 ? (
                 <div className="mt-5 overflow-x-auto">
@@ -197,9 +205,10 @@ export default function AdmissionsPage() {
                     <thead>
                       <tr className="border-b border-line text-ink-soft">
                         <th className="py-2 pr-4 font-semibold">Stage</th>
-                        <th className="py-2 pr-4 font-semibold">Admission (once)</th>
+                        <th className="py-2 pr-4 font-semibold">Registration (once)</th>
                         <th className="py-2 pr-4 font-semibold">Annual charges</th>
-                        <th className="py-2 font-semibold">Tuition / month</th>
+                        <th className="py-2 pr-4 font-semibold">Tuition per quarter</th>
+                        <th className="py-2 font-semibold">Total for the year</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -208,7 +217,8 @@ export default function AdmissionsPage() {
                           <td className="py-2.5 pr-4 font-medium text-ink">{f.stage}</td>
                           <td className="py-2.5 pr-4">{inr(f.admission)}</td>
                           <td className="py-2.5 pr-4">{inr(f.annual)}</td>
-                          <td className="py-2.5">{inr(f.monthly)}</td>
+                          <td className="py-2.5 pr-4">{inr(f.quarter)}</td>
+                          <td className="py-2.5 font-medium text-ink">{inr(yearTotal(f))}</td>
                         </tr>
                       ))}
                     </tbody>

@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from "react";
 
-// Cloudflare Turnstile: proves a person, not a script, is sending the form. Most parents
-// never see a puzzle, only a box that ticks itself. Switched on by NEXT_PUBLIC_TURNSTILE_SITEKEY;
-// the backend enforces it independently, so leaving this out of a form cannot bypass the check.
+// Cloudflare Turnstile: evidence that a person, not a script, is sending the form.
+// It must never stand between a parent and the school: the box appears only when Cloudflare
+// wants a tap, and if the check fails or hangs (it does on some phones and browsers) it
+// disappears and the form is sent without it. The backend then applies a smaller daily
+// allowance instead of refusing. Switched on by NEXT_PUBLIC_TURNSTILE_SITEKEY.
 const SITEKEY = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY || "";
 export const humanCheckOn = SITEKEY !== "";
 
@@ -57,9 +59,21 @@ export function HumanCheck({ onToken, resetKey = 0 }: { onToken: (token: string 
           action: "kp-admissions",
           theme: "light",
           size: "flexible",
+          appearance: "interaction-only",
+          retry: "never",
           callback: (t: string) => onToken(t),
           "expired-callback": () => onToken(null),
-          "error-callback": () => onToken(null),
+          // Returning true tells Turnstile we have handled it, so it shows no error of its own.
+          "error-callback": () => {
+            onToken(null);
+            if (box.current) box.current.style.display = "none";
+            return true;
+          },
+          "timeout-callback": () => onToken(null),
+          "unsupported-callback": () => {
+            onToken(null);
+            if (box.current) box.current.style.display = "none";
+          },
         });
       })
       .catch(() => onToken(null));
@@ -71,5 +85,5 @@ export function HumanCheck({ onToken, resetKey = 0 }: { onToken: (token: string 
   }, [onToken, resetKey]);
 
   if (!SITEKEY) return null;
-  return <div ref={box} className="min-h-[65px]" data-testid="human-check" />;
+  return <div ref={box} data-testid="human-check" />;
 }

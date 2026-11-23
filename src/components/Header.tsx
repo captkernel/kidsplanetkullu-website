@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, UserRound, X } from "lucide-react";
 import { PRIMARY_NAV } from "@/lib/links";
 import { SCHOOL } from "@/lib/constants";
 import { Button } from "./ui/Button";
@@ -75,18 +75,36 @@ export function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/admissions"
-            className="hidden items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-primary hover:text-primary-deep xl:inline-flex"
+            className="hidden items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-primary hover:text-primary-deep 2xl:inline-flex"
           >
             <span aria-hidden className="text-gold">✦</span>
             Admissions {SCHOOL.admissionsYear} open
           </Link>
-          <Button href="/admissions#enquire" variant="secondary" size="md">
+          <Link
+            href="/parent/"
+            aria-current={isActive("/parent") ? "page" : undefined}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/8"
+          >
+            <UserRound size={16} strokeWidth={1.75} />
+            Parent Login
+          </Link>
+          <Button href="/admissions#enquire" variant="secondary" size="md" className="hidden whitespace-nowrap xl:inline-flex">
             Enquire
           </Button>
-          <Button href="/admissions#visit" variant="primary" size="md">
+          <Button href="/admissions#visit" variant="primary" size="md" className="whitespace-nowrap">
             Book a Visit
           </Button>
         </div>
+
+        {/* Phones: the parent area is one tap from every page, beside the menu button. */}
+        <Link
+          href="/parent/"
+          aria-label="Parent login"
+          className="ml-auto inline-flex h-11 items-center gap-1.5 rounded-full border border-primary/30 px-3.5 text-sm font-semibold text-primary lg:hidden"
+        >
+          <UserRound size={16} strokeWidth={1.75} />
+          Parents
+        </Link>
 
         <button
           type="button"
@@ -122,6 +140,16 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/parent/"
+              aria-current={isActive("/parent") ? "page" : undefined}
+              className={`flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium ${
+                isActive("/parent") ? "bg-surface text-primary" : "text-ink hover:bg-surface"
+              }`}
+            >
+              <UserRound size={18} strokeWidth={1.75} />
+              Parent Login
+            </Link>
             <div className="mt-3 flex flex-col gap-2.5">
               <Button href="/admissions#enquire" variant="secondary" size="lg">
                 Enquire

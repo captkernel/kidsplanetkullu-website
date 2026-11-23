@@ -644,6 +644,50 @@ export default function HomePage() {
         </Container>
       </section>
 
+      {/* ── FOR PARENTS · the parent area, one tap from the home page ─────────*/}
+      <section id="parents" className="bg-surface py-20 text-ink md:py-28">
+        <Container>
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+          <FadeIn>
+            <Eyebrow star>For parents</Eyebrow>
+            <h2 className="mt-4 font-display text-3xl md:text-5xl">
+              Your child&rsquo;s school, <em className="italic text-primary">in your pocket.</em>
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
+              Sign in to the parent area to follow an admission, add documents,
+              read updates from the school about your child and class, and keep
+              your phone number and email up to date.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button href="/parent/" size="lg">
+                Parent Login
+              </Button>
+              <Button href="/admissions/status/" variant="secondary" size="lg">
+                Check an application
+              </Button>
+            </div>
+          </FadeIn>
+          <FadeIn delay={100}>
+            <ul className="space-y-4 text-ink">
+              {[
+                ["Updates from the school", "Notices for your child's class, and messages meant just for your family."],
+                ["Admissions, step by step", "See where an application stands and what the office needs next."],
+                ["Your details, kept right", "Sign in with your mobile number or email. Change them any time."],
+              ].map(([t, b]) => (
+                <li key={t} className="flex gap-3 rounded-2xl border border-line bg-canvas p-5">
+                  <span aria-hidden className="mt-0.5 text-gold">✦</span>
+                  <span>
+                    <span className="block font-display text-xl">{t}</span>
+                    <span className="mt-1 block leading-relaxed text-ink-soft">{b}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
+        </div>
+        </Container>
+      </section>
+
       {/* ── 9 · ADMISSIONS CLOSE · the one closing intent ────────────────────
           Closing band that clearly invites admissions for the new session, with
           the current news surfaced beneath it so the page ends on momentum plus
