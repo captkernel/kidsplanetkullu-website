@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, FileUp, Loader2, LogOut, Phone, Plus, ShieldCheck, Smartphone } from "lucide-react";
+import { Bell, Check, FileUp, GraduationCap, Loader2, LogOut, Phone, Plus, ShieldCheck, Smartphone } from "lucide-react";
 import {
   admissionsOnline, api, ApiError, clearSession, DOC_KINDS, EVENT_WORDS, fetchFeatures, loadSaved, loadSession,
   MIN_PASSWORD, saveSession, shrinkImage, STATUS_LABELS, uploadFile,
-  type Account, type AccountData, type Application, type Features,
+  type Account, type AccountData, type Application, type Features, type SchoolUpdate,
 } from "@/lib/admissions";
 import { SCHOOL } from "@/lib/constants";
 import { telHref } from "@/lib/links";
@@ -204,8 +204,10 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
         ) : (
           <>
             <p className="leading-relaxed text-ink-soft">
-              A profile is for families who have applied or enquired. You need the
-              reference we gave you, so we know the form is yours.{" "}
+              If your child is already at Kids Planet, the office gives you your login:
+              call or message us and sign in with the password we send. If you have
+              applied or enquired online, create your profile here with the reference
+              we gave you.{" "}
               <Link href="/admissions/apply/" className="font-semibold text-primary underline underline-offset-4">
                 Not applied yet? Start here.
               </Link>
@@ -312,18 +314,41 @@ type ProfileProps = {
 function Profile(props: ProfileProps) {
   const { session, data, refresh } = props;
   const { account, applications } = data;
+  const children = data.children ?? [];
+  const updates = data.updates ?? [];
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+    <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]" data-private>
       <div>
+        <Updates updates={updates} firstName={account.name.split(" ")[0]} />
+
+        {children.length > 0 && (
+          <section className="mb-10" data-testid="enrolled">
+            <h2 className="font-display text-2xl md:text-3xl">Your children at Kids Planet</h2>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {children.map((c) => (
+                <li key={c.name + c.class} className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/8 text-primary">
+                    <GraduationCap size={20} strokeWidth={1.75} />
+                  </span>
+                  <span>
+                    <span className="block font-display text-xl">{c.name}</span>
+                    <span className="block text-sm text-ink-soft">{c.class}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 className="font-display text-2xl md:text-3xl">Your children</h2>
+          <h2 className="font-display text-2xl md:text-3xl">{children.length > 0 ? "Admission applications" : "Your children"}</h2>
           <Link href="/admissions/apply/?new=1" className={quietBtn}>
             <Plus size={16} strokeWidth={1.75} /> Apply for another child
           </Link>
         </div>
         {applications.length === 0 ? (
           <p className="mt-5 leading-relaxed text-ink-soft">
-            Nothing here yet.{" "}
+            {children.length > 0 ? "No applications in progress. Applying for a brother or sister? " : "Nothing here yet. "}
             <Link href="/admissions/apply/?new=1" className="font-semibold text-primary underline underline-offset-4">
               Start an application
             </Link>
@@ -343,6 +368,49 @@ function Profile(props: ProfileProps) {
         <Security {...props} />
       </div>
     </div>
+  );
+}
+
+/** What the school has posted for this family: for everyone, for their child's class, or for them alone. */
+function Updates({ updates, firstName }: { updates: SchoolUpdate[]; firstName: string }) {
+  const [all, setAll] = useState(false);
+  const shown = all ? updates : updates.slice(0, 3);
+  const tag = (u: SchoolUpdate) => (u.audience === "family" ? "For your family" : u.audience === "class" ? u.class : "All parents");
+  return (
+    <section className="mb-10" data-testid="updates">
+      <h2 className="flex items-center gap-2 font-display text-2xl md:text-3xl">
+        <Bell size={22} strokeWidth={1.75} className="text-primary" /> Updates from the school
+      </h2>
+      {updates.length === 0 ? (
+        <p className="mt-4 rounded-2xl border border-line bg-surface p-5 leading-relaxed text-ink-soft">
+          Namaste{firstName ? `, ${firstName}` : ""}. Nothing new just now. Notices for your child&rsquo;s class and
+          messages meant for your family will appear here.
+        </p>
+      ) : (
+        <ul className="mt-4 space-y-3">
+          {shown.map((u) => (
+            <li
+              key={u.id}
+              className={`rounded-2xl border bg-surface p-5 shadow-[var(--shadow-card)] ${u.audience === "family" ? "border-gold" : "border-line"}`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">{tag(u)}</span>
+                <span className="text-sm text-ink-soft">
+                  {new Date(u.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long" })}
+                </span>
+              </div>
+              <h3 className="mt-2 font-display text-xl">{u.title}</h3>
+              {u.body && <p className="mt-1 whitespace-pre-line leading-relaxed text-ink-soft">{u.body}</p>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {updates.length > 3 && (
+        <button type="button" onClick={() => setAll((v) => !v)} className="mt-3 text-sm font-semibold text-primary underline underline-offset-4">
+          {all ? "Show fewer" : `Show all ${updates.length} updates`}
+        </button>
+      )}
+    </section>
   );
 }
 

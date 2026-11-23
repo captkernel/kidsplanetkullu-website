@@ -176,9 +176,13 @@ export type Account = {
 };
 export type SignedInDevice = { id: string; device: string; created_at: string; last_used_at: string; current: boolean };
 export type AccountEvent = { kind: string; device: string; at: string };
+export type EnrolledChild = { name: string; class: string };
+export type SchoolUpdate = { id: string; audience: "all" | "class" | "family"; class: string; title: string; body: string; created_at: string };
 export type AccountData = {
   account: Account;
   applications: Application[];
+  children: EnrolledChild[];
+  updates: SchoolUpdate[];
   sessions: SignedInDevice[];
   events: AccountEvent[];
 };
@@ -198,6 +202,8 @@ export async function fetchFeatures(): Promise<Features> {
 // How the profile's "Recent activity" reads to a parent.
 export const EVENT_WORDS: Record<string, string> = {
   profile_created: "Profile created",
+  profile_created_by_office: "Profile created for you by the school office",
+  children_updated_by_office: "Your children's details updated by the office",
   signed_in: "Signed in",
   wrong_password: "Wrong password tried",
   locked_after_wrong_passwords: "Locked for 15 minutes after wrong passwords",

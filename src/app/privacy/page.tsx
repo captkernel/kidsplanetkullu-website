@@ -42,8 +42,12 @@ const ROWS: [string, string][] = [
     "If you choose a password, we keep a profile with your name, mobile number and email so you can sign in and see your own applications. Your password is stored in a scrambled form that even the school cannot read, and we check it against lists of passwords known to have leaked elsewhere, without the password ever leaving our system. If you forget it, the office can give you a temporary one. The profile is deleted within 30 days of your last application being removed.",
   ],
   [
+    "Parents of children at the school",
+    "If your child is at Kids Planet, the office may create a profile for you with your name, your mobile number, and your child's first name and class, so that you can read updates meant for your child's class or for your family. Nothing else from the school record is placed online. Ask the office and the profile will be removed.",
+  ],
+  [
     "Keeping the forms safe",
-    "A Cloudflare check confirms that a person, not an automated program, is sending each form. We keep a record of enquiries, forms started, and every sign-in attempt on a profile (time, type of phone or browser, and the mobile number typed), so the office can help a parent who got stuck and can spot misuse. You can see the recent activity on your own profile. This record is kept for one year.",
+    "A Cloudflare check helps confirm that a person, not an automated program, is sending each form. We keep a record of enquiries, forms started, and every sign-in attempt on a profile (time, type of phone or browser, and the mobile number typed), so the office can help a parent who got stuck and can spot misuse. You can see the recent activity on your own profile. This record is kept for one year.",
   ],
   [
     "Messages from us",

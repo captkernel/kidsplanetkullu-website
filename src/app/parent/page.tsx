@@ -20,7 +20,7 @@ export default function ParentPage() {
       <PageHero
         eyebrow="For parents"
         title="Your parent profile."
-        intro="Follow each child's admission, add documents, and keep your phone number and email up to date. Sign in with your mobile number or email."
+        intro="Read updates from the school about your child and class, follow an admission, add documents, and keep your phone number and email up to date. Sign in with your mobile number or email."
       />
       <Section tone="canvas" className="!py-12 md:!py-16">
         <ParentPortal />
