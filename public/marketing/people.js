@@ -7,7 +7,7 @@
    first    how the page greets her ("Hello, <first> Ma'am").
 
    Source: Kids Planet portal (staff_profiles), exported in src/data/faculty.generated.json.
-   Five teachers were recorded there by first name only. Madhvi Singh confirmed by the school (24 Nov 2026);
+   Five teachers were recorded there by first name only. Madhavi Singh confirmed by the school (24 Nov 2026);
    still first name only: Anju, Poonam, Ravina, Santosh —
    add their surnames to `name` below once the school confirms them. */
 window.KP_PEOPLE = {
@@ -16,7 +16,7 @@ window.KP_PEOPLE = {
   "broniya-jambal-sharma": { name: "Broniya Jambal Sharma", onCards: "Broniya Jambal Sharma", first: "Broniya", role: "Teacher",        subjects: "Moral Science", qual: "MA, B.Ed, PdPet, TET, NTT" },
   "divya-thakur":          { name: "Divya Thakur",          onCards: "Divya Thakur",          first: "Divya",   role: "Vice Principal", subjects: "English · Maths · Spoken English", qual: "BBA, D.El.Ed" },
   "kanika-sharma":         { name: "Kanika Sharma",         onCards: "Kanika Sharma",         first: "Kanika",  role: "Teacher",        subjects: "Maths · Science", qual: "" },
-  "madhavi":               { name: "Madhvi Singh",          onCards: "Madhavi",               first: "Madhvi", role: "Teacher",        subjects: "Spoken English", qual: "" },
+  "madhavi":               { name: "Madhavi Singh",         onCards: "Madhavi",               first: "Madhavi",role: "Teacher",        subjects: "Spoken English", qual: "" },
   "meenu-bala":            { name: "Meenu Bala",            onCards: "Meenu Bala",            first: "Meenu",   role: "Teacher",        subjects: "EVS · English · G.K. · Hindi · Maths", qual: "" },
   "poonam":                { name: "Poonam",                onCards: "Poonam",                first: "Poonam",  role: "Teacher",        subjects: "Games · Him Lok Sanskriti · Hindi", qual: "" },
   "pragya-sharma":         { name: "Pragya Sharma",         onCards: "Pragya Sharma",         first: "Pragya",  role: "Teacher",        subjects: "Computer · G.K. · Moral Science", qual: "MBA, PGDCA" },
