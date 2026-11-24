@@ -87,11 +87,11 @@ function pillB(x,text,h,size){const t=clean(text).replace(/\n/g,' ');if(!t)retur
   return {h,draw(y){let s=size;x.font=F.role(s);while(s>20&&x.measureText(t).width+2*size*.64>936){s--;x.font=F.role(s)}const w=x.measureText(t).width+2*size*.64;
     x.fillStyle=C.mari;rrect(x,X0,y,w,h,8);x.fill();x.fillStyle=C.ink;x.fillText(t,X0+size*.64,y+h/2+s*.36)}}}
 function ruleB(){return {h:2,draw(y){x0.fillStyle='rgba(245,179,1,.42)';x0.fillRect(X0,y,936,2)}}}
-let x0=null;const X0=72;
+let x0=null,lastGeo=null;const X0=72;
 
 /* Her photo in a circle, her name, her role, KIDS PLANET SCHOOL. */
 function personB(x,w,d,photo,place){const k=d/197,tx=77+d+38*k,tw=1008-tx;
-  return {h:d+10,draw(y){const g={x:77,y:y+5,w:d,h:d,r:d/2,round:true};
+  return {h:d+10,draw(y){const g={x:77,y:y+5,w:d,h:d,r:d/2,round:true};lastGeo={x:g.x,y:+g.y.toFixed(1),w:d,h:d,r:45,round:true};
     x.fillStyle=C.mari;x.beginPath();x.arc(g.x+d/2,g.y+d/2,d/2+5,0,Math.PI*2);x.fill();
     x.save();x.beginPath();x.arc(g.x+d/2,g.y+d/2,d/2,0,Math.PI*2);x.clip();x.fillStyle='#fff';x.fillRect(g.x,g.y,d,d);if(photo)x.drawImage(photo,...place(g,photo));x.restore();
     const cy=g.y+d/2,name=clean(w.name).replace(/\n/g,' '),role=clean(w.role).replace(/\n/g,' ');
@@ -154,7 +154,7 @@ function meetLayout(x,w,big,photo,place,room){const tw=big?381:353,th=big?479:44
   let C0=null;for(let ns=big?150:140;ns>=44;ns-=2){C0=build(ns);if(C0&&C0.colH<=th+80)break}
   if(!C0)C0=build(44)||{ns:44,restLines:[rest],k:null,roleT:'',colH:100};
   const rowH=Math.max(th+10,C0.colH);
-  const row={h:rowH,draw(y){const ty=y+(rowH-th)/2,g={x:78,y:ty,w:tw,h:th,r:7.5,round:false};
+  const row={h:rowH,draw(y){const ty=y+(rowH-th)/2,g={x:78,y:ty,w:tw,h:th,r:7.5,round:false};lastGeo={x:78,y:+ty.toFixed(1),w:tw,h:th,r:7.5,round:false};
       x.fillStyle=C.mari;rrect(x,g.x-5,g.y-5,tw+10,th+10,11);x.fill();x.save();rrect(x,g.x,g.y,tw,th,7.5);x.clip();x.fillStyle='#fff';x.fillRect(g.x,g.y,tw,th);if(photo)x.drawImage(photo,...place(g,photo));x.restore();
       let cy=y+(rowH-C0.colH)/2;const ns=C0.ns;
       if(C0.k){x.font=F.kicker(30);x.fillStyle=C.mari;tracked(x,clean(w.kicker).toUpperCase(),cx,cy+C0.k.h,30*.12);cy+=C0.k.h+21}
@@ -173,6 +173,7 @@ function draw(o){const {key,shape,words,base,photo,place}=o,s=spec(key);const cv
   const grp=s.kind==='team'||s.kind==='admissions'?s.kind:'teacher',[c0,c1]=CLEAR[shape][grp];
   const bg=x.getImageData(4,c0+4,1,1).data;x.fillStyle=`rgb(${bg[0]},${bg[1]},${bg[2]})`;x.fillRect(0,c0,cv.width,c1-c0);
   const {st,top,bot}=layout(x,key,shape,words,photo,place);if(st){const y=Math.round(top+(bot-top-st.h)/2);st.draw(y)}
+  cv.kpGeo=lastGeo;lastGeo=null;  /* where her photo sits, for the page to put another photo in the same place */
   return cv}
 
 window.KPCards={spec,defaults,printed,fields,same,clean,fonts,draw};
