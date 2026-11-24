@@ -21,14 +21,17 @@ const CARDS={
  'J-ask':{kind:'teacher',max:128,w:{kicker:'Admissions open · 2027–28',white:'Ask me about',yellow:'our school.',sub:'I am happy to answer.\nMessage me, or call the school.',pill:''}},
  'team-we':{kind:'team',w:{kicker:'Kids Planet School · Dhalpur, Kullu',white:'We teach at',yellow:'Kids Planet.',sub:'Come and see our classrooms.\nAdmissions open 2027–28.'}},
  'team-meet':{kind:'team',inline:true,w:{kicker:'The people behind Kids Planet School',white:'Meet our',yellow:'teachers.',sub:'Come and meet them on any working day.\nAdmissions open 2027–28.'}},
- 'admissions':{kind:'admissions',w:{white:'Come and see',yellow:'our school.',pill:'Admissions open · 2027–28',ages:AGES}}
+ 'admissions':{kind:'admissions',w:{white:'Come and see',yellow:'our school.',pill:'Admissions open · 2027–28',ages:AGES}},
+ 'online':{kind:'online',max:150,w:{kicker:'New · Admissions 2027–28',white:'Apply from',yellow:'your phone.',sub:'A free parent profile. No fee to apply.',
+   steps:'Make a free parent profile: Sign in with your mobile number.\nAdd documents: A phone photo of each page is fine.\nHear from the school: Notes and updates in your profile.\nTrack your application: From Received to Seat offered.',
+   note:'Then come and see us. Seats are confirmed at the school.'}}
 };
 /* What she sees beside each box. */
-const LABEL={kicker:'Small line at the top',white:'Big words (white)',yellow:'Big words (yellow)',sub:'Line under the big words',
+const LABEL={steps:'Steps (one on each line: title, a colon, then a few words)',note:'Line under the steps',kicker:'Small line at the top',white:'Big words (white)',yellow:'Big words (yellow)',sub:'Line under the big words',
   name:'Your name',role:'Your role',subjects:'Your subjects',qual:'Your qualifications',tagline:'Yellow line',pill:'Yellow label',ages:'Ages and classes (one on each line)'};
-const ORDER={meet:['kicker','name','role','subjects','qual','tagline','pill'],teacher:['kicker','white','yellow','sub','name','role','pill'],
+const ORDER={online:['kicker','white','yellow','sub','steps','note'],meet:['kicker','name','role','subjects','qual','tagline','pill'],teacher:['kicker','white','yellow','sub','name','role','pill'],
   ages:['kicker','white','yellow','ages','name','role','pill'],team:['kicker','white','yellow','sub'],admissions:['white','yellow','pill','ages']};
-const MULTI={white:1,sub:1,ages:1};
+const MULTI={white:1,sub:1,ages:1,steps:1};
 
 function spec(key){return CARDS[key]||null}
 function defaults(key,who){const s=spec(key);if(!s)return null;const w=Object.assign({},s.w);
@@ -118,6 +121,15 @@ function barsB(x,text,rowH){const items=clean(text).split('\n').map(s=>s.trim())
     if(it.n){x.font=F.num(Math.round(rowH*.68));x.fillText(it.n,X0+40,cy+rowH*.72);const nw=x.measureText(it.n).width;x.font=F.role(Math.round(rowH*.3));x.fillText('+',X0+42+nw,cy+rowH*.4)}
     x.font=F.role(Math.round(rowH*.5));x.fillStyle=C.cream;const lx=X0+185;let s=Math.round(rowH*.5);while(s>16&&x.measureText(it.l).width>w-200){s--;x.font=F.role(s)}x.fillText(it.l,lx,cy+rowH/2+s*.36)})}}}
 
+/* Numbered steps: a marigold number, a bold title and a few words, with a thin line between steps. */
+function stepsB(x,text,big){const items=clean(text).split('\n').map(s=>s.trim()).filter(Boolean).map(s=>{const i=s.indexOf(':');return i>0?{t:s.slice(0,i).trim(),d:s.slice(i+1).trim()}:{t:s,d:''}});
+  if(!items.length)return null;const k=big?1.08:1,D=Math.round(54*k),ts=Math.round(35*k),ds=Math.round(27*k),tx=X0+D+26,tw=1008-tx,GAP=Math.round(13*k);
+  const rows=items.map(it=>{x.font=F.body(ds);const dl=it.d?wrapPlain(x,it.d,tw):[];let s=ts;x.font=F.role(s);while(s>20&&x.measureText(it.t).width>tw){s--;x.font=F.role(s)}
+    return {it,dl,s,h:Math.max(D,s*.74+(dl.length?12+dl.length*ds*1.3:0)+ds*.25)}});
+  return {h:rows.reduce((a,r)=>a+r.h,0)+(rows.length-1)*GAP*2,draw(y){rows.forEach((r,i)=>{if(i){x.fillStyle='rgba(245,179,1,.28)';x.fillRect(tx,y+GAP-1,tw,2);y+=GAP*2}
+    x.fillStyle=C.mari;x.beginPath();x.arc(X0+D/2,y+D/2,D/2,0,Math.PI*2);x.fill();x.fillStyle=C.night;x.font=F.num(Math.round(D*.62));x.textAlign='center';x.fillText(String(i+1),X0+D/2,y+D*.7);x.textAlign='left';
+    x.font=F.role(r.s);x.fillStyle=C.cream;const tb=y+r.s*.74+Math.max(0,(D-r.s*.74-(r.dl.length?12+r.dl.length*ds*1.3:0))/2)*0;x.fillText(r.it.t,tx,y+r.s*.82);
+    x.font=F.body(ds);x.fillStyle='rgba(251,248,236,.78)';r.dl.forEach((l,j)=>x.fillText(l,tx,y+r.s*.82+12+ds*1.05+j*ds*1.3));y+=r.h})}}}
 /* Fit the big words: the largest size whose layout fits the space. */
 function fitHead(x,w,build,max,min,inline,room){
   /* First try to keep her lines as she typed them, only smaller; if that cannot fit, let long lines wrap. */
@@ -137,6 +149,8 @@ function layout(x,key,shape,w,photo,place){const s=spec(key),kind=s.kind,big=sha
   if(kind==='meet')st=meetLayout(x,w,big,photo,place,room);
   else if(kind==='team')st=fitHead(x,w,(L,hs)=>{const k=kickerB(x,w.kicker,30,936),h=headB(x,L,hs),sb=subB(x,w.sub,46,936,54);
       return bl(k,k&&h&&gap(20),h,h&&sb&&gap(hs*.2+30),sb)},100,52,s.inline,room);
+  else if(kind==='online'){st=fitHead(x,w,(L,hs)=>{const k=kickerB(x,w.kicker,34,936),h=headB(x,L,hs),sb=subB(x,w.sub,48,936,59),stp=stepsB(x,w.steps,big),nt=subB(x,w.note,40,936,50);
+      return bl(k,k&&h&&gap(21),h,sb&&gap(hs*.2+26),sb,gap(sb?(big?60:40):hs*.2+40),stp,nt&&gap(big?50:30),nt)},s.max,56,s.inline,room)}
   else if(kind==='admissions'){const rowH=big?79:73;st=fitHead(x,w,(L,hs)=>{const h=headB(x,L,hs),p=pillB(x,w.pill,79,44),b=barsB(x,w.ages,rowH);
       return bl(h,h&&(p||b)&&gap(hs*.2+28),p,p&&b&&gap(25),b)},92,48,s.inline,room)}
   else{const d=big?224:197;st=fitHead(x,w,(L,hs)=>{const k=kickerB(x,w.kicker,34,936),h=headB(x,L,hs),
