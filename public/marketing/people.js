@@ -23,5 +23,8 @@ window.KP_PEOPLE = {
   "ravina":                { name: "Ravina",                onCards: "Ravina",                first: "Ravina",  role: "Teacher",        subjects: "EVS · G.K. · Games · Hindi", qual: "" },
   "santosh":               { name: "Santosh",               onCards: "Santosh",               first: "Santosh", role: "Teacher",        subjects: "English · Games · Maths", qual: "" },
   "vipasha-bhardwaj":      { name: "Vipasha Bhardwaj",      onCards: "Vipasha Bhardwaj",      first: "Vipasha", role: "Teacher",        subjects: "", qual: "" },
-  "yamika-chaudhary":      { name: "Yamika Chaudhary",      onCards: "Yamika Chaudhary",      first: "Yamika",  role: "Teacher",        subjects: "EVS · English · G.K. · Maths", qual: "MA (English), B.Ed, Pd.Pet, CCA, TET" }
+  "yamika-chaudhary":      { name: "Yamika Chaudhary",      onCards: "Yamika Chaudhary",      first: "Yamika",  role: "Teacher",        subjects: "EVS · English · G.K. · Maths", qual: "MA (English), B.Ed, Pd.Pet, CCA, TET" },
+  /* School staff who share the school-wide pictures (not teachers: no personal cards). */
+  "karan":                 { name: "Karan Parmar",          onCards: "Karan Parmar",          first: "Karan",   role: "", subjects: "", qual: "", staff: true },
+  "social-media":          { name: "Social media",          onCards: "Social media",          first: "",        role: "", subjects: "", qual: "", staff: true }
 };
