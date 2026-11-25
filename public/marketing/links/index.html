@@ -1,0 +1,157 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="format-detection" content="telephone=no"><title>Link builder · Kids Planet</title>
+<link rel="icon" href="/favicon-32.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,700&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+:root{--green:#2d5016;--night:#0F1F08;--mari:#F5B301;--paper:#FBF8EC;--ink:#1B2A12;--line:#D9D6C2;--muted:#4C5A41}
+*{box-sizing:border-box} html{-webkit-text-size-adjust:100%} body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:620px;margin:0 auto;padding:0 16px}
+header{background:var(--green);color:var(--paper);border-bottom:5px solid var(--mari)} header .wrap{display:flex;align-items:center;gap:14px;padding-top:16px;padding-bottom:14px}
+header img{height:60px;width:auto;flex:none} header small{display:block;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#DCE8CC}
+h1{font:700 28px/1.1 Newsreader,Georgia,serif;margin:2px 0 0;letter-spacing:-.01em} h2{font:700 22px/1.2 Newsreader,Georgia,serif;margin:0 0 6px}
+p{margin:0 0 10px} .lede{margin:18px 0 6px}
+.step{font-weight:600;font-size:18px;line-height:1.3;margin:24px 0 6px} .step b{display:inline-block;min-width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:var(--mari);color:var(--night);font-size:16px;margin-right:8px}
+.help{font-size:15px;color:var(--muted);margin:0 0 8px}
+.dest{display:grid;gap:8px} .dest button{text-align:left;font:inherit;font-size:16px;line-height:1.3;padding:10px 12px;min-height:52px;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;cursor:pointer}
+.dest button b{display:block;font-weight:600} .dest button span{color:var(--muted);font-size:14px} .dest button[aria-pressed=true]{border-color:var(--green);box-shadow:0 0 0 3px var(--mari)}
+input[type=text]{display:block;width:100%;font:400 17px/1.4 inherit;font-family:inherit;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:8px;padding:11px 12px;margin:0}
+input[type=text]:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--mari)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0} .chips button{font:inherit;font-size:15px;padding:6px 12px;min-height:38px;border:1px solid var(--green);background:#fff;color:var(--green);border-radius:999px;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--green);color:#fff}
+.clean{font-size:14px;color:var(--muted);margin:6px 0 0;min-height:1em} .clean code{background:#fff;border:1px solid var(--line);border-radius:4px;padding:0 4px;color:var(--ink)}
+.out{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:24px 0 0}
+.link{font:400 15px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-wrap:anywhere;-webkit-user-select:all;user-select:all;margin:0 0 10px}
+.link .q{color:var(--green);font-weight:600}
+.btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px} .btns button,.btns a{display:flex;align-items:center;justify-content:center;min-height:50px;text-align:center;font:inherit;font-weight:600;font-size:16px;line-height:1.2;padding:6px;border-radius:10px;border:2px solid var(--green);background:#fff;color:var(--green);text-decoration:none;cursor:pointer}
+.btns .main{background:var(--green);color:#fff}
+.warn{font-size:15px;background:#FCF1CC;border-left:5px solid var(--mari);border-radius:0 8px 8px 0;padding:8px 12px;margin:10px 0 0} .warn:empty{display:none}
+.qr{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;margin:22px 0 0} .qr canvas{width:150px;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
+.qr label{display:block;font-weight:600;font-size:15px;margin:0 0 4px} .qr .btns{grid-template-columns:1fr;margin:10px 0 0}
+.saved{margin:28px 0 40px} .saved table{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.saved td,.saved th{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top} .saved th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--paper)}
+.saved td.l{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;overflow-wrap:anywhere;color:var(--muted)} .saved td button{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 8px;cursor:pointer;margin:0 0 4px}
+.saved .row{display:flex;gap:8px;margin:10px 0 0} .saved .row input{flex:1} .saved .row button{font:inherit;font-weight:600;border:2px solid var(--green);background:var(--green);color:#fff;border-radius:8px;padding:0 14px;cursor:pointer}
+.empty{color:var(--muted);font-size:15px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--night);color:#fff;padding:12px 16px;border-radius:12px;font-weight:600;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:5;max-width:calc(100vw - 24px);text-align:center}
+#toast.on{opacity:1} footer{color:var(--muted);font-size:15px;padding:0 0 40px}
+button:focus-visible,a:focus-visible{outline:3px solid var(--mari);outline-offset:2px}
+@media (max-width:420px){.qr{grid-template-columns:1fr}.qr canvas{width:180px}}
+</style></head><body>
+<header><div class="wrap"><img src="../img/logo.png" alt="Kids Planet School crest" width="118" height="128"><div><small>Kids Planet School · for the office</small><h1>Make a tracked link</h1></div></div></header>
+<main class="wrap">
+<p class="lede">Make a link (and a QR code) for any poster, post, ad or message. Each visit and each application that comes through it is counted, so you can see what brings families in.</p>
+
+<div class="step"><b>1</b>Where should it go?</div>
+<div class="dest" id="dest">
+ <button data-path="/admissions/" data-hash="#enquire" aria-pressed="true"><b>Admissions page</b><span>Classes, ages, fees, how to apply. The best start for most families.</span></button>
+ <button data-path="/admissions/apply/" data-hash=""><b>Online application form</b><span>Straight to the form. For parents who have already decided.</span></button>
+ <button data-path="/parent/" data-hash="" data-q="new=1"><b>Make a parent profile</b><span>Opens on “Create a profile”.</span></button>
+ <button data-path="/admissions/status/" data-hash=""><b>Check an application</b><span>For parents who have already applied.</span></button>
+ <button data-path="/" data-hash=""><b>Home page</b><span>The whole school.</span></button>
+</div>
+
+<div class="step"><b>2</b>Who or what is sending them?</div>
+<p class="help">The source. One word for the kind of thing.</p>
+<input type="text" id="source" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="for example: poster">
+<div class="chips" data-for="source"></div><p class="clean" id="source-c"></p>
+
+<div class="step"><b>3</b>Through which channel?</div>
+<input type="text" id="medium" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="for example: qr">
+<div class="chips" data-for="medium"></div><p class="clean" id="medium-c"></p>
+
+<div class="step"><b>4</b>Which campaign?</div>
+<p class="help">The push this belongs to. Use the same word for everything in one push.</p>
+<input type="text" id="campaign" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="for example: admissions27">
+<div class="chips" data-for="campaign"></div><p class="clean" id="campaign-c"></p>
+
+<div class="step"><b>5</b>Which one exactly? <span class="help">(optional)</span></div>
+<p class="help">Tells two links in the same campaign apart: a teacher, a place, a design.</p>
+<input type="text" id="content" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="for example: dhalpur-market">
+<div class="chips" data-for="content"></div><p class="clean" id="content-c"></p>
+
+<section class="out" aria-live="polite">
+ <h2>Your link</h2>
+ <div class="link" id="link"></div>
+ <div class="btns"><button class="main" id="copy">Copy link</button><button id="share">Share</button><a id="open" href="#" target="_blank" rel="noopener">Try it</a></div>
+ <p class="warn" id="warn"></p>
+</section>
+
+<div class="qr">
+ <canvas id="qr" width="600" height="690" aria-label="QR code for the link"></canvas>
+ <div><label for="qrlabel">Words under the QR code</label><input type="text" id="qrlabel" placeholder="Scan to apply online">
+  <p class="help" style="margin-top:6px">Print it at least 3 cm wide. Test it with your phone camera before printing many.</p>
+  <div class="btns"><button id="dlqr">Download QR code</button></div></div>
+</div>
+
+<section class="saved"><h2>Links you have made</h2>
+ <p class="help">Kept on this phone or computer only. Give each one a note so you know where it was used.</p>
+ <div class="row"><input type="text" id="note" placeholder="Note, e.g. Poster at Dhalpur market, Dec"><button id="save">Save</button></div>
+ <div id="list"></div>
+ <div class="btns" style="grid-template-columns:1fr;margin-top:10px"><button id="csv">Download the list (spreadsheet)</button></div>
+</section>
+<footer><p>Results: kp-pulse dashboard → Acquisition. Filter by source and campaign; “which one exactly” shows as utm_content. Applications record the source.</p></footer>
+</main><div id="toast" role="status" aria-live="polite"></div>
+<script src="../people.js"></script><script src="qrcode.js"></script>
+<script>
+(function(){'use strict';
+const SITE='https://kidsplanetkullu.com';
+const $=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)}catch(_){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(_){return false}}};
+const P=window.KP_PEOPLE||{};
+const SUG={
+ source:['school','teacher','poster','flyer','banner','newspaper','parent','facebook-ad','instagram-ad','google'],
+ medium:['whatsapp','instagram','facebook','qr','print','sms','email','youtube'],
+ campaign:['admissions27','apply-online','digital27','open-day'],
+ content:[]};
+/* Lowercase, hyphens for spaces, nothing else odd: "Facebook Ad" and "facebook-ad" would otherwise count as two sources. */
+const slug=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);
+let dest=document.querySelector('#dest [aria-pressed=true]');
+function contentSug(){return slug($('source').value)==='teacher'?Object.keys(P):['dhalpur-market','akhara-bazaar','card-apply-phone','reel-1']}
+function chips(){document.querySelectorAll('.chips').forEach(box=>{const f=box.dataset.for,list=f==='content'?contentSug():SUG[f],cur=slug($(f).value);
+  box.innerHTML='';list.forEach(v=>{const b=document.createElement('button');b.type='button';b.textContent=f==='content'&&P[v]?P[v].name:v;b.dataset.v=v;b.setAttribute('aria-pressed',String(cur===v));box.appendChild(b)})})}
+function url(){const q=new URLSearchParams();if(dest.dataset.q)dest.dataset.q.split('&').forEach(kv=>{const [k,v]=kv.split('=');q.set(k,v)});
+  const vals={utm_source:slug($('source').value),utm_medium:slug($('medium').value),utm_campaign:slug($('campaign').value),utm_content:slug($('content').value)};
+  for(const k in vals)if(vals[k])q.set(k,vals[k]);const qs=q.toString();return SITE+dest.dataset.path+(qs?'?'+qs:'')+(dest.dataset.hash||'')}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function render(){const u=url();
+  $('link').innerHTML=esc(u).replace(/(utm_[a-z]+=)([^&#]*)/g,'$1<span class="q">$2</span>');$('open').href=u;
+  ['source','medium','campaign','content'].forEach(f=>{const raw=$(f).value,s=slug(raw);$(f+'-c').innerHTML=raw&&s!==raw?'Will be saved as <code>'+esc(s||'(empty)')+'</code>':''});
+  const miss=['source','medium','campaign'].filter(f=>!slug($(f).value));
+  $('warn').textContent=miss.length?'Fill in '+miss.join(', ')+' so this link can be told apart from the others in the reports.':'';
+  chips();drawQR(u);store.set('kp-linkb',JSON.stringify({p:dest.dataset.path,s:$('source').value,m:$('medium').value,c:$('campaign').value,x:$('content').value,l:$('qrlabel').value}))}
+function drawQR(u){const cv=$('qr'),x=cv.getContext('2d'),label=$('qrlabel').value.trim();let qr;
+  try{qr=qrcode(0,'M');qr.addData(u);qr.make()}catch(e){x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);return}
+  const n=qr.getModuleCount(),quiet=4,W=600,cell=Math.floor(W/(n+quiet*2)),size=cell*(n+quiet*2),off=Math.floor((W-size)/2),H=label?690:600;
+  cv.height=H;x.fillStyle='#fff';x.fillRect(0,0,W,H);x.fillStyle='#0F1F08';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(qr.isDark(r,c))x.fillRect(off+(c+quiet)*cell,off+(r+quiet)*cell,cell,cell);
+  if(label){x.font='600 34px "IBM Plex Sans", system-ui, sans-serif';x.textAlign='center';let s=34;while(s>16&&x.measureText(label).width>W-40){s--;x.font='600 '+s+'px "IBM Plex Sans", system-ui, sans-serif'}x.fillText(label,W/2,640)}}
+function say(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>t.classList.remove('on'),3500)}
+function copy(s){const done=ok=>say(ok?'Link copied.':'Could not copy. Press and hold the link to copy it.');
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(s).then(()=>done(true),()=>done(fallback(s)));else done(fallback(s))}
+function fallback(s){const a=document.createElement('textarea');a.value=s;a.style.cssText='position:fixed;top:0;opacity:0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}a.remove();return ok}
+/* Saved links. */
+function list(){try{return JSON.parse(store.get('kp-links')||'[]')||[]}catch(_){return[]}}
+function showList(){const L=list(),box=$('list');if(!L.length){box.innerHTML='<p class="empty">Nothing saved yet.</p>';return}
+  box.innerHTML='<table><thead><tr><th>Note</th><th>Link</th><th></th></tr></thead><tbody>'+L.map((r,i)=>'<tr><td>'+esc(r.note||'')+'<br><span class="help">'+esc(r.date)+'</span></td><td class="l">'+esc(r.url)+'</td><td><button data-copy="'+i+'">Copy</button><button data-del="'+i+'">Delete</button></td></tr>').join('')+'</tbody></table>'}
+$('list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const L=list();
+  if(b.dataset.copy)copy(L[+b.dataset.copy].url);if(b.dataset.del&&confirm('Delete this saved link? The link itself keeps working.')){L.splice(+b.dataset.del,1);store.set('kp-links',JSON.stringify(L));showList()}});
+$('save').addEventListener('click',()=>{const L=list(),u=url();if(L.some(r=>r.url===u)){say('This link is already in your list.');return}
+  L.unshift({note:$('note').value.trim(),url:u,date:new Date().toISOString().slice(0,10)});if(!store.set('kp-links',JSON.stringify(L))){say('This browser could not save the list.');return}$('note').value='';showList();say('Saved.')});
+$('csv').addEventListener('click',()=>{const L=list();if(!L.length){say('Nothing saved yet.');return}
+  const q=s=>'"'+String(s).replace(/"/g,'""')+'"',rows=[['Date','Note','Link','Source','Channel','Campaign','Which one']].concat(L.map(r=>{const p=new URL(r.url).searchParams;return [r.date,r.note,r.url,p.get('utm_source')||'',p.get('utm_medium')||'',p.get('utm_campaign')||'',p.get('utm_content')||'']}));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv'}));a.download='kids-planet-links.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+/* Wiring. */
+$('dest').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;dest=b;document.querySelectorAll('#dest button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()});
+document.querySelectorAll('.chips').forEach(box=>box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const f=box.dataset.for;$(f).value=b.dataset.v;render()}));
+['source','medium','campaign','content','qrlabel'].forEach(id=>$(id).addEventListener('input',render));
+$('copy').addEventListener('click',()=>copy(url()));
+$('share').addEventListener('click',()=>{const u=url();if(navigator.share)navigator.share({url:u}).catch(()=>{});else copy(u)});
+$('dlqr').addEventListener('click',()=>{const a=document.createElement('a'),n=[slug($('source').value),slug($('medium').value),slug($('content').value)].filter(Boolean).join('-')||'link';
+  a.href=$('qr').toDataURL('image/png');a.download='qr-'+n+'.png';a.click()});
+/* Start where the last link was left. */
+try{const s=JSON.parse(store.get('kp-linkb')||'null');if(s){$('source').value=s.s||'';$('medium').value=s.m||'';$('campaign').value=s.c||'';$('content').value=s.x||'';$('qrlabel').value=s.l||'';
+  const b=[...document.querySelectorAll('#dest button')].find(x=>x.dataset.path===s.p);if(b){dest=b;document.querySelectorAll('#dest button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}}}catch(_){}
+render();showList();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>drawQR(url()));
+})();
+</script></body></html>
