@@ -11,5 +11,5 @@
    are already viewable by link, and only from this website. */
 window.KP_SOCIAL = {
   folderId: "1medlmCdxn5TNCbDFgmaL2W0Ga6m5VOhX",
-  apiKey: ""
+  apiKey: "AIzaSyDnrypP2kxnUke-RuiKVAT1gXM9XXIB38c"
 };
