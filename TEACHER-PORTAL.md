@@ -14,8 +14,10 @@ The Worker checks every request, pictures included, against Google sign-in and t
   Salary, Fees, My work and Substitutions until the school portal is connected.
 - They can open only their own page and pictures, plus the shared school pictures. Another
   teacher's page or pictures are refused by the server (403), not just hidden.
-- Admins (principal, office) see everything, including the teacher list and the link builder,
-  and manage the staff list at `/admin/`.
+- Three roles. The **owner** (you) sees everything and is the only one who can make or remove a
+  school admin. The **school admin** (the school office) sees every teacher's page, the link
+  builder, and placeholders for the Comms channel and Substitution tracker, and adds or removes
+  teachers at `/admin/`. A **teacher** sees only their own pages.
 
 `kidsplanetkullu.com/marketing/<teacher>/` keeps working: it is now a tiny page that forwards to
 the same path on the Worker, which asks for sign-in first. So the links teachers already have still work.
@@ -46,8 +48,9 @@ When you add a teacher page later: put it in `staff-assets/marketing/<slug>/`, r
 2. **Google:** add `https://kp-staff.kidsplanetkullu.workers.dev` to the Authorized JavaScript
    origins of the Google OAuth client the parent sign-in uses, and put that client id in
    `wrangler.jsonc` (`GOOGLE_CLIENT_ID`).
-3. **First admin:** put your own Google email in `ADMIN_EMAILS`, sign in, then add each teacher's
-   real Gmail address and page name on `/admin/`.
+3. **Owner first:** put your own Google email in `OWNER_EMAILS`, sign in, add the school office's
+   Google account as a school admin on `/admin/`, then add each teacher's real Gmail address and
+   page name (you or the office).
 4. **Old copies:** this repo is public, so the pictures stay visible in its git history even after
    this change. To close that, either make the repo private (GitHub Pages from a private repo needs
    a paid GitHub plan) or rewrite its history. Ask before doing either.
