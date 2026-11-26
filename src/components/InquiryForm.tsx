@@ -2,11 +2,28 @@
 
 import { useState } from "react";
 import { Send, MessageCircle } from "lucide-react";
-import { whatsappHref } from "@/lib/links";
+import { telHref, whatsappHref } from "@/lib/links";
+import { SCHOOL } from "@/lib/constants";
 import { track } from "@/lib/track";
 import Link from "next/link";
 import { admissionsOnline, api, CLASSES, visitSource } from "@/lib/admissions";
 import { HumanCheck } from "@/components/admissions/HumanCheck";
+
+// When a family would like to come. Kept to the office hours shown across the site.
+const VISIT_TIMES = [
+  "A weekday morning",
+  "A weekday afternoon (before 3 PM)",
+  "A Saturday morning",
+  "Not sure yet, just enquiring",
+] as const;
+
+// Indian mobile: 10 digits, optionally written with +91, 91 or a leading 0.
+function cleanPhone(raw: string): string | null {
+  let d = raw.replace(/\D/g, "");
+  if (d.length === 12 && d.startsWith("91")) d = d.slice(2);
+  if (d.length === 11 && d.startsWith("0")) d = d.slice(1);
+  return /^[6-9]\d{9}$/.test(d) ? d : null;
+}
 
 // Static-export friendly: no backend. On submit we compose a WhatsApp message
 // (the school's real, monitored channel) so the enquiry actually reaches them.
@@ -15,9 +32,12 @@ export function InquiryForm() {
     parent: "",
     phone: "",
     childClass: "",
+    visit: "",
     message: "",
   });
   const [error, setError] = useState<string | null>(null);
+  // The WhatsApp text that was opened, kept so the parent can reopen it if WhatsApp did not start.
+  const [sent, setSent] = useState<string | null>(null);
   const [human, setHuman] = useState<string | null>(null);
   const [round, setRound] = useState(0);
 
@@ -31,30 +51,43 @@ export function InquiryForm() {
       setError("Please add your name and a phone number so we can reach you.");
       return;
     }
+    const phone = cleanPhone(values.phone);
+    if (!phone) {
+      setError("Please check the mobile number. It should have 10 digits, like 94180 23454.");
+      return;
+    }
     setError(null);
+    const wantsVisit = values.visit !== "" && !values.visit.startsWith("Not sure");
+    const visitLine = wantsVisit ? `Preferred visit time: ${values.visit}` : "";
     const lines = [
-      "Hello Kids Planet, I would like to enquire about admissions.",
-      `Parent: ${values.parent}`,
-      `Phone: ${values.phone}`,
+      wantsVisit
+        ? "Hello Kids Planet, I would like to book a visit to the school."
+        : "Hello Kids Planet, I would like to enquire about admissions.",
+      `Parent: ${values.parent.trim()}`,
+      `Phone: ${phone}`,
       values.childClass ? `Class of interest: ${values.childClass}` : "",
+      visitLine,
       values.message ? `Message: ${values.message}` : "",
     ].filter(Boolean);
-    track("enquiry_submit", values.childClass || "class not given");
+    track(wantsVisit ? "visit_request" : "enquiry_submit", values.childClass || "class not given");
     // Record it for the office too, so the enquiry is not lost if WhatsApp is never sent.
     if (admissionsOnline) {
       api("POST", "/api/enquiry", {
         body: {
-          parent_name: values.parent,
-          phone: values.phone,
+          parent_name: values.parent.trim(),
+          phone,
           class_sought: values.childClass,
-          message: values.message,
+          // The visit time rides in the message so the office sees it without a server change.
+          message: [visitLine, values.message].filter(Boolean).join("\n"),
           source: visitSource(),
           ts: human,
         },
       }).catch(() => {});
       setRound((n) => n + 1); // a human-check token works once
     }
-    window.open(whatsappHref(lines.join("\n")), "_blank", "noopener,noreferrer");
+    const text = lines.join("\n");
+    setSent(text);
+    window.open(whatsappHref(text), "_blank", "noopener,noreferrer");
   };
 
   const field =
@@ -121,6 +154,26 @@ export function InquiryForm() {
       </div>
 
       <div>
+        <label htmlFor="visitTime" className={labelCls}>
+          When would you like to visit?
+        </label>
+        <select
+          id="visitTime"
+          name="visitTime"
+          value={values.visit}
+          onChange={set("visit")}
+          className={`mt-2 ${field}`}
+        >
+          <option value="">Choose a time (optional)</option>
+          {VISIT_TIMES.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
         <label htmlFor="message" className={labelCls}>
           Anything you would like us to know
         </label>
@@ -131,7 +184,7 @@ export function InquiryForm() {
           value={values.message}
           onChange={set("message")}
           className={`mt-2 ${field} resize-y`}
-          placeholder="A question, a preferred visit time, your child's age..."
+          placeholder="A question, your child's age, a day that suits you..."
         />
       </div>
 
@@ -140,6 +193,26 @@ export function InquiryForm() {
       {error && (
         <p role="alert" className="text-sm font-medium text-primary">
           {error}
+        </p>
+      )}
+
+      {sent && !error && (
+        <p role="status" className="rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm leading-relaxed text-ink">
+          Thank you. WhatsApp should now be open with your message ready, so please press Send there.
+          If it did not open,{" "}
+          <a
+            href={whatsappHref(sent)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-primary underline underline-offset-4"
+          >
+            open WhatsApp again
+          </a>{" "}
+          or call{" "}
+          <a href={telHref} className="font-semibold text-primary underline underline-offset-4">
+            {SCHOOL.phoneDisplay}
+          </a>
+          .
         </p>
       )}
 
@@ -163,8 +236,8 @@ export function InquiryForm() {
       </div>
       <p className="text-xs text-ink-soft">
         Your enquiry opens WhatsApp with the details filled in, sent straight to
-        the school office. We usually reply within one working day. We also keep
-        a note of it so the office can call you back.{" "}
+        the school office. We usually reply within one working day.
+        {admissionsOnline && " We also keep a note of it so the office can call you back."}{" "}
         <Link href="/privacy/" className="font-semibold text-primary underline underline-offset-4">
           How we look after your details
         </Link>

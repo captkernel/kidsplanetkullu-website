@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "onDark" | "ghost";
 type Size = "md" | "lg";
 
 const base =
@@ -16,6 +16,11 @@ const variants: Record<Variant, string> = {
   // Forest outline on canvas.
   secondary:
     "border border-primary/40 text-primary bg-transparent hover:bg-primary hover:text-canvas",
+  // Cream outline for dark sections and photo heroes. A separate variant because a
+  // className override (text-canvas over text-primary) loses to the secondary colours
+  // in the generated CSS, which left the hero WhatsApp button unreadable.
+  onDark:
+    "border border-canvas/50 text-canvas bg-transparent hover:bg-canvas hover:text-primary",
   // Quiet link-button.
   ghost: "text-primary hover:text-primary-deep underline-offset-4 hover:underline",
 };

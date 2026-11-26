@@ -245,9 +245,8 @@ export default function HomePage() {
                   "Hello, I would like to know more about admissions at Kids Planet."
                 )}
                 external
-                variant="secondary"
+                variant="onDark"
                 size="lg"
-                className="border-canvas/50 text-canvas hover:bg-canvas hover:text-primary"
               >
                 Message on WhatsApp
               </MagneticButton>
@@ -330,7 +329,7 @@ export default function HomePage() {
               <h2 className="mt-2 font-display"
                 style={{ fontSize: "clamp(1.6rem, 5vw, 3rem)" }}
               >
-                One path, from first words to Class 8.
+                One path through the foundation years.
               </h2>
             </div>
             <Button href="/programs" variant="ghost" size="md">
@@ -721,9 +720,8 @@ export default function HomePage() {
                   `Hello, I would like to apply for admission at Kids Planet for the ${SCHOOL.admissionsSession} session.`
                 )}
                 external
-                variant="secondary"
+                variant="onDark"
                 size="lg"
-                className="border-canvas/50 text-canvas hover:bg-canvas hover:text-primary"
               >
                 Message on WhatsApp
               </MagneticButton>
