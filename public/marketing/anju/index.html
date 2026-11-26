@@ -64,15 +64,21 @@ const HINT={
  'whatsapp-story':'Tap the green button under a picture. Choose <b>WhatsApp</b>, then <b>My status</b>. The words and your link go with the picture.',
  'whatsapp-post':'Tap the green button under a picture. Choose <b>WhatsApp</b>, then the group or person. The words and your link go with the picture.',
  'instagram-post':'Tap the green button under a picture. Choose <b>Instagram</b>, then <b>Feed</b>. The words are already copied: press and hold in the caption box and tap <b>Paste</b>.',
- 'instagram-story':'Tap the green button under a picture. Choose <b>Instagram</b>, then <b>Stories</b>. A story needs no caption.',
+ 'instagram-story':'Tap the green button under a picture. Choose <b>Instagram</b>, then <b>Stories</b>. Your link is already copied: tap the <b>sticker</b> button, choose <b>Link</b> and tap <b>Paste</b>.',
  'facebook-post':'Tap the green button under a picture and choose <b>Facebook</b>. The words are already copied: press and hold where you write and tap <b>Paste</b>.',
- 'facebook-story':'Tap the green button under a picture. Choose <b>Facebook</b>, then <b>Your story</b>. A story needs no caption.'};
+ 'facebook-story':'Tap the green button under a picture. Choose <b>Facebook</b>, then <b>Your story</b>. Your link is already copied: tap <b>Stickers</b>, choose <b>Link</b> and tap <b>Paste</b>.'};
 const store={get(k){try{return localStorage.getItem(k)}catch(_){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(_){return false}},del(k){try{localStorage.removeItem(k)}catch(_){}}};
 let app=store.get('kp-app');if(!NAME[app])app='whatsapp';
 let shape=app==='whatsapp'?'story':'post';
-const link=m=>`${SITE}?utm_source=teacher&utm_medium=${m}&utm_campaign=digital27&utm_content=${T.slug}#enquire`;
-const tail=()=>app==='instagram'?`Call or WhatsApp: 94180 23454\nWebsite: link in my bio (kidsplanetkullu.com/admissions)`:`Call or WhatsApp: 94180 23454\nWebsite: ${link(app)}`;
-const caption=c=>`${KC&&CAPS[c.key]!=null?KC.clean(CAPS[c.key]):c.text}\n\n${tail()}`;
+/* Links. The long link carries the tracking tags the reports read; the short one (kidsplanetkullu.com/t/<short>/<app>) forwards to it, so parents see a clean address. Short pages: scripts/short-links.mjs, from `short` in people.js. The Apply online card goes straight to the form; every other card goes to the admissions page. */
+const LP=(window.KP_PEOPLE&&KP_PEOPLE[T.slug])||{},MED={whatsapp:'wa',facebook:'fb',instagram:'ig'};
+const dest=c=>c&&c.key==='online'?'apply':'';
+const longLink=(m,d)=>`${d==='apply'?'https://kidsplanetkullu.com/admissions/apply/':SITE}?utm_source=teacher&utm_medium=${m}&utm_campaign=digital27&utm_content=${T.slug}${d==='apply'?'':'#enquire'}`;
+const link=(m,d)=>LP.short&&MED[m]?`https://kidsplanetkullu.com/t/${LP.short}/${MED[m]}${d?'/'+d:''}`:longLink(m,d);
+/* Instagram and Facebook stories take no caption, but they do take a Link sticker: there the box holds the link. */
+const story=()=>shape==='story'&&app!=='whatsapp';
+const tail=c=>app==='instagram'?`Call or WhatsApp: 94180 23454\nWebsite: link in my bio (kidsplanetkullu.com/admissions)`:`Call or WhatsApp: 94180 23454\n${dest(c)==='apply'?'Apply online':'Website'}: ${link(app,dest(c))}`;
+const caption=c=>story()?link(app,dest(c)):`${KC&&CAPS[c.key]!=null?KC.clean(CAPS[c.key]):c.text}\n\n${tail(c)}`;
 const base=c=>`../img/${c.folder}/${c.key}-${shape}.jpg`;
 /* Her photo. 'd' = the one already on the cards; {a:n} = another school photo; 'o' = her own, kept on this phone only. */
 let photo={k:'d'},ownData=null,made={},jobs={},ver=0,photoPromise=null,line=Promise.resolve(),slideT=0,raf=0;const urls=new Set();
@@ -130,7 +136,7 @@ function render(){
   document.getElementById('hint').innerHTML=HINT[app+'-'+shape];
   document.getElementById('biolink').hidden=app!=='instagram';
   T.cards.forEach((c,i)=>{const el=document.getElementById('c'+i);setPic(el,c);
-    el.querySelector('.cap').textContent=caption(c);el.querySelector('.share').textContent='Share on '+NAME[app];
+    el.querySelector('.cap').textContent=caption(c);el.querySelector('.share').textContent='Share on '+NAME[app];el.querySelector('.caplabel').textContent=story()?'Your link (for the Link sticker)':'Caption';el.querySelector('.copycap').textContent=story()?'Copy link':'Copy caption';
     });
   document.querySelectorAll('.th').forEach(b=>b.setAttribute('aria-pressed',String(photo.k==='o'?b.dataset.photo==='own':b.dataset.photo===String(photo.k==='a'?photo.n:1))));
   const ot=document.querySelector('.th.own');ot.hidden=!ownData;if(ownData&&document.getElementById('ownthumb').getAttribute('src')!==ownData)document.getElementById('ownthumb').src=ownData;
@@ -172,7 +178,7 @@ document.addEventListener('click',e=>{
     else{const p=b.dataset.photo==='1'?{k:'d'}:{k:'a',n:+b.dataset.photo};if(JSON.stringify(p)!==was)setPhoto(p)}return}
   if(b.id==='copylink'){copyText(link('instagram')).then(ok=>say(ok?'Your link is copied. In Instagram: Edit profile, Links, Add external link, Paste.':'Could not copy. Press and hold the link above to copy it.',b.closest('.card')));return}
   const el=b.closest('.card');if(!el||!el.id.startsWith('c'))return;const c=T.cards[+el.id.slice(1)];
-  if(b.classList.contains('copycap')){copyText(caption(c)).then(ok=>say(ok?'Caption copied. Open '+NAME[app]+', press and hold where you type, and tap Paste.':'Could not copy. Press and hold the words above, then tap Select all and Copy.',el));return}
+  if(b.classList.contains('copycap')){copyText(caption(c)).then(ok=>say(ok?(story()?'Link copied. In your story, add a Link sticker and tap Paste.':'Caption copied. Open '+NAME[app]+', press and hold where you type, and tap Paste.'):'Could not copy. Press and hold the words above, then tap Select all and Copy.',el));return}
   if(b.classList.contains('copypic')){copyPic(el);return}
   if(b.classList.contains('share'))sharePic(el,c);
 });
