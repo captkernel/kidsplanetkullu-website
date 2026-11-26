@@ -249,7 +249,7 @@ export function LinkHub() {
       <div className="mx-auto w-full max-w-md px-5 pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-10 sm:pt-14">
         <div className="flex flex-col items-center text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/kp-logo.png" alt="Kids Planet School crest" width={80} height={87} className="h-[87px] w-20" />
+          <img src="/kp-logo-small.png" alt="Kids Planet School crest" width={80} height={87} className="h-[87px] w-20" />
           <h1 className="mt-4 text-3xl font-semibold">{SCHOOL.name} School</h1>
           <p className="mt-2 text-sm text-ink-soft">Pre-Nursery to Class 8 in Dhalpur, Kullu. Since {SCHOOL.founded}.</p>
           <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-gold/60 bg-surface px-4 py-1.5 text-xs font-semibold text-primary">
