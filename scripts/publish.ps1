@@ -19,11 +19,12 @@ if (-not (Test-Path "$dest\.git")) {
   throw "Deploy repo missing at $dest. Clone it first: gh repo clone captkernel/kidsplanetkullu-website $dest"
 }
 
-# Mirror source into the deploy repo. Excluded: dependencies, build output, git metadata,
+# Mirror source into the deploy repo. staff-assets/ (the teachers' private marketing pages and
+# pictures) is NEVER copied: it is served only by the kp-staff Worker after sign-in. Also excluded: dependencies, build output, git metadata,
 # local logs, generated TS files, env files, the 13 MB logo master, and unused leftovers
 # from the old site (mock fee data, PlanetStudio assets, unreferenced content JSON).
 robocopy $src $dest /MIR `
-  /XD node_modules .next out .git `
+  /XD node_modules .next out .git staff-assets `
   /XF .preview.log next-env.d.ts *.tsbuildinfo .env .env.local kp-logo-large.png `
       finance.ts media-library.ts stickers.ts curated-icons.ts templates.ts `
       achievements.json daily-schedule.json faq.json gallery.json news.json testimonials.json `
