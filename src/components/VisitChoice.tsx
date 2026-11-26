@@ -33,7 +33,8 @@ export function VisitChoice() {
 
   useEffect(() => {
     pages.current += 1;
-    if (choice !== "none" || !endpoint("/r") || browserSaysNo() || !canStore() || isPrivatePath(pathname)) return;
+    // Not on the link-in-bio page: the card would sit over its buttons. The next page asks instead.
+    if (choice !== "none" || !endpoint("/r") || browserSaysNo() || !canStore() || isPrivatePath(pathname) || pathname.startsWith("/links")) return;
     const t = setTimeout(() => {
       // Never over someone filling in a form.
       if (document.activeElement?.closest("form")) return;
@@ -42,7 +43,7 @@ export function VisitChoice() {
     return () => clearTimeout(t);
   }, [choice, pathname]);
 
-  if (!show || choice !== "none" || isPrivatePath(pathname) || pathname.startsWith("/privacy")) return null;
+  if (!show || choice !== "none" || isPrivatePath(pathname) || pathname.startsWith("/privacy") || pathname.startsWith("/links")) return null;
 
   return (
     <section

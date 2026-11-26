@@ -315,3 +315,11 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .magnetic { transform: none; transition: none; }
 }
+
+/* Link-in-bio page (/links/): one focused column for Instagram and Facebook visitors, so the
+   site header, footer and mobile bottom bar step aside. Browsers without :has() simply show them. */
+body:has([data-bare-page]) > header,
+body:has([data-bare-page]) > footer,
+body:has([data-bare-page]) [data-site-bar] {
+  display: none;
+}
