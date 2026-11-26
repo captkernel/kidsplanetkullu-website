@@ -9,10 +9,10 @@ After: the real pages live in `website-v2/staff-assets/marketing/` and are serve
 **kp-staff** Cloudflare Worker (code in the school workspace at `KidsPlanet/staff-portal/`).
 The Worker checks every request, pictures included, against Google sign-in and the staff list:
 
-- A teacher signs in with her Google account. Only emails on the staff list get in.
-- She sees her portal home: **Marketing** (her own page), and placeholders for Attendance,
+- A teacher signs in with their Google account. Only emails on the staff list get in.
+- They see their portal home: **Marketing** (their own page), and placeholders for Attendance,
   Salary, Fees, My work and Substitutions until the school portal is connected.
-- She can open only her own page and pictures, plus the shared school pictures. Another
+- They can open only their own page and pictures, plus the shared school pictures. Another
   teacher's page or pictures are refused by the server (403), not just hidden.
 - Admins (principal, office) see everything, including the teacher list and the link builder,
   and manage the staff list at `/admin/`.
