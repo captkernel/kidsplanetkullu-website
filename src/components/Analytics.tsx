@@ -113,6 +113,9 @@ export function Analytics() {
     engaged.current = 0;
     maxScroll.current = scrollPct();
     const formStarted = { done: false };
+    // At most one zero-time "leave" per page view, so a quick bounce still shows where the visit
+    // ended (27 Nov 2026: 31 of 104 visits had no exit record).
+    let reported = false;
 
     const onScroll = () => {
       const s = scrollPct();
@@ -122,8 +125,9 @@ export function Analytics() {
       if (visibleSince.current) engaged.current += Date.now() - visibleSince.current;
       visibleSince.current = 0;
     };
-    const leave = () => {
-      if (engaged.current <= 0) return;
+    const leave = (final = false) => {
+      if (engaged.current <= 0 && (reported || !final)) return;
+      reported = true;
       const v = !vitalsSent ? vitals : {};
       vitalsSent = true;
       send({
@@ -152,15 +156,23 @@ export function Analytics() {
       formStarted.done = true;
       track("form_start", pathname);
     };
+    // iPhone Safari often skips visibilitychange when a tab is closed or the page is left;
+    // pagehide is its last reliable moment.
+    const onPageHide = () => {
+      flush();
+      leave(true);
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pagehide", onPageHide);
     document.addEventListener("visibilitychange", onVis);
     document.addEventListener("focusin", onFocus);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pagehide", onPageHide);
       document.removeEventListener("visibilitychange", onVis);
       document.removeEventListener("focusin", onFocus);
       flush();
-      leave();
+      leave(true);
     };
   }, [pathname]);
 

@@ -10,7 +10,8 @@ import {
 } from "@/lib/admissions";
 import { SCHOOL } from "@/lib/constants";
 import { telHref, whatsappHref } from "@/lib/links";
-import { track } from "@/lib/track";
+import { sessionId, track } from "@/lib/track";
+import { lastingId } from "@/lib/consent";
 import { GoogleButton, googleOn } from "./GoogleButton";
 import { HumanCheck } from "./HumanCheck";
 import { PasswordField } from "./PasswordField";
@@ -198,6 +199,46 @@ export function ApplyForm() {
     top.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  // Where a parent stops (27 Nov 2026). Logs each step reached, and on leaving the page before
+  // sending: the step and the NAME of the last field touched. Never what was typed.
+  const STEP_NAMES = ["child", "family", "documents", "visit"];
+  const stepRef = useRef(step);
+  const doneRef = useRef(done);
+  const lastField = useRef("");
+  const leftAt = useRef<number | null>(null);
+  stepRef.current = step;
+  doneRef.current = done;
+  useEffect(() => {
+    if (!ready || done) return;
+    lastField.current = "";
+    track("apply_view", STEP_NAMES[step] ?? String(step));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, step, done]);
+  useEffect(() => {
+    const onFocus = (e: FocusEvent) => {
+      const el = e.target as HTMLInputElement | null;
+      const key = el?.name || el?.id || "";
+      if (el?.closest?.("form") && key) lastField.current = key;
+    };
+    const onLeave = () => {
+      if (doneRef.current || leftAt.current === stepRef.current) return;
+      leftAt.current = stepRef.current;
+      track("apply_leave", `${STEP_NAMES[stepRef.current] ?? stepRef.current}:${lastField.current || "-"}`);
+    };
+    const onVis = () => {
+      if (document.visibilityState === "hidden") onLeave();
+      else leftAt.current = null; // came back: a later exit counts again
+    };
+    document.addEventListener("focusin", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("pagehide", onLeave);
+    return () => {
+      document.removeEventListener("focusin", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("pagehide", onLeave);
+    };
+  }, []);
+
   const setS = (k: keyof typeof EMPTY_START) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setStart((v) => ({ ...v, [k]: e.target.value }));
   const setD = (k: keyof Details) => (
@@ -237,7 +278,12 @@ export function ApplyForm() {
       } else {
         const r = await api<{ ref: string; token?: string }>("POST", "/api/applications", {
           token: session ?? undefined,
-          body: { ...start, consent: true, consent_text: CONSENT_TEXT, source: visitSource(), website, ts: human },
+          body: {
+            ...start, consent: true, consent_text: CONSENT_TEXT, source: visitSource(), website, ts: human,
+            // This visit, so the office can see how the family found the school (privacy page says so).
+            // The lasting id is only there if the parent chose Allow.
+            pulse_session: sessionId(), pulse_vid: lastingId(),
+          },
         });
         if (!r.token) throw new Error("Could not save just now. Please call the school office.");
         const s = { ref: r.ref, token: r.token };

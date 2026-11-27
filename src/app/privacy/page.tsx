@@ -102,6 +102,12 @@ export default function PrivacyPage() {
             are not shared with anyone or used for advertising. This is for adults: if you are under 18, please do not
             choose Allow. You can change your mind here at any time.
           </p>
+          <p className="mt-4 leading-relaxed text-ink-soft">
+            <strong className="text-ink">If you send an application</strong>, the visit you sent it from is attached
+            to it, so the school office can see which pages you read and how you found us (for example a poster or a
+            link). Only that visit is attached, plus your earlier visits if you chose Allow. It is seen only by the
+            school office and kept with your application.
+          </p>
           <VisitControls />
         </div>
         <p className="mt-10 max-w-3xl leading-relaxed text-ink">
