@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+
+const noSubscribe = () => () => {};
 
 // "Continue with Google", using Google Identity Services. Google shows its own account chooser
 // and hands back a signed token; our backend checks that token against Google's keys before
@@ -96,6 +98,71 @@ export function GoogleButton({
     };
   }, [label]);
 
+  // Read on the phone only (the page is pre-built without a browser), as a plain string so it is stable.
+  const inAppKey = useSyncExternalStore(noSubscribe, () => {
+    const a = inAppBrowser();
+    return a ? `${a.name}|${a.android ? 1 : 0}` : "";
+  }, () => "");
+  const inApp: InApp = inAppKey ? { name: inAppKey.split("|")[0], android: inAppKey.endsWith("|1") } : null;
+
   if (!CLIENT_ID) return null;
+  if (inApp) return <OpenInBrowser app={inApp} />;
   return <div ref={box} className="min-h-[44px]" data-testid="google-button" />;
+}
+
+// Google refuses to sign people in inside the Instagram / Facebook / WhatsApp in-app
+// browsers ("disallowed_useragent"). Most campaign visitors arrive in exactly those,
+// so instead of a button that fails we tell them how to open the page in their browser.
+type InApp = { name: string; android: boolean } | null;
+
+function inAppBrowser(): InApp {
+  if (typeof navigator === "undefined") return null;
+  const ua = navigator.userAgent || "";
+  const android = /Android/i.test(ua);
+  if (/Instagram/i.test(ua)) return { name: "Instagram", android };
+  if (/FBAN|FBAV|FB_IAB|FBIOS|FB4A/i.test(ua)) return { name: "Facebook", android };
+  if (/WhatsApp/i.test(ua)) return { name: "WhatsApp", android };
+  if (/Snapchat|Line\/|LinkedInApp|Twitter/i.test(ua)) return { name: "this app", android };
+  if (android && /; wv\)/.test(ua)) return { name: "this app", android };
+  return null;
+}
+
+function OpenInBrowser({ app }: { app: { name: string; android: boolean } }) {
+  const [copied, setCopied] = useState(false);
+  const here = typeof window !== "undefined" ? window.location.href : "";
+  // Android: an intent link opens the same page in Chrome (or the phone's default browser).
+  const intent = here
+    ? `intent://${here.replace(/^https?:\/\//, "")}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(here)};end`
+    : "";
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(here);
+      setCopied(true);
+    } catch {
+      // Clipboard blocked: the instructions below still work.
+    }
+  };
+  return (
+    <div className="rounded-xl border border-line bg-canvas p-4 text-sm leading-relaxed text-ink" data-testid="google-open-in-browser">
+      <p>
+        <strong>Sign in with Google</strong> works in your phone&rsquo;s browser, not inside {app.name}.
+      </p>
+      {app.android ? (
+        <a
+          href={intent}
+          className="mt-3 inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 font-semibold text-canvas"
+        >
+          Open this page in Chrome
+        </a>
+      ) : (
+        <p className="mt-2 text-ink-soft">
+          Tap <strong>&middot;&middot;&middot;</strong> (top right) and choose <strong>Open in browser</strong>.
+        </p>
+      )}
+      <button type="button" onClick={() => void copy()} className="mt-3 block font-semibold text-primary underline underline-offset-4">
+        {copied ? "Link copied. Paste it in Chrome or Safari." : "Or copy the link"}
+      </button>
+      <p className="mt-2 text-ink-soft">You can also carry on below with your mobile number.</p>
+    </div>
+  );
 }

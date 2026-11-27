@@ -148,14 +148,22 @@ export default function ProgramsPage() {
             }`}
           >
             <FadeIn>
-              <div className="overflow-hidden rounded-2xl border border-line shadow-[var(--shadow-card)]">
+              {/* Visitors tapped these photos: take them to the classes below. */}
+              <a
+                href={`#${stage.id}-classes`}
+                aria-label={`See the ${stage.label} classes`}
+                className="group relative block overflow-hidden rounded-2xl border border-line shadow-[var(--shadow-card)]"
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={stage.image}
                   alt={`${stage.label} at Kids Planet`}
-                  className="aspect-[4/3] h-full w-full object-cover"
+                  className="aspect-[4/3] h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
                 />
-              </div>
+                <span className="absolute bottom-3 right-3 rounded-full bg-canvas/95 px-3.5 py-1.5 text-sm font-semibold text-primary shadow">
+                  See the classes &darr;
+                </span>
+              </a>
             </FadeIn>
             <FadeIn delay={100}>
               <Eyebrow star>{stage.range}</Eyebrow>
@@ -169,7 +177,7 @@ export default function ProgramsPage() {
           </div>
 
           {/* Say it, then show it: the specific classes within the stage. */}
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
+          <div id={`${stage.id}-classes`} className="mt-12 grid scroll-mt-28 gap-5 sm:grid-cols-2">
             {programs
               .filter((p) => stage.ids.includes(p.id))
               .map((p) => (

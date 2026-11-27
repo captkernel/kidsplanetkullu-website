@@ -343,14 +343,15 @@ export default function HomePage() {
                 {/* Horizontal on phone (image left, text right) to stay compact;
                     vertical equal-size cards on sm+ (per user request). */}
                 <Card hover className="group flex h-full flex-row overflow-hidden sm:flex-col">
-                  <div className="relative aspect-square w-28 shrink-0 overflow-hidden sm:aspect-[4/3] sm:w-auto">
+                  {/* The photo is tappable too: visitors tapped it expecting to go on. */}
+                  <Link href={s.href} tabIndex={-1} aria-hidden className="relative block aspect-square w-28 shrink-0 overflow-hidden sm:aspect-[4/3] sm:w-auto">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={s.image}
-                      alt={`${s.label} at Kids Planet`}
+                      alt=""
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transition-none"
                     />
-                  </div>
+                  </Link>
                   <div className="flex flex-1 flex-col p-3.5 sm:p-5">
                     <h3 className="font-display text-lg sm:text-2xl">{s.label}</h3>
                     <p className="mt-0.5 text-[0.65rem] font-medium uppercase tracking-[0.1em] text-primary sm:mt-1 sm:text-xs">

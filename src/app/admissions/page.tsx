@@ -193,7 +193,8 @@ export default function AdmissionsPage() {
           </h2>
         </div>
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          <FadeIn>
+          {/* min-w-0: let the fee table scroll inside its card instead of widening the page on phones. */}
+          <FadeIn className="min-w-0">
             <Card className="h-full p-8">
               <Eyebrow>Fees</Eyebrow>
               <h3 className="mt-3 font-display text-2xl md:text-3xl">
@@ -238,7 +239,7 @@ export default function AdmissionsPage() {
             </Card>
           </FadeIn>
 
-          <FadeIn delay={100}>
+          <FadeIn delay={100} className="min-w-0">
             <Card className="h-full p-8">
               <Eyebrow>Who can join</Eyebrow>
               <h3 className="mt-3 font-display text-2xl md:text-3xl">

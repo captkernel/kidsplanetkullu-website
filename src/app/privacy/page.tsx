@@ -44,7 +44,11 @@ const ROWS: [string, string][] = [
   ],
   [
     "Signing in with Google",
-    "If you choose Continue with Google, Google tells us your name and email address and confirms that the email is yours. We do not see your Google password, and we receive nothing else from your Google account. Google's own privacy policy covers what Google records about the sign-in.",
+    "If you choose Continue with Google, Google tells us your name and email address and confirms that the email is yours. We do not see your Google password, and we receive nothing else from your Google account. Google's own privacy policy covers what Google records about the sign-in. On the application form, Fill in with Google only copies your name and email into the form on your phone; nothing is sent to us until you press Save and continue.",
+  ],
+  [
+    "Answers not yet sent",
+    "While you fill in the first step of the application, your answers are kept on your own phone, in this browser only, so that opening another page or losing signal does not wipe them. They are removed from the phone once the form is saved with us, and Start again clears them at any time.",
   ],
   [
     "Parents of children at the school",

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Send, MessageCircle } from "lucide-react";
-import { whatsappHref } from "@/lib/links";
+import { MessageCircle, Phone } from "lucide-react";
+import { telHref, whatsappHref } from "@/lib/links";
+import { SCHOOL } from "@/lib/constants";
 import { track } from "@/lib/track";
 import Link from "next/link";
 import { admissionsOnline, api, CLASSES, visitSource } from "@/lib/admissions";
@@ -15,7 +16,6 @@ export function InquiryForm() {
     parent: "",
     phone: "",
     childClass: "",
-    message: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [human, setHuman] = useState<string | null>(null);
@@ -37,7 +37,6 @@ export function InquiryForm() {
       `Parent: ${values.parent}`,
       `Phone: ${values.phone}`,
       values.childClass ? `Class of interest: ${values.childClass}` : "",
-      values.message ? `Message: ${values.message}` : "",
     ].filter(Boolean);
     track("enquiry_submit", values.childClass || "class not given");
     // Record it for the office too, so the enquiry is not lost if WhatsApp is never sent.
@@ -47,7 +46,6 @@ export function InquiryForm() {
           parent_name: values.parent,
           phone: values.phone,
           class_sought: values.childClass,
-          message: values.message,
           source: visitSource(),
           ts: human,
         },
@@ -111,28 +109,13 @@ export function InquiryForm() {
           onChange={set("childClass")}
           className={`mt-2 ${field}`}
         >
-          <option value="">Select a class (optional)</option>
+          <option value="">Not sure yet</option>
           {classes.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>
           ))}
         </select>
-      </div>
-
-      <div>
-        <label htmlFor="message" className={labelCls}>
-          Anything you would like us to know
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows={4}
-          value={values.message}
-          onChange={set("message")}
-          className={`mt-2 ${field} resize-y`}
-          placeholder="A question, a preferred visit time, your child's age..."
-        />
       </div>
 
       {admissionsOnline && <HumanCheck onToken={setHuman} resetKey={round} />}
@@ -148,23 +131,21 @@ export function InquiryForm() {
           type="submit"
           className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-base font-semibold text-canvas transition-colors hover:bg-primary-deep active:scale-[0.98]"
         >
-          <Send size={18} strokeWidth={1.75} />
-          Send enquiry
+          <MessageCircle size={18} strokeWidth={1.75} />
+          Send on WhatsApp
         </button>
         <a
-          href={whatsappHref("Hello, I would like to enquire about admissions at Kids Planet.")}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={telHref}
           className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/40 px-7 py-3.5 text-base font-semibold text-primary transition-colors hover:bg-primary hover:text-canvas active:scale-[0.98]"
         >
-          <MessageCircle size={18} strokeWidth={1.75} />
-          Chat on WhatsApp
+          <Phone size={18} strokeWidth={1.75} />
+          Call {SCHOOL.phoneDisplay}
         </a>
       </div>
       <p className="text-xs text-ink-soft">
-        Your enquiry opens WhatsApp with the details filled in, sent straight to
-        the school office. We usually reply within one working day. We also keep
-        a note of it so the office can call you back.{" "}
+        Three details, then WhatsApp opens with your message ready to send to the
+        school office. Ask anything there. We usually reply within one working day,
+        and we keep a note so the office can call you back.{" "}
         <Link href="/privacy/" className="font-semibold text-primary underline underline-offset-4">
           How we look after your details
         </Link>

@@ -11,6 +11,7 @@ import {
 import { SCHOOL } from "@/lib/constants";
 import { telHref, whatsappHref } from "@/lib/links";
 import { track } from "@/lib/track";
+import { GoogleButton, googleOn } from "./GoogleButton";
 import { HumanCheck } from "./HumanCheck";
 import { PasswordField } from "./PasswordField";
 
@@ -39,6 +40,43 @@ const quietBtn =
 
 const EMPTY_START = { child_name: "", child_dob: "", class_sought: "", parent_name: "", phone: "" };
 
+// Step 1 answers are kept on this phone until the form is saved with the school, so
+// opening another page (or the privacy notice) no longer wipes what a parent typed.
+const DRAFT_KEY = "kp_apply_draft";
+type Draft = { start: typeof EMPTY_START; email?: string; at: number };
+function loadDraft(): Draft | null {
+  try {
+    const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null") as Draft | null;
+    if (!d || Date.now() - d.at > 30 * 864e5) return null; // same 30 days as an unsent form
+    return d;
+  } catch {
+    return null;
+  }
+}
+function saveDraft(d: Draft | null) {
+  try {
+    if (d) localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // Private mode or storage blocked: the form still works, it just is not kept.
+  }
+}
+
+// Name and email from a Google sign-in token, read on the phone only, to fill the form.
+// Nothing is trusted or sent from it here; the server checks Google tokens when it uses them.
+function googleProfile(credential: string): { name: string; email: string } {
+  try {
+    const part = credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(part).split("").map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0")).join("")
+    );
+    const p = JSON.parse(json) as { name?: string; email?: string };
+    return { name: p.name || "", email: p.email || "" };
+  } catch {
+    return { name: "", email: "" };
+  }
+}
+
 export function ApplyForm() {
   const [ready, setReady] = useState(false);
   const [step, setStep] = useState(0);
@@ -63,7 +101,35 @@ export function ApplyForm() {
   const [human, setHuman] = useState<string | null>(null);
   const [humanRound, setHumanRound] = useState(0);
   const [phoneFromProfile, setPhoneFromProfile] = useState(false);
+  const [restored, setRestored] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [fromGoogle, setFromGoogle] = useState("");
   const top = useRef<HTMLDivElement>(null);
+
+  // Keep step 1 on this phone as it is typed, until the school has it.
+  useEffect(() => {
+    if (!ready || saved || step !== 0) return;
+    const any = Object.values(start).some((v) => v.trim() !== "");
+    saveDraft(any ? { start, email: details.email || "", at: Date.now() } : null);
+  }, [ready, saved, step, start, details.email]);
+
+  const fillFromGoogle = (credential: string) => {
+    const g = googleProfile(credential);
+    if (!g.name && !g.email) return setError("Google did not share your name. Please type it in.");
+    setStart((v) => ({ ...v, parent_name: v.parent_name || g.name }));
+    if (g.email) setDetails((d) => ({ ...d, email: d.email || g.email }));
+    setFromGoogle(g.email || g.name);
+    track("apply_google_fill", "apply");
+  };
+
+  const startAgain = () => {
+    saveDraft(null);
+    setStart(EMPTY_START);
+    setDetails({});
+    setConsent(false);
+    setRestored(false);
+    setFromGoogle("");
+  };
 
   // Pick up where this phone left off, or open the form a signed-in parent chose
   // on their profile page (?ref=...), or start a fresh one for another child (?new=1).
@@ -79,6 +145,13 @@ export function ApplyForm() {
     const s: Saved | null =
       wanted && sess ? { ref: wanted, token: sess } : q.get("new") ? null : loadSaved();
     if (!s) {
+      // Answers typed earlier on this phone, before the form was saved.
+      const draft = q.get("new") ? null : loadDraft();
+      if (draft) {
+        setStart({ ...EMPTY_START, ...draft.start });
+        if (draft.email) setDetails((d) => ({ ...d, email: d.email || draft.email }));
+        setRestored(true);
+      }
       // A child chosen on the profile page arrives already filled in.
       const pre = takePrefill();
       if (pre) {
@@ -170,6 +243,7 @@ export function ApplyForm() {
         const s = { ref: r.ref, token: r.token };
         saveSaved(s);
         setSaved(s);
+        saveDraft(null); // the school has it now; nothing left to keep on the phone
         track("apply_start", start.class_sought);
       }
       goTo(1);
@@ -252,6 +326,7 @@ export function ApplyForm() {
 
   const startAnother = () => {
     clearSaved();
+    saveDraft(null);
     setSaved(null);
     setDone(false);
     setStart({ ...EMPTY_START, parent_name: start.parent_name, phone: start.phone });
@@ -385,6 +460,28 @@ export function ApplyForm() {
 
       {step === 0 && (
         <form onSubmit={submitStart} className="mt-8 space-y-5" noValidate>
+          {restored && !saved && (
+            <p className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink" data-testid="draft-restored">
+              We kept what you typed last time on this phone.{" "}
+              <button type="button" onClick={startAgain} className="font-semibold text-primary underline underline-offset-4">
+                Start again
+              </button>
+            </p>
+          )}
+          {googleOn && !saved && !session && (
+            <div data-testid="apply-google">
+              {fromGoogle ? (
+                <p className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-ink">
+                  <Check size={16} className="text-primary" /> Filled in from Google ({fromGoogle}). Please check it below.
+                </p>
+              ) : (
+                <>
+                  <GoogleButton onCredential={fillFromGoogle} label="continue_with" />
+                  <p className={hintCls}>Fills in your name and email. You add your child and mobile number.</p>
+                </>
+              )}
+            </div>
+          )}
           <div>
             <label htmlFor="child_name" className={labelCls}>Child&rsquo;s full name</label>
             <input id="child_name" value={start.child_name} onChange={setS("child_name")} className={`mt-2 ${field}`} placeholder="As on the birth certificate" autoComplete="off" />
@@ -427,11 +524,38 @@ export function ApplyForm() {
             <input type="checkbox" className="mt-1 h-5 w-5 accent-[#2d5016]" checked={consent} onChange={(e) => setConsent(e.target.checked)} disabled={!!saved} />
             <span className="text-sm leading-relaxed text-ink">
               {CONSENT_TEXT}{" "}
-              <Link href="/privacy/" target="_blank" className="font-semibold text-primary underline underline-offset-4">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault(); // inside the label: do not tick the box
+                  setShowPrivacy((v) => !v);
+                }}
+                aria-expanded={showPrivacy}
+                aria-controls="privacy-summary"
+                className="font-semibold text-primary underline underline-offset-4"
+              >
                 How we look after your details
-              </Link>
+              </button>
             </span>
           </label>
+          {showPrivacy && (
+            <div id="privacy-summary" className="rounded-xl border border-line bg-canvas p-4 text-sm leading-relaxed text-ink" data-testid="privacy-summary">
+              <ul className="space-y-2">
+                <li><span className="text-gold">✦</span> Only the school office and the Principal see your form. We never sell or share it, or use it for advertising.</li>
+                <li><span className="text-gold">✦</span> We do not ask for Aadhaar, bank details or any fee online.</li>
+                <li><span className="text-gold">✦</span> A form you do not send is deleted after 30 days. If your child does not join, everything is deleted within 90 days.</li>
+                <li><span className="text-gold">✦</span> Until you press Save and continue, your answers stay on this phone only.</li>
+              </ul>
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                <button type="button" onClick={() => setShowPrivacy(false)} className="font-semibold text-primary underline underline-offset-4">
+                  Close
+                </button>
+                <Link href="/privacy/" target="_blank" className="font-semibold text-primary underline underline-offset-4">
+                  Read the full notice
+                </Link>
+              </div>
+            </div>
+          )}
           {!saved && !session && <HumanCheck onToken={setHuman} resetKey={humanRound} />}
           <ErrorLine error={error} />
           <button type="submit" disabled={busy} className={`${primaryBtn} w-full sm:w-auto`}>
@@ -439,7 +563,7 @@ export function ApplyForm() {
             Save and continue <ArrowRight size={18} strokeWidth={1.75} />
           </button>
           <p className="text-sm text-ink-soft">
-            Takes about five minutes. Your place is saved on this phone after this step, so you can finish later.
+            Takes about five minutes. What you type is kept on this phone, and after this step your form is saved with the school, so you can finish later.
             {!session && (
               <>
                 {" "}Already have a parent profile?{" "}
