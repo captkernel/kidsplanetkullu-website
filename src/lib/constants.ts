@@ -23,7 +23,7 @@ export const SCHOOL = {
   ageRange: "Ages 2–14",
   timings: {
     weekday: "Mon to Fri: 9:00 AM to 3:00 PM",
-    saturday: "Saturday: 9:00 AM to 1:00 PM",
+    saturday: "Saturday: 9:30 AM to 1:30 PM (Classes 2 to 8 only)",
     sunday: "Sunday: Closed",
   },
   social: {
@@ -34,8 +34,11 @@ export const SCHOOL = {
     "https://www.justdial.com/Kullu/Kids-Planet-Above-Circuit-House-Miyanbehar-Dhalpur/9999P1902-1902-221104022902-R7X7_BZDET",
   justdialRating: "4.4",
   mapUrl: "https://maps.app.goo.gl/wPPZwpFfuFCcPHuB9",
+  // Query embed for the school's own Google Maps listing (Plus Code X436+QPP). The old
+  // pb= embed pointed at a place id that does not exist, so the map showed no pin and
+  // sat about 240 m west of the school.
   mapEmbedUrl:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3377.5!2d77.1072594!3d31.9536218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390479a3c0f6e0c7%3A0x7e3e98bda7e7b1a4!2sKids%20Planet!5e0!3m2!1sen!2sin!4v1711280000000",
+    "https://www.google.com/maps?q=Kids+Planet,+X436%2BQPP,+Dhalpur,+Kullu,+Himachal+Pradesh&z=17&output=embed",
   // Live numbers from the school database (updated 2026-09-16: 14 active
   // teachers in staff_profiles, ~187 students -> about 13 per teacher).
   stats: [

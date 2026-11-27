@@ -7,7 +7,7 @@ import { MIN_PASSWORD } from "@/lib/admissions";
 const field =
   "w-full rounded-xl border border-line bg-canvas px-4 py-3 pr-12 text-ink " +
   "placeholder:text-ink-soft/60 focus:border-primary focus-visible:outline-2 " +
-  "focus-visible:outline-gold focus-visible:outline-offset-2";
+  "focus-visible:outline-primary-deep focus-visible:outline-offset-2";
 
 /** 0 too short, 1 fair, 2 good, 3 strong. Guidance only: the server makes the real decision. */
 export function passwordScore(pw: string): number {

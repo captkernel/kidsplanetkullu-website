@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { MisspeltRedirect } from "@/components/MisspeltRedirect";
+import { SCHOOL } from "@/lib/constants";
+import { telHref, whatsappHref } from "@/lib/links";
 
 // GitHub Pages serves this for any address that does not exist. Common misspellings
 // (from shared or printed links, e.g. /admsslons) are sent on to the right page.
@@ -27,6 +29,15 @@ export default function NotFound() {
           <Link href="/" className="inline-flex items-center justify-center rounded-full border border-primary/40 px-7 py-3.5 font-semibold text-primary">
             Home
           </Link>
+        </div>
+        <p className="mt-10 text-lg text-ink-soft">Or ask the office directly:</p>
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+          <a href={telHref} className="inline-flex items-center justify-center rounded-full bg-primary px-7 py-3.5 font-semibold text-canvas">
+            Call {SCHOOL.phoneDisplay}
+          </a>
+          <a href={whatsappHref("Hello, I was looking for a page on the Kids Planet website.")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full border border-primary/40 px-7 py-3.5 font-semibold text-primary">
+            Message on WhatsApp
+          </a>
         </div>
       </Container>
     </section>

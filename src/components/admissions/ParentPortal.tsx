@@ -18,7 +18,7 @@ import { PasswordField } from "./PasswordField";
 const field =
   "w-full rounded-xl border border-line bg-canvas px-4 py-3 text-ink " +
   "placeholder:text-ink-soft/60 focus:border-primary focus-visible:outline-2 " +
-  "focus-visible:outline-gold focus-visible:outline-offset-2";
+  "focus-visible:outline-primary-deep focus-visible:outline-offset-2";
 const labelCls = "block text-sm font-semibold text-ink";
 const primaryBtn =
   "inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-base " +
@@ -508,7 +508,7 @@ function WhoAreYou({
 
   const option =
     "flex w-full items-start gap-4 rounded-2xl border border-line bg-surface p-5 text-left shadow-[var(--shadow-card)] " +
-    "transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-gold disabled:opacity-60";
+    "transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-primary-deep disabled:opacity-60";
 
   return (
     <div ref={top} className="max-w-xl scroll-mt-28" data-testid="who-are-you">

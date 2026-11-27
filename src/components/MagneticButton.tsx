@@ -17,7 +17,7 @@ export function MagneticButton({
 }: {
   href: string;
   external?: boolean;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "onDark" | "ghost";
   size?: "md" | "lg";
   className?: string;
   strength?: number;

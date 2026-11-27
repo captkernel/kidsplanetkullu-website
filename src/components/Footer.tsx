@@ -8,6 +8,7 @@ const explore = [
   { href: "/about", label: "About Us" },
   { href: "/programs", label: "Programs" },
   { href: "/admissions", label: "Admissions" },
+  { href: "/admissions/apply", label: "Apply Online" },
   { href: "/faculty", label: "Our Faculty" },
   { href: "/contact", label: "Contact" },
   { href: "/parent", label: "Parent Sign In" },
@@ -17,7 +18,7 @@ const explore = [
 export function Footer() {
   return (
     <footer className="bg-primary-deep text-canvas">
-      <Container className="py-16 md:py-20">
+      <Container className="pt-16 pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pt-20 lg:pb-20">
         {/* Mission line, reinforced. */}
         <div className="max-w-2xl">
           <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-gold-soft">
@@ -40,7 +41,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/kp-logo.png" alt="" className="h-10 w-10 rounded-full" width={40} height={40} />
+              <img src="/kp-crest-176.png" alt="" className="h-14 w-auto shrink-0" width={52} height={56} />
               <span className="font-display text-xl font-semibold">{SCHOOL.name}</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-canvas/70">

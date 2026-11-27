@@ -10,7 +10,7 @@ import { track } from "@/lib/track";
 const field =
   "w-full rounded-xl border border-line bg-canvas px-4 py-3 text-ink " +
   "placeholder:text-ink-soft/60 focus:border-primary focus-visible:outline-2 " +
-  "focus-visible:outline-gold focus-visible:outline-offset-2";
+  "focus-visible:outline-primary-deep focus-visible:outline-offset-2";
 const labelCls = "block text-sm font-semibold text-ink";
 
 // The stages a parent moves through, in order, for the progress line.

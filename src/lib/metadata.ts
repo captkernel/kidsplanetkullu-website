@@ -62,8 +62,9 @@ export function getSchoolJsonLd() {
       },
       geo: {
         "@type": "GeoCoordinates",
-        latitude: 31.95362,
-        longitude: 77.10726,
+        // From the school's Google Maps listing (Plus Code X436+QPP).
+        latitude: 31.9534124,
+        longitude: 77.1097378,
       },
       hasMap: SCHOOL.mapUrl,
       areaServed: { "@type": "City", name: "Kullu" },

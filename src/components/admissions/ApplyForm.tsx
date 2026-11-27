@@ -21,14 +21,14 @@ const STEPS = ["Your child", "Family", "Documents", "Visit and send"] as const;
 const VISIT_TIMES = [
   "Any working day, morning",
   "Any working day, afternoon",
-  "Saturday morning",
+  "Saturday, 9:30 AM to 1:30 PM",
   "Please call me to fix a time",
 ];
 
 const field =
   "w-full rounded-xl border border-line bg-canvas px-4 py-3 text-ink " +
   "placeholder:text-ink-soft/60 focus:border-primary focus-visible:outline-2 " +
-  "focus-visible:outline-gold focus-visible:outline-offset-2";
+  "focus-visible:outline-primary-deep focus-visible:outline-offset-2";
 const labelCls = "block text-sm font-semibold text-ink";
 const hintCls = "mt-1 text-sm text-ink-soft";
 const primaryBtn =

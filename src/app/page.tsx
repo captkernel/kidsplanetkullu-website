@@ -165,7 +165,8 @@ const TRUST_FACTS = [
   },
 ];
 
-const recentNews = announcements
+const recentNews = [...announcements]
+  .sort((a, b) => b.date.localeCompare(a.date))
   .filter((a) => a.type === "event" || a.type === "general")
   .slice(0, 3);
 
@@ -209,7 +210,7 @@ export default function HomePage() {
             <div className="hero-logo flex shrink-0 items-center sm:-ml-8 lg:-ml-20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/kp-logo-nocircles.png"
+                src="/kp-logo-nocircles-400.png"
                 alt="Kids Planet"
                 width={112}
                 height={112}
@@ -245,13 +246,18 @@ export default function HomePage() {
                   "Hello, I would like to know more about admissions at Kids Planet."
                 )}
                 external
-                variant="secondary"
+                variant="onDark"
                 size="lg"
-                className="border-canvas/50 text-canvas hover:bg-canvas hover:text-primary"
               >
                 Message on WhatsApp
               </MagneticButton>
             </div>
+            <Link
+              href="/admissions/apply/"
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-canvas underline underline-offset-4 [text-shadow:0_1px_6px_rgba(0,0,0,.6)] hover:text-gold-soft"
+            >
+              Or apply online, in about five minutes <ArrowRight size={15} strokeWidth={2} />
+            </Link>
             </div>
           </div>
         </Container>
@@ -330,7 +336,7 @@ export default function HomePage() {
               <h2 className="mt-2 font-display"
                 style={{ fontSize: "clamp(1.6rem, 5vw, 3rem)" }}
               >
-                One path, from first words to Class 8.
+                One path through the foundation years.
               </h2>
             </div>
             <Button href="/programs" variant="ghost" size="md">
@@ -591,11 +597,10 @@ export default function HomePage() {
                   {SCHOOL.justdialRating} out of 5
                 </p>
                 <p className="mt-1.5 text-[0.9rem] leading-snug text-ink-soft sm:text-base">
-                  How Kullu parents rate Kids Planet on JustDial, in their own
-                  reviews.
+                  How Kullu parents rate Kids Planet on JustDial.
                 </p>
                 <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                  Read the reviews <ArrowRight size={15} strokeWidth={2} />
+                  See it on JustDial <ArrowRight size={15} strokeWidth={2} />
                 </span>
               </a>
             </FadeIn>
@@ -722,9 +727,8 @@ export default function HomePage() {
                   `Hello, I would like to apply for admission at Kids Planet for the ${SCHOOL.admissionsSession} session.`
                 )}
                 external
-                variant="secondary"
+                variant="onDark"
                 size="lg"
-                className="border-canvas/50 text-canvas hover:bg-canvas hover:text-primary"
               >
                 Message on WhatsApp
               </MagneticButton>

@@ -87,9 +87,6 @@ function TeacherTile({ t, delay }: { t: StaffMember; delay: number }) {
               <span className="font-display text-lg leading-none text-primary">
                 {initials(t.name)}
               </span>
-              <span className="text-[0.55rem] font-medium uppercase tracking-[0.14em] text-ink-soft">
-                Portrait
-              </span>
             </div>
           )}
           <span aria-hidden className="absolute right-1 top-1 text-[0.7rem] text-gold">
@@ -204,7 +201,7 @@ export default function FacultyPage() {
             <Button
               href="/admissions#visit"
               size="lg"
-              className="bg-gold text-primary-deep hover:bg-gold-soft"
+              variant="gold"
             >
               Book a Visit
             </Button>

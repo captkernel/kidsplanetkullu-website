@@ -38,15 +38,15 @@ export function Header() {
           : "border-transparent bg-canvas/70 backdrop-blur-sm"
       }`}
     >
-      <div className="container-page flex h-[72px] items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-2.5" aria-label={`${SCHOOL.name} home`}>
+      <div className="container-page flex h-[72px] items-center justify-between gap-3 lg:gap-6">
+        <Link href="/" prefetch={false} className="flex shrink-0 items-center gap-2 sm:gap-2.5" aria-label={`${SCHOOL.name} home`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/kp-logo.png" alt="" className="h-9 w-9 rounded-full" width={36} height={36} />
+          <img src="/kp-crest-176.png" alt="" className="h-12 w-auto shrink-0" width={44} height={48} />
           <span className="flex flex-col leading-none">
             <span className="font-display text-lg font-semibold tracking-tight text-ink">
               {SCHOOL.name}
             </span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">
+            <span className="mt-1 whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.08em] text-primary sm:text-[11px] sm:tracking-[0.16em]">
               {SCHOOL.motto}
             </span>
           </span>
@@ -74,11 +74,11 @@ export function Header() {
             the nav on one line and the header height under 80px. */}
         <div className="hidden items-center gap-3 lg:flex">
           <Link
-            href="/admissions"
+            href="/admissions/apply/"
             className="hidden items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-primary hover:text-primary-deep 2xl:inline-flex"
           >
             <span aria-hidden className="text-gold">✦</span>
-            Admissions {SCHOOL.admissionsYear} open
+            Apply online for {SCHOOL.admissionsYear}
           </Link>
           <Link
             href="/parent/"
@@ -100,7 +100,7 @@ export function Header() {
         <Link
           href="/parent/"
           aria-label="Parent login"
-          className="ml-auto inline-flex h-11 items-center gap-1.5 rounded-full border border-primary/30 px-3.5 text-sm font-semibold text-primary lg:hidden"
+          className="ml-auto inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-primary/30 px-3 text-sm font-semibold text-primary lg:hidden"
         >
           <UserRound size={16} strokeWidth={1.75} />
           Parents
@@ -151,10 +151,13 @@ export function Header() {
               Parent Login
             </Link>
             <div className="mt-3 flex flex-col gap-2.5">
+              <Button href="/admissions/apply/" variant="primary" size="lg">
+                Apply online
+              </Button>
               <Button href="/admissions#enquire" variant="secondary" size="lg">
                 Enquire
               </Button>
-              <Button href="/admissions#visit" variant="primary" size="lg">
+              <Button href="/admissions#visit" variant="secondary" size="lg">
                 Book a Visit
               </Button>
             </div>

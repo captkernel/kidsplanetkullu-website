@@ -58,7 +58,7 @@
 
   /* Visible gold focus ring, everywhere. */
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--color-primary-deep);
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -322,4 +322,15 @@ body:has([data-bare-page]) > header,
 body:has([data-bare-page]) > footer,
 body:has([data-bare-page]) [data-site-bar] {
   display: none;
+}
+
+/* Hero parallax and panel art can poke past the viewport edge; never let phones side-scroll. */
+html, body { overflow-x: clip; }
+
+/* Focus ring: dark forest on light pages (3:1+), gold inside dark bands and the photo hero. */
+.bg-primary-deep :focus-visible,
+.bg-primary :focus-visible,
+.kp-hero :focus-visible,
+footer :focus-visible {
+  outline-color: var(--color-gold) !important;
 }

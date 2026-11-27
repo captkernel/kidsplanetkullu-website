@@ -92,13 +92,9 @@ export default function AboutPage() {
             <div className="relative mx-auto aspect-[3/4] w-full max-w-[320px] overflow-hidden rounded-2xl ring-1 ring-gold/40 lg:mx-0">
               {/* When ready: replace this block with
                   <img src="/images/leadership/karan-parmar.jpg" ... /> */}
-              <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-primary/8">
-                <span className="font-display text-4xl leading-none text-primary">
-                  KP
-                </span>
-                <span className="text-[0.6rem] font-medium uppercase tracking-[0.16em] text-ink-soft">
-                  Portrait
-                </span>
+              <div className="flex h-full w-full items-center justify-center bg-primary/8 p-12">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/kp-crest-176.png" alt="" className="h-auto w-full max-w-[150px]" width={176} height={191} />
               </div>
               <span
                 aria-hidden

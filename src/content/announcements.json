@@ -1,9 +1,65 @@
 [
-  {"id":"1","title":"Admissions Open for the 2027-28 Session","date":"2026-10-16","type":"general","content":"Kids Planet is now accepting applications for the 2027-28 academic session, Pre-Nursery through Class 8, English medium. Pre-Nursery reopens with this session. Walk in on any working day, call us on +91 94180 23454, or visit during office hours (Mon to Fri 9 AM to 3 PM, Saturday 9 AM to 1 PM)."},
-  {"id":"3","title":"Holi Holiday Notice","date":"2026-03-12","type":"holiday","content":"School will remain closed on 14 March 2026 for Holi. Classes resume on 16 March 2026. We wish all our families a colourful and joyful Holi."},
-  {"id":"4","title":"Class 8 Farewell Ceremony","date":"2026-02-28","type":"event","content":"We gave our Class 8 graduates a warm farewell. To our wonderful students: every goodbye is the start of a great hello in your next chapter. Go out and write a bestseller, and shine as bright as the stars you are."},
-  {"id":"5","title":"Republic Day Celebrations","date":"2026-01-26","type":"event","content":"Republic Day was marked with real feeling. Students performed songs, dances, and skits honouring the Constitution, and a fancy dress competition saw children dressed as national leaders and freedom fighters."},
-  {"id":"6","title":"Winter Break Notice","date":"2025-12-20","type":"holiday","content":"School will remain closed for the winter break from 25 December 2025 to 2 January 2026. Classes resume on 3 January 2026. We wish all our families a warm and happy holiday season."},
-  {"id":"7","title":"Art and Craft Exhibition Success","date":"2025-11-15","type":"event","content":"The Kids Planet Art and Craft Exhibition was a grand success. Students displayed handmade crafts, science models, paper lanterns, and artwork, and parents and neighbours turned out to appreciate their creativity."},
-  {"id":"8","title":"Sports Day Results","date":"2025-10-20","type":"event","content":"Our Annual Sports Day drew a big turnout across races, relay, long jump, and team games. Congratulations to every winner and every participant. Each child who ran is a champion."}
+  {
+    "id": "10",
+    "title": "Parents' Day 2026: The School of Time",
+    "date": "2026-11-22",
+    "type": "event",
+    "content": "On Sunday 22 November, every child from Nursery to Class 8 took the stage together at Atal Sadan, Dhalpur, in our play The School of Time. Thank you to every family who came to watch."
+  },
+  {
+    "id": "9",
+    "title": "Children's Day Fancy Dress",
+    "date": "2026-11-13",
+    "type": "event",
+    "content": "Children's Day was celebrated with a fancy dress competition for every class from Nursery to Class 8, with each child speaking a few lines about themselves."
+  },
+  {
+    "id": "1",
+    "title": "Admissions Open for the 2027-28 Session",
+    "date": "2026-10-16",
+    "type": "general",
+    "content": "Kids Planet is now accepting applications for the 2027-28 academic session, Pre-Nursery through Class 8, English medium. Pre-Nursery reopens with this session. Walk in on any working day, call us on +91 94180 23454, or visit during office hours (Mon to Fri 9 AM to 3 PM, Saturday 9:30 AM to 1:30 PM)."
+  },
+  {
+    "id": "3",
+    "title": "Holi Holiday Notice",
+    "date": "2026-03-12",
+    "type": "holiday",
+    "content": "School will remain closed on 14 March 2026 for Holi. Classes resume on 16 March 2026. We wish all our families a colourful and joyful Holi."
+  },
+  {
+    "id": "4",
+    "title": "Class 8 Farewell Ceremony",
+    "date": "2026-02-28",
+    "type": "event",
+    "content": "We gave our Class 8 graduates a warm farewell. To our wonderful students: every goodbye is the start of a great hello in your next chapter. Go out and write a bestseller, and shine as bright as the stars you are."
+  },
+  {
+    "id": "5",
+    "title": "Republic Day Celebrations",
+    "date": "2026-01-26",
+    "type": "event",
+    "content": "Republic Day was marked with real feeling. Students performed songs, dances, and skits honouring the Constitution, and a fancy dress competition saw children dressed as national leaders and freedom fighters."
+  },
+  {
+    "id": "6",
+    "title": "Winter Break Notice",
+    "date": "2025-12-20",
+    "type": "holiday",
+    "content": "School will remain closed for the winter break from 25 December 2025 to 2 January 2026. Classes resume on 3 January 2026. We wish all our families a warm and happy holiday season."
+  },
+  {
+    "id": "7",
+    "title": "Art and Craft Exhibition Success",
+    "date": "2025-11-15",
+    "type": "event",
+    "content": "The Kids Planet Art and Craft Exhibition was a grand success. Students displayed handmade crafts, science models, paper lanterns, and artwork, and parents and neighbours turned out to appreciate their creativity."
+  },
+  {
+    "id": "8",
+    "title": "Sports Day Results",
+    "date": "2025-10-20",
+    "type": "event",
+    "content": "Our Annual Sports Day drew a big turnout across races, relay, long jump, and team games. Congratulations to every winner and every participant. Each child who ran is a champion."
+  }
 ]

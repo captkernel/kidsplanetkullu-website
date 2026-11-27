@@ -108,6 +108,11 @@ export default function PrivacyPage() {
             link). Only that visit is attached, plus your earlier visits if you chose Allow. It is seen only by the
             school office and kept with your application.
           </p>
+          <p className="mt-4 leading-relaxed text-ink-soft">
+            <strong className="text-ink">The map on our Contact page</strong> is provided by Google Maps. When that
+            page opens, your browser loads the map from Google, so Google receives your visit under its own privacy
+            policy. We do not send Google anything else.
+          </p>
           <VisitControls />
         </div>
         <p className="mt-10 max-w-3xl leading-relaxed text-ink">

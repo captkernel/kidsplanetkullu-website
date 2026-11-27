@@ -227,15 +227,14 @@ export default function ProgramsPage() {
             <Button
               href="/admissions#visit"
               size="lg"
-              className="bg-gold text-primary-deep hover:bg-gold-soft"
+              variant="gold"
             >
               Book a Visit
             </Button>
             <Button
               href="/admissions"
-              variant="secondary"
+              variant="onDark"
               size="lg"
-              className="border-canvas/50 text-canvas hover:bg-canvas hover:text-primary"
             >
               Admissions
             </Button>

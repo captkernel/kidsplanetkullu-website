@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "onDark" | "gold" | "ghost";
 type Size = "md" | "lg";
 
 const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-semibold " +
   "transition-[transform,background-color,color,border-color] duration-200 " +
-  "active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-gold " +
+  "active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-primary-deep " +
   "focus-visible:outline-offset-2 motion-reduce:transition-none";
 
 const variants: Record<Variant, string> = {
@@ -16,6 +16,14 @@ const variants: Record<Variant, string> = {
   // Forest outline on canvas.
   secondary:
     "border border-primary/40 text-primary bg-transparent hover:bg-primary hover:text-canvas",
+  // Cream outline for dark sections and photo heroes. A separate variant because a
+  // className override (text-canvas over text-primary) loses to the secondary colours
+  // in the generated CSS, which left the hero WhatsApp button unreadable.
+  onDark:
+    "border border-canvas/50 text-canvas bg-transparent hover:bg-canvas hover:text-primary",
+  // Gold fill for the closing bands on dark green (same reason as onDark: a className
+  // override cannot beat the variant colours).
+  gold: "bg-gold text-primary-deep hover:bg-gold-soft shadow-[var(--shadow-card)]",
   // Quiet link-button.
   ghost: "text-primary hover:text-primary-deep underline-offset-4 hover:underline",
 };

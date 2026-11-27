@@ -69,6 +69,46 @@ const STEPS = [
   },
 ];
 
+// Questions parents ask before they call. Every answer reuses a fact already shown on
+// this page or the homepage, so nothing here is new policy. Plain <details>, no script.
+const FAQ: { q: string; a: string }[] = [
+  {
+    q: "What age should my child be for Nursery, LKG, UKG or Class 1?",
+    a: `Nursery 3 years completed, LKG 4, UKG 5 and Class 1 6, counted on 30 September 2027 as the Himachal Education Department requires. Pre-Nursery takes children from 2 years.`,
+  },
+  {
+    q: "When does the 2027-28 session begin?",
+    a: "In February for Classes 1 to 8, and in March for the kindergarten classes, Pre-Nursery to UKG.",
+  },
+  {
+    q: "What are the fees?",
+    a:
+      FEES.length > 0
+        ? `For the current session (${FEES_SESSION}) the total for the year is ${FEES.map((f) => `${inr(yearTotal(f))} for ${f.stage}`).join(", ")}, plus a one-time registration for new admissions. The full breakdown is in the table above, and any change for 2027-28 will be shown there.`
+        : "Fees are set by stage. Call or visit and the office will walk you through the breakdown for your child's class.",
+  },
+  {
+    q: "Is there a fee to apply?",
+    a: "No. Applying online or at the office is free. The registration fee is paid once, only when your child joins.",
+  },
+  {
+    q: "Do I need an appointment to see the school?",
+    a: `No. Walk in on any working day (${SCHOOL.timings.weekday}, ${SCHOOL.timings.saturday}), or send the form below with a time that suits you and the office will confirm it.`,
+  },
+  {
+    q: "Which documents will I need?",
+    a: "Your child's birth certificate and a recent photo, and the last report card or transfer certificate if your child has been to school before. A clear phone photo of each is fine.",
+  },
+  {
+    q: "Does the school have transport?",
+    a: "School vans run known, supervised routes across the Kullu town area. Ask the office whether a van covers your area.",
+  },
+  {
+    q: "What is the medium of teaching?",
+    a: "English, from Pre-Nursery to Class 8.",
+  },
+];
+
 export default function AdmissionsPage() {
   return (
     <>
@@ -97,7 +137,7 @@ export default function AdmissionsPage() {
 
       {/* Steps: Enquire, Visit, Apply. Editorial stagger so the row is not a
           flat three-equal trio. */}
-      <Section tone="canvas" id="visit">
+      <Section tone="canvas" id="how-it-works">
         <div className="max-w-2xl">
           <Eyebrow star>How it works</Eyebrow>
           <h2 className="mt-4 font-display text-3xl md:text-5xl">
@@ -294,18 +334,22 @@ export default function AdmissionsPage() {
 
       <Constellation shape="lean-left" className="bg-canvas pt-4" />
 
-      {/* Inquiry form with a warm, aspirational close. */}
-      <Section tone="canvas" id="enquire" className="pt-6 md:pt-8">
+      {/* Book a visit / enquire. Every "Book a Visit" button on the site lands here,
+          on the form, not on the steps above. #enquire stays for the header link. */}
+      <Section tone="canvas" id="visit" className="pt-6 md:pt-8">
+        <div id="enquire" aria-hidden />
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <FadeIn>
-            <Eyebrow star>Send an enquiry</Eyebrow>
+            <Eyebrow star>Book a visit or enquire</Eyebrow>
             <h2 className="mt-4 font-display text-3xl md:text-4xl">
-              Tell us about your child.
+              Tell us about your child, and when you would like to come.
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-ink-soft">
-              Share a few details and we will get back to you with the right
-              next step. Prefer to talk? Call {SCHOOL.phoneDisplay} during
-              office hours, or message us on WhatsApp any time.
+              Share a few details and a time that suits you, and the office
+              will confirm your visit, usually within one working day. You are
+              also welcome to simply walk in on any working day. Prefer to
+              talk? Call {SCHOOL.phoneDisplay} during office hours, or message
+              us on WhatsApp any time.
             </p>
             <p className="mt-6 font-display text-xl italic text-primary">
               Come and see an ordinary morning here. It says more than we can.
@@ -324,6 +368,34 @@ export default function AdmissionsPage() {
               <InquiryForm />
             </Card>
           </FadeIn>
+        </div>
+      </Section>
+
+      <Section tone="surface" id="questions">
+        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <Eyebrow>Questions parents ask</Eyebrow>
+            <h2 className="mt-4 font-display text-3xl md:text-4xl">
+              Admissions, answered.
+            </h2>
+            <p className="mt-5 leading-relaxed text-ink-soft">
+              Anything else? Call {SCHOOL.phoneDisplay} or message us on
+              WhatsApp, and the office will help.
+            </p>
+          </div>
+          <div className="divide-y divide-line border-y border-line">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-4 font-semibold text-ink">
+                  <span>{f.q}</span>
+                  <span aria-hidden className="mt-0.5 text-gold transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 leading-relaxed text-ink-soft">{f.a}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </Section>
     </>
