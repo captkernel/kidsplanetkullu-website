@@ -10,8 +10,9 @@ After: the real pages live in `website-v2/staff-assets/marketing/` and are serve
 The Worker checks every request, pictures included, against Google sign-in and the staff list:
 
 - A teacher signs in with their Google account. Only emails on the staff list get in.
-- They see their portal home: **Marketing** (their own page), and placeholders for Attendance,
-  Salary, Fees, My work and Substitutions until the school portal is connected.
+- They see their portal home: **Marketing** (their own page), and placeholders for Staff Room,
+  Circulars, My classes, My timetable and Fees I've collected until the school portal is connected.
+  Salary and staff attendance stay with the office, as in the portal access plan.
 - They can open only their own page and pictures, plus the shared school pictures. Another
   teacher's page or pictures are refused by the server (403), not just hidden.
 - Three roles. The **owner** (you) sees everything and is the only one who can make or remove a
