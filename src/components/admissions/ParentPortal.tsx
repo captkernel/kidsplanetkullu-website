@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Bell, Check, FileUp, GraduationCap, Loader2, LogOut, MessageCircle, Phone, Plus, ShieldCheck, Smartphone } from "lucide-react";
 import {
@@ -109,6 +109,11 @@ export function ParentPortal() {
   if (!session || !data) return <SignIn onSignedIn={signedIn} />;
   if (data.account.must_change) {
     return <NewPassword session={session} onDone={signedIn} onSignOut={signOut} />;
+  }
+  // Asked once, right after signing up: a parent of a child at the school goes to the parent area,
+  // a new family goes to the admission form. ("" = not asked yet; an older backend sends nothing.)
+  if (data.account.parent_type === "" && (data.children ?? []).length === 0 && data.applications.length === 0) {
+    return <WhoAreYou session={session} data={data} setData={setData} onSignOut={signOut} />;
   }
   return (
     <Profile
@@ -270,7 +275,7 @@ function SignIn({ onSignedIn }: { onSignedIn: (token: string) => Promise<void> }
             <p className="leading-relaxed text-ink-soft">
               A profile is free and takes a minute. You do not need to apply first: we keep your
               details, show you school updates, and your form is half filled when you are ready.
-              If your child is already at Kids Planet, ask the office for your login instead.
+              Parents of children already at Kids Planet sign up here too: we connect your child to your profile.
             </p>
             {!hasRef && (
               <fieldset className="rounded-xl border border-line p-4">
@@ -442,6 +447,200 @@ function NewPassword({
   );
 }
 
+// ---------------------------------------------------------------- current parent or new family?
+
+/**
+ * Shown once after signing up (with a number, an email or Google). A parent of a child already at
+ * the school names the child; the office matches it to the school roll before class and family
+ * updates appear. A new family goes straight to the admission form, already filled in.
+ */
+function WhoAreYou({
+  session, data, setData, onSignOut,
+}: { session: string; data: AccountData; setData: (d: AccountData) => void; onSignOut: () => void }) {
+  const { account } = data;
+  const [choice, setChoice] = useState<"" | "current">("");
+  const [kids, setKids] = useState([{ name: "", class: "" }]);
+  const [phone, setPhone] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const first = account.name.split(" ")[0];
+  const top = useRef<HTMLDivElement>(null);
+  // The sign-up form sits low on the page: bring the question into view on a phone.
+  useEffect(() => {
+    top.current?.scrollIntoView({ block: "start" });
+  }, [choice]);
+
+  const goNew = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await api<AccountData>("POST", "/api/account/parent-type", { token: session, body: { type: "new" } });
+      track("parent_type", "new");
+      const c = (data.interests ?? [])[0];
+      if (c) setPrefill({ child_name: c.child_name, child_dob: c.child_dob, class_sought: c.class_sought });
+      window.location.assign("/admissions/apply/?new=1");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Please try again.");
+      setBusy(false);
+    }
+  };
+
+  const sendCurrent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    const named = kids.filter((k) => k.name.trim());
+    if (!named.length) return setError("Please add your child's name.");
+    if (named.some((k) => !k.class)) return setError("Please choose each child's class.");
+    if (!account.phone && !/^[6-9]\d{9}$/.test(phone.replace(/\D/g, "").slice(-10)))
+      return setError("Please add your 10 digit mobile number. The office matches it to the school record.");
+    setBusy(true);
+    try {
+      if (!account.phone) await api<AccountData>("POST", "/api/account/phone", { token: session, body: { phone } });
+      setData(await api<AccountData>("POST", "/api/account/parent-type", { token: session, body: { type: "current", children: named } }));
+      track("parent_type", "current");
+      setTimeout(() => document.querySelector('[data-testid="connecting"]')?.scrollIntoView({ block: "center" }), 50);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const option =
+    "flex w-full items-start gap-4 rounded-2xl border border-line bg-surface p-5 text-left shadow-[var(--shadow-card)] " +
+    "transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-gold disabled:opacity-60";
+
+  return (
+    <div ref={top} className="max-w-xl scroll-mt-28" data-testid="who-are-you">
+      <h2 className="font-display text-3xl md:text-4xl">Welcome{first ? `, ${first}` : ""}.</h2>
+      <p className="mt-3 text-lg leading-relaxed text-ink-soft">One question, so we show you the right things.</p>
+      <h3 className="mt-8 font-display text-2xl">Is your child already studying at Kids Planet?</h3>
+
+      {choice === "" && (
+        <div className="mt-5 space-y-4">
+          <button type="button" className={option} onClick={() => setChoice("current")} disabled={busy} data-testid="choose-current">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/8 text-primary">
+              <GraduationCap size={20} strokeWidth={1.75} />
+            </span>
+            <span>
+              <span className="block font-display text-xl">Yes, my child studies here</span>
+              <span className="mt-1 block text-sm leading-relaxed text-ink-soft">
+                Get updates for your child&rsquo;s class and messages from the school.
+              </span>
+            </span>
+          </button>
+          <button type="button" className={option} onClick={() => void goNew()} disabled={busy} data-testid="choose-new">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/8 text-primary">
+              {busy ? <Loader2 size={20} className="animate-spin" /> : <Plus size={20} strokeWidth={1.75} />}
+            </span>
+            <span>
+              <span className="block font-display text-xl">No, I want to apply for admission</span>
+              <span className="mt-1 block text-sm leading-relaxed text-ink-soft">
+                Start the application for 2027-28. Your name and number are already filled in.
+              </span>
+            </span>
+          </button>
+        </div>
+      )}
+
+      {choice === "current" && (
+        <form onSubmit={sendCurrent} className="mt-5 space-y-5 rounded-2xl border border-line bg-surface p-5 shadow-[var(--shadow-card)]" noValidate>
+          <p className="leading-relaxed text-ink">
+            Tell us your child&rsquo;s name and class. The office checks it against the school record and
+            connects your child to this profile, usually within one working day.
+          </p>
+          {kids.map((k, i) => (
+            <div key={i} className="grid gap-4 sm:grid-cols-[1.4fr_1fr]">
+              <div>
+                <label htmlFor={`kid_name_${i}`} className={labelCls}>{i === 0 ? "Child's full name" : "Another child's full name"}</label>
+                <input
+                  id={`kid_name_${i}`}
+                  value={k.name}
+                  onChange={(e) => setKids(kids.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))}
+                  className={`mt-2 ${field}`}
+                  autoComplete="off"
+                />
+              </div>
+              <div>
+                <label htmlFor={`kid_class_${i}`} className={labelCls}>Class now</label>
+                <select
+                  id={`kid_class_${i}`}
+                  value={k.class}
+                  onChange={(e) => setKids(kids.map((x, j) => (j === i ? { ...x, class: e.target.value } : x)))}
+                  className={`mt-2 ${field}`}
+                >
+                  <option value="">Select</option>
+                  {CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+          ))}
+          {kids.length < 4 && (
+            <button type="button" onClick={() => setKids([...kids, { name: "", class: "" }])} className="text-sm font-semibold text-primary underline underline-offset-4">
+              Add a brother or sister at the school
+            </button>
+          )}
+          {!account.phone && (
+            <div>
+              <label htmlFor="who_phone" className={labelCls}>Your mobile number</label>
+              <input id="who_phone" type="tel" inputMode="numeric" value={phone} onChange={(e) => setPhone(e.target.value)} className={`mt-2 ${field}`} placeholder="The number the school has for you" autoComplete="tel" />
+            </div>
+          )}
+          {error && <Notice>{error}</Notice>}
+          <div className="flex flex-wrap items-center gap-4">
+            <button type="submit" disabled={busy} className={primaryBtn}>
+              {busy && <Loader2 size={18} className="animate-spin" />} Connect my child
+            </button>
+            <button type="button" onClick={() => { setChoice(""); setError(null); }} className="text-sm font-semibold text-primary underline underline-offset-4">
+              Back
+            </button>
+          </div>
+        </form>
+      )}
+
+      {choice === "" && error && <div className="mt-4"><Notice>{error}</Notice></div>}
+      <button type="button" onClick={onSignOut} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-ink-soft underline underline-offset-4">
+        <LogOut size={15} strokeWidth={1.75} /> Sign out
+      </button>
+    </div>
+  );
+}
+
+/** A current parent waiting for the office to match their child, or told it did not match. */
+function Connecting({ data }: { data: AccountData }) {
+  const asks = data.link_requests ?? [];
+  if (!asks.length) return null;
+  const declined = asks.some((a) => a.status === "declined");
+  const names = asks.map((a) => `${a.child_name}${a.class ? ` (${a.class})` : ""}`).join(", ");
+  return (
+    <section className="mb-10 rounded-2xl border border-gold bg-gold/10 p-5" data-testid="connecting">
+      {declined ? (
+        <>
+          <h2 className="font-display text-xl">We could not match your child yet</h2>
+          <p className="mt-2 leading-relaxed text-ink">
+            The office could not find {names} with the mobile number on this profile. Please message the
+            office and we will sort it out.
+          </p>
+          <a
+            href={whatsappHref(`Namaste Kids Planet, I made a parent profile with ${data.account.phone}. My child: ${names}. Please connect my child.`)}
+            target="_blank" rel="noopener noreferrer" className={`${quietBtn} mt-4 bg-surface`}
+          >
+            <MessageCircle size={16} strokeWidth={1.75} /> Message the office on WhatsApp
+          </a>
+        </>
+      ) : (
+        <>
+          <h2 className="font-display text-xl">Connecting your child</h2>
+          <p className="mt-2 leading-relaxed text-ink">
+            The office is matching {names} with the school record, usually within one working day.
+            Until then you see the updates for all parents.
+          </p>
+        </>
+      )}
+    </section>
+  );
+}
+
 // ---------------------------------------------------------------- profile
 
 type ProfileProps = {
@@ -464,9 +663,10 @@ function Profile(props: ProfileProps) {
     <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]" data-private>
       <div>
         {!account.phone && <AddNumber session={session} setData={props.setData} />}
-        {account.phone && !account.phone_verified && <ConfirmNumber account={account} />}
+        <Connecting data={data} />
+        {account.phone && !account.phone_verified && account.parent_type !== "current" && <ConfirmNumber account={account} />}
         <Updates updates={updates} firstName={account.name.split(" ")[0]} />
-        {(interests.length > 0 || (applications.length === 0 && children.length === 0)) && (
+        {account.parent_type !== "current" && (interests.length > 0 || (applications.length === 0 && children.length === 0)) && (
           <Considering interests={interests} session={session} setData={props.setData} />
         )}
 
@@ -490,14 +690,14 @@ function Profile(props: ProfileProps) {
         )}
 
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 className="font-display text-2xl md:text-3xl">{children.length > 0 ? "Admission applications" : "Your children"}</h2>
+          <h2 className="font-display text-2xl md:text-3xl">{children.length > 0 || account.parent_type === "current" ? "Admission applications" : "Your children"}</h2>
           <Link href="/admissions/apply/?new=1" className={quietBtn}>
             <Plus size={16} strokeWidth={1.75} /> Apply for another child
           </Link>
         </div>
         {applications.length === 0 ? (
           <p className="mt-5 leading-relaxed text-ink-soft">
-            {children.length > 0 ? "No applications in progress. Applying for a brother or sister? " : "Nothing here yet. "}
+            {children.length > 0 || account.parent_type === "current" ? "No applications in progress. Applying for a brother or sister? " : "Nothing here yet. "}
             <Link href="/admissions/apply/?new=1" className="font-semibold text-primary underline underline-offset-4">
               Start an application
             </Link>

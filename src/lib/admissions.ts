@@ -204,18 +204,23 @@ export type Account = {
   /** Signs in with Google. `phone` is "" until such a profile adds a mobile number. */
   google: boolean;
   has_password: boolean;
+  /** The parent's answer to "Is your child already at Kids Planet?": current | new | "" (not asked yet). */
+  parent_type?: "current" | "new" | "";
 };
 /** A child a family is considering, saved on a profile before any application. */
 export type Interest = { id: string; child_name: string; child_dob: string; class_sought: string };
 export type SignedInDevice = { id: string; device: string; created_at: string; last_used_at: string; current: boolean };
 export type AccountEvent = { kind: string; device: string; at: string };
 export type EnrolledChild = { name: string; class: string };
+/** A child a current parent named, waiting for the office to match it to the school roll. */
+export type LinkRequest = { child_name: string; class: string; status: "pending" | "declined"; created_at: string };
 export type SchoolUpdate = { id: string; audience: "all" | "class" | "family"; class: string; title: string; body: string; created_at: string };
 export type AccountData = {
   account: Account;
   applications: Application[];
   children: EnrolledChild[];
   interests: Interest[];
+  link_requests?: LinkRequest[];
   updates: SchoolUpdate[];
   sessions: SignedInDevice[];
   events: AccountEvent[];
@@ -246,6 +251,9 @@ export const EVENT_WORDS: Record<string, string> = {
   email_removed_its_owner_signed_up_with_google: "Email removed: its owner signed up with Google",
   profile_created_by_office: "Profile created for you by the school office",
   children_updated_by_office: "Your children's details updated by the office",
+  asked_to_connect_child: "Asked the office to connect your child",
+  children_connected_by_office: "Your child connected by the school office",
+  connect_request_declined_by_office: "The office could not match your child yet",
   signed_in: "Signed in",
   wrong_password: "Wrong password tried",
   locked_after_wrong_passwords: "Locked for 15 minutes after wrong passwords",

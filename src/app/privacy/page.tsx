@@ -36,7 +36,7 @@ const ROWS: [string, string][] = [
   ],
   [
     "How long we keep it",
-    "A form you start but do not send is deleted after 30 days. If your child does not join, the application and its documents are deleted within 90 days of being closed. If your child joins, the details become part of the school record.",
+    "A form you start but do not send is deleted from the website after 30 days. If your child does not join, the application and its documents are deleted within 90 days of being closed. If your child joins, the details become part of the school record. If you remove a document after sending it, the office keeps the copy it already received with your application, under the same time limits. When the office deletes a form, the school's own copy is kept for 30 more days in case it was a mistake, then erased.",
   ],
   [
     "Parent profiles",
